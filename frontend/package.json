@@ -4,6 +4,7 @@
     "bootstrap": "^5.3.8",
     "quill": "^2.0.3",
     "react-bootstrap": "^2.10.10",
-    "sweetalert2": "^11.26.3"
+    "sweetalert2": "^11.26.3",
+    "sweetalert2-react-content": "^5.1.0"
   }
 }

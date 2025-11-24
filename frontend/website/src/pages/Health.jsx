@@ -24,7 +24,6 @@ const Health = () => {
     fetchHealthTips();
   }, []);
 
-  // Helper function to extract plain text from HTML and limit to one sentence
   const getFirstSentence = (htmlContent) => {
     const text = htmlContent.replace(/<[^>]*>/g, '');
     const match = text.match(/^[^.!?]*[.!?]/);
@@ -51,34 +50,31 @@ const Health = () => {
 
       <div className="row g-4">
         {loading
-          ? Array(3)
-              .fill()
-              .map((_, i) => (
-                <div key={i} className="col-12 col-md-6 col-lg-4">
-                  <div className="news-card card h-100 shadow-sm">
-                    <Skeleton height={200} borderRadius={8} />
-                    <div className="card-body text-center">
-                      <Skeleton height={25} width={250} className="mx-auto mb-2" />
-                      <Skeleton height={15} width={100} className="mx-auto mb-2" />
-                      <Skeleton count={3} height={10} width={`80%`} className="mx-auto" />
-                      <Skeleton height={35} width={120} className="mt-3 mx-auto rounded-pill" />
-                    </div>
+          ? Array(3).fill().map((_, i) => (
+              <div key={i} className="col-12 col-md-6 col-lg-4">
+                <div className="news-card card h-100 shadow-sm">
+                  <Skeleton height={200} borderRadius={8} />
+                  <div className="card-body text-center">
+                    <Skeleton height={25} width={250} className="mx-auto mb-2" />
+                    <Skeleton height={15} width={100} className="mx-auto mb-2" />
+                    <Skeleton count={3} height={10} width={`80%`} className="mx-auto" />
+                    <Skeleton height={35} width={120} className="mt-3 mx-auto rounded-pill" />
                   </div>
                 </div>
-              ))
+              </div>
+            ))
           : articles.map((article) => (
               <div key={article.id} className="col-12 col-md-6 col-lg-4">
                 <div className="news-card card h-100 shadow-sm">
                   <div
                     className="news-img rounded-top"
                     style={{
-                      backgroundImage: `url(${article.image_url || "https://via.placeholder.com/600x300?text=News"})`,
+                      backgroundImage: `url(${article.image_url || "https://via.placeholder.com/600x300?text=Health Tips"})`,
                       backgroundSize: "cover",
                       backgroundPosition: "center",
                       height: "200px",
                     }}
                   ></div>
-
                   <div className="card-body text-center d-flex flex-column justify-content-between">
                     <div>
                       <p className="text-muted small mb-1">{article.short_title}</p>
@@ -90,9 +86,8 @@ const Health = () => {
                         {getFirstSentence(article.description)}
                       </p>
                     </div>
-
                     <Link
-                      to={`/health/${article.id}`}
+                      to={`/health/${article.slug}`} // ✅ use slug
                       className="btn btn-primary mt-3 align-self-center"
                     >
                       See More →

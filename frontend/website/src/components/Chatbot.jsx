@@ -17,23 +17,36 @@ function Chatbot() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const handleSend = () => {
-    if (!input.trim()) return;
-    const userMsg = { sender: "user", text: input.trim() };
-    setMessages((prev) => [...prev, userMsg]);
-    setInput("");
+  const handleSend = async () => {
+  if (!input.trim()) return;
 
-    // Fake bot reply
-    setTimeout(() => {
-      setMessages((prev) => [
-        ...prev,
-        {
-          sender: "bot",
-          text: "Thanks for reaching out! 💬 A representative will assist you soon.",
-        },
-      ]);
-    }, 1000);
-  };
+  const userText = input.trim();
+  const userMsg = { sender: "user", text: userText };
+  setMessages(prev => [...prev, userMsg]);
+
+  setInput("");
+
+  try {
+    const response = await fetch("http://localhost:5000/api/chatbot-gemini", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message: userText }),
+  });
+
+    const data = await response.json();
+
+    setMessages(prev => [
+      ...prev,
+      { sender: "bot", text: data.reply }
+    ]);
+  } catch (error) {
+    setMessages(prev => [
+      ...prev,
+      { sender: "bot", text: "❌ Error: Unable to reach Lunax server." }
+    ]);
+  }
+};
+
 
   return (
     <div className="chatbot-container">
@@ -97,3 +110,4 @@ function Chatbot() {
 }
 
 export default Chatbot;
+

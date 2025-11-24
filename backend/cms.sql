@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 22, 2025 at 03:31 AM
+-- Generation Time: Nov 24, 2025 at 05:49 PM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -50,9 +50,10 @@ INSERT INTO `announcement` (`id`, `short_title`, `full_title`, `topic_tags`, `de
 ('2bc0948c-b990-11f0-b748-c018509200f9', 'jfjhwbjfe', 'jbwjbw', 'jbjhbe', '<p>jfbjebfjwefjhfe</p>', '1762268913014-777763467.webp', 'published', NULL, '2025-11-04 23:08:33', '2025-11-10 13:41:07', 12, 'Kuromi'),
 ('5649a7dc-b997-11f0-b748-c018509200f9', 'jfjhweb', 'jbwejfeb', 'jbjeh', '<p>bfhebfewf</p>', '1762271990847-429750890.webp', 'published', NULL, '2025-11-04 23:59:50', '2025-11-04 23:59:50', 12, NULL),
 ('a7bd5fcb-b98f-11f0-b748-c018509200f9', 'jndje', 'jhbfjqehbf', 'jbfjbef', '<p>jfjhefwe</p>', '1762268691532-524275736.webp', 'published', NULL, '2025-11-04 23:04:51', '2025-11-04 23:04:51', 1, NULL),
+('bcd7af8b-c943-11f0-b8ab-c018509202f6', 'Jame', 'x', 'j', '<p>xx	</p>', '1763995321666-206657281.png', 'published', NULL, '2025-11-24 22:42:01', '2025-11-24 22:42:01', 12, 'jame'),
 ('d361c0ac-b99e-11f0-b748-c018509200f9', 'dbqjhbdj', 'jhbejfbj', 'jbjhbw', '<p>jfbejhwef</p>', '1762275207204-65518573.webp', 'published', NULL, '2025-11-05 00:53:27', '2025-11-05 00:53:27', 12, NULL),
 ('f7c6d85e-b98e-11f0-b748-c018509200f9', 'jndjedj', 'bfjwe', 'jbfjhwe', '<p>enfjnefef</p>', '1762268396313-221346.webp', 'published', NULL, '2025-11-04 22:59:56', '2025-11-04 22:59:56', 1, NULL),
-('fe077a52-bdf7-11f0-9b30-c018509202f6', 'Welcome to MediSync', 'Welcome to the Lorem Ipsum MediSync', 'Welcome, Hello, Goodluck', '<p class=\"ql-align-justify\"><span style=\"background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);\">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eu pellentesque diam. Maecenas lacinia aliquet imperdiet. Ut luctus pharetra sem, sit amet facilisis velit tincidunt nec. Phasellus eget eros neque. Etiam risus felis, lacinia sed rhoncus lobortis, sagittis sed ligula. Quisque ac orci est. Donec quis velit lacus. Aliquam in lacus odio. Aenean pulvinar semper dictum. Nullam gravida hendrerit velit ac mattis. Donec consectetur tellus risus, eu commodo mi ullamcorper non. Morbi in lobortis purus, sed interdum ex. Nulla sapien diam, sagittis non leo id, mattis tincidunt purus.</span></p><p class=\"ql-align-justify\"><span style=\"background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);\">Mauris viverra tincidunt nisl vel dapibus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse in libero tempus, interdum libero eget, lacinia velit. Vestibulum bibendum sem non scelerisque rutrum. Duis dignissim risus quis ex commodo posuere. Vestibulum sed elit eget lacus ornare ultricies at a tortor. Quisque dui risus, efficitur eu congue a, laoreet a ante.</span></p><p><br></p>', '1762753326480-6937911.jpg', 'published', NULL, '2025-11-10 13:42:06', '2025-11-10 13:42:06', 12, 'welcome-to-medisync');
+('fe077a52-bdf7-11f0-9b30-c018509202f6', NULL, 'Welcome to the Lorem Ipsum MediSync', 'Welcome, Hello, Goodluck', '<p class=\"ql-align-justify\"><span style=\"background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);\">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eu pellentesque diam. Maecenas lacinia aliquet imperdiet. Ut luctus pharetra sem, sit amet facilisis velit tincidunt nec. Phasellus eget eros neque. Etiam risus felis, lacinia sed rhoncus lobortis, sagittis sed ligula. Quisque ac orci est. Donec quis velit lacus. Aliquam in lacus odio. Aenean pulvinar semper dictum. Nullam gravida hendrerit velit ac mattis. Donec consectetur tellus risus, eu commodo mi ullamcorper non. Morbi in lobortis purus, sed interdum ex. Nulla sapien diam, sagittis non leo id, mattis tincidunt purus.</span></p><p class=\"ql-align-justify\"><span style=\"background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);\">Mauris viverra tincidunt nisl vel dapibus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse in libero tempus, interdum libero eget, lacinia velit. Vestibulum bibendum sem non scelerisque rutrum. Duis dignissim risus quis ex commodo posuere. Vestibulum sed elit eget lacus ornare ultricies at a tortor. Quisque dui risus, efficitur eu congue a, laoreet a ante.</span></p><p><br></p>', '1762753326480-6937911.jpg', 'published', NULL, '2025-11-10 13:42:06', '2025-11-24 22:09:55', 12, 'welcome-to-medisync');
 
 -- --------------------------------------------------------
 
@@ -107,15 +108,7 @@ CREATE TABLE `files` (
 --
 
 INSERT INTO `files` (`id`, `name`, `filename`, `url`, `size`, `status`, `date_uploaded`, `section`) VALUES
-(11, 'alden dila', '9698f63016f7fb05029de0205e48a3e8jpg-1762704350022.jpg', '/uploads/media/9698f63016f7fb05029de0205e48a3e8jpg-1762704350022.jpg', NULL, 'Active', '2025-11-09 08:05:50', 'home-carousel'),
-(12, 'SEATED\'ED', 'FIJpn23t400x400jpg-1762704438937.jpg', '/uploads/media/FIJpn23t400x400jpg-1762704438937.jpg', NULL, 'Active', '2025-11-09 08:07:18', 'home-carousel'),
-(13, 'POSA', 'cat2jpg-1762704554450.jpg', '/uploads/media/cat2jpg-1762704554450.jpg', NULL, 'Active', '2025-11-09 08:09:14', 'home-carousel'),
-(14, 'UWONNN', 'catjpg-1762706456676.jpg', '/uploads/media/catjpg-1762706456676.jpg', NULL, 'Active', '2025-11-09 08:40:56', 'hero-image'),
-(18, 'UUEUEUUE', 'ok3jpg-1762751284414.jpg', '/uploads/media/ok3jpg-1762751284414.jpg', NULL, 'Active', '2025-11-09 21:08:04', 'home-carousel'),
-(19, 'M', 'djpg-1762751314209.jpg', '/uploads/media/djpg-1762751314209.jpg', NULL, 'Active', '2025-11-09 21:08:34', 'home-carousel'),
-(20, 'L', 'clinicpng-1762751330111.png', '/uploads/media/clinicpng-1762751330111.png', NULL, 'Active', '2025-11-09 21:08:50', 'home-carousel'),
-(21, 'L', 'newjeans-supernatural-group-members-4k-wallpaper-uhdpapercom-783bjpg-1762751369679.jpg', '/uploads/media/newjeans-supernatural-group-members-4k-wallpaper-uhdpapercom-783bjpg-1762751369679.jpg', NULL, 'Active', '2025-11-09 21:09:29', 'hero-image'),
-(22, 'MINJI', '6a6acafcddb79be380f80aca4b305963jpg-1762751400002.jpg', '/uploads/media/6a6acafcddb79be380f80aca4b305963jpg-1762751400002.jpg', NULL, 'Active', '2025-11-09 21:10:00', 'home-carousel');
+(23, 'Doctors', 'istockphoto-1555515663-612x612jpg-1763779971240.jpg', '/uploads/media/istockphoto-1555515663-612x612jpg-1763779971240.jpg', NULL, 'Active', '2025-11-21 18:52:51', 'home-carousel');
 
 -- --------------------------------------------------------
 
@@ -124,27 +117,26 @@ INSERT INTO `files` (`id`, `name`, `filename`, `url`, `size`, `status`, `date_up
 --
 
 CREATE TABLE `health_tips` (
-  `id` int(11) NOT NULL,
+  `id` char(36) NOT NULL,
   `short_title` varchar(255) NOT NULL,
   `full_title` varchar(255) NOT NULL,
   `topic_tags` varchar(255) DEFAULT NULL,
   `description` text NOT NULL,
-  `status` enum('draft','published','trash') DEFAULT 'draft',
-  `author` varchar(100) DEFAULT 'admin',
+  `status` enum('draft','published') DEFAULT 'draft',
   `image` varchar(255) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `slug` varchar(255) DEFAULT NULL,
+  `author` varchar(100) DEFAULT NULL,
+  `scheduled_at` datetime DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `health_tips`
 --
 
-INSERT INTO `health_tips` (`id`, `short_title`, `full_title`, `topic_tags`, `description`, `status`, `author`, `image`, `created_at`) VALUES
-(1, 'knjjkddsnfj', 'jbjfjewjfhb', 'fefefweff', '<p>wkjfebjhef</p>', 'published', '12', '1762273362290-416039652.png', '2025-11-04 16:22:42'),
-(2, 'fnwef', 'kjwebjhwe', 'jbjfjwfhb', '<p>nrjjr4h44t</p>', 'draft', '12', '1762273385851-834789004.png', '2025-11-04 16:23:05'),
-(3, 'fbjfb', 'jhbfjeb', 'jbefjbwe', '<p>jbfjhwfe</p>', 'published', '12', '1762273586258-482025715.webp', '2025-11-04 16:26:26'),
-(4, 'fejwe', 'nefjhb', 'kbjhbef', '<p>fkjnwejf</p>', 'draft', '12', NULL, '2025-11-04 16:26:39'),
-(5, 'bjehfjhqe', 'kjbjbfej', 'kjbjhbfe', '<p>jwfjhbef</p>', 'trash', '12', '1762275325006-808796661.jpg', '2025-11-04 16:55:25');
+INSERT INTO `health_tips` (`id`, `short_title`, `full_title`, `topic_tags`, `description`, `status`, `image`, `slug`, `author`, `scheduled_at`, `created_at`, `updated_at`) VALUES
+('', 'James', 'James', 'james', '<p>James</p>', 'published', '1763994793359-535401115.png', NULL, '12', NULL, '2025-11-24 22:33:13', '2025-11-24 22:33:13');
 
 -- --------------------------------------------------------
 
@@ -191,6 +183,7 @@ CREATE TABLE `news` (
   `id` char(36) NOT NULL DEFAULT uuid(),
   `short_title` text DEFAULT NULL,
   `full_title` text DEFAULT NULL,
+  `slug` varchar(255) DEFAULT NULL,
   `topic_tags` text DEFAULT NULL,
   `description` text DEFAULT NULL,
   `status` varchar(20) DEFAULT 'draft',
@@ -205,19 +198,21 @@ CREATE TABLE `news` (
 -- Dumping data for table `news`
 --
 
-INSERT INTO `news` (`id`, `short_title`, `full_title`, `topic_tags`, `description`, `status`, `image`, `scheduled_at`, `created_at`, `updated_at`, `author`) VALUES
-('1bbf2721-b99b-11f0-b748-c018509200f9', 'mn fwbje ', 'jjebfj', 'jbjhebf', '<p>jfbjhbfwe</p>', 'draft', NULL, NULL, '2025-11-05 00:26:50', '2025-11-05 00:26:50', 12),
-('1f254804-b996-11f0-b748-c018509200f9', 'hjbjheb', 'jbfjbjweb', 'jbefjbwe', '<p>jbfjwhfebwef</p>', 'posted', '00de2686-c72b-4515-bb46-1b1d1bd3adef.webp', NULL, '2025-11-04 23:51:08', '2025-11-04 23:51:08', 12),
-('3457a777-b996-11f0-b748-c018509200f9', 'dvfhwvefh', 'kbfjebj', 'jbfjwbe', '<p>bdjhjbdqw</p>', 'draft', NULL, NULL, '2025-11-04 23:51:44', '2025-11-04 23:51:44', 12),
-('5e3c2a48-b997-11f0-b748-c018509200f9', 'jbfjwbfj', 'jhbfjbej', 'jhhbjefhb', '<p>wbdhwbdjwd</p>', 'posted', NULL, NULL, '2025-11-05 00:00:04', '2025-11-05 00:00:04', 12),
-('60822222-b995-11f0-b748-c018509200f9', 'bfjhewfj', 'jhbfejwe', 'jbfjhwe', '<p>jfbjwvef</p>', 'posted', '03be2231-bd50-4c12-96d6-19a245f3904f.webp', NULL, '2025-11-04 23:45:49', '2025-11-04 23:45:49', 12),
-('99ef8bc9-b9ae-11f0-b748-c018509200f9', 'wnmqdbqjw', 'jhbjfb', 'jhbjf', '<p>fejwejhbwfe</p>', 'posted', NULL, NULL, '2025-11-05 02:46:22', '2025-11-05 02:46:22', 12),
-('a07b21c5-b996-11f0-b748-c018509200f9', 'mbfjwhebf', 'kjjfbwjeb', 'kjbjbfe', '<p>jbfjhwef</p>', 'posted', 'd1fb21d9-8525-4cf7-8ac6-8ef1dee824ef.gif', NULL, '2025-11-04 23:54:45', '2025-11-04 23:54:45', 12),
-('b332d70a-b995-11f0-b748-c018509200f9', 'bfjhewfj', 'jhbfejwe', 'jbfjhwe', '<p>jfbjwvef</p>', 'posted', 'd28dffe7-3b06-4adc-bbc1-7ba3aa1e3e49.webp', NULL, '2025-11-04 23:48:07', '2025-11-04 23:48:07', 12),
-('c38afae1-b996-11f0-b748-c018509200f9', 'kjfbjhebj', 'kjbjefbwefb', 'kjbqbf', '<p>jfbjwfeb</p>', 'posted', 'c9853452-a0db-45d1-97e3-60b4240ecd74.webp', NULL, '2025-11-04 23:55:44', '2025-11-04 23:55:44', 12),
-('dae6dc1f-b99e-11f0-b748-c018509200f9', 'fmwbejb', 'kjnjwfe', 'jbfjhbe', '<p>fbwjehbfwe</p>', 'trash', NULL, NULL, '2025-11-05 00:53:39', '2025-11-05 01:44:23', 12),
-('e0b4921a-b996-11f0-b748-c018509200f9', 'd qjbdjw', 'kjbjbfej', 'jbjfehw', '<p><br></p>', 'posted', NULL, NULL, '2025-11-04 23:56:33', '2025-11-04 23:56:33', 12),
-('eb30e588-b996-11f0-b748-c018509200f9', 'ebfjbwe', 'kbjfehb', 'jbfjhwe', '<p>jbfjhew</p>', 'draft', NULL, NULL, '2025-11-04 23:56:51', '2025-11-04 23:56:51', 12);
+INSERT INTO `news` (`id`, `short_title`, `full_title`, `slug`, `topic_tags`, `description`, `status`, `image`, `scheduled_at`, `created_at`, `updated_at`, `author`) VALUES
+('1bbf2721-b99b-11f0-b748-c018509200f9', 'mn fwbje ', 'jjebfj', NULL, 'jbjhebf', '<p>jfbjhbfwe</p>', 'draft', NULL, NULL, '2025-11-05 00:26:50', '2025-11-05 00:26:50', 12),
+('1f254804-b996-11f0-b748-c018509200f9', 'hjbjheb', 'jbfjbjweb', NULL, 'jbefjbwe', '<p>jbfjwhfebwef</p>', 'posted', '00de2686-c72b-4515-bb46-1b1d1bd3adef.webp', NULL, '2025-11-04 23:51:08', '2025-11-04 23:51:08', 12),
+('3457a777-b996-11f0-b748-c018509200f9', 'dvfhwvefh', 'kbfjebj', NULL, 'jbfjwbe', '<p>bdjhjbdqw</p>', 'draft', NULL, NULL, '2025-11-04 23:51:44', '2025-11-04 23:51:44', 12),
+('5e3c2a48-b997-11f0-b748-c018509200f9', 'jbfjwbfj', 'jhbfjbej', NULL, 'jhhbjefhb', '<p>wbdhwbdjwd</p>', 'posted', NULL, NULL, '2025-11-05 00:00:04', '2025-11-05 00:00:04', 12),
+('60822222-b995-11f0-b748-c018509200f9', 'bfjhewfj', 'jhbfejwe', NULL, 'jbfjhwe', '<p>jfbjwvef</p>', 'posted', '03be2231-bd50-4c12-96d6-19a245f3904f.webp', NULL, '2025-11-04 23:45:49', '2025-11-04 23:45:49', 12),
+('99ef8bc9-b9ae-11f0-b748-c018509200f9', 'wnmqdbqjw', 'jhbjfb', NULL, 'jhbjf', '<p>fejwejhbwfe</p>', 'posted', NULL, NULL, '2025-11-05 02:46:22', '2025-11-05 02:46:22', 12),
+('a07b21c5-b996-11f0-b748-c018509200f9', 'mbfjwhebf', 'kjjfbwjeb', NULL, 'kjbjbfe', '<p>jbfjhwef</p>', 'posted', 'd1fb21d9-8525-4cf7-8ac6-8ef1dee824ef.gif', NULL, '2025-11-04 23:54:45', '2025-11-04 23:54:45', 12),
+('ab8baeeb-c941-11f0-b8ab-c018509202f6', 'Jamesss', 'ameee', 'jamesss', 'aaa', '<p>aaaaa</p>', 'posted', '1763994433626-631069622.png', NULL, '2025-11-24 22:27:13', '2025-11-24 22:27:13', 12),
+('b332d70a-b995-11f0-b748-c018509200f9', 'bfjhewfj', 'jhbfejwe', NULL, 'jbfjhwe', '<p>jfbjwvef</p>', 'posted', 'd28dffe7-3b06-4adc-bbc1-7ba3aa1e3e49.webp', NULL, '2025-11-04 23:48:07', '2025-11-04 23:48:07', 12),
+('c38afae1-b996-11f0-b748-c018509200f9', 'kjfbjhebj', 'kjbjefbwefb', NULL, 'kjbqbf', '<p>jfbjwfeb</p>', 'posted', 'c9853452-a0db-45d1-97e3-60b4240ecd74.webp', NULL, '2025-11-04 23:55:44', '2025-11-04 23:55:44', 12),
+('dae6dc1f-b99e-11f0-b748-c018509200f9', 'fmwbejb', 'kjnjwfe', NULL, 'jbfjhbe', '<p>fbwjehbfwe</p>', 'trash', NULL, NULL, '2025-11-05 00:53:39', '2025-11-05 01:44:23', 12),
+('daf314a0-c943-11f0-b8ab-c018509202f6', 'aaaaa', 'aaaa', 'aaaaa', 'aaa', '<p>aaaa</p>', 'posted', '1763995372179-711433668.png', NULL, '2025-11-24 22:42:52', '2025-11-24 22:42:52', 12),
+('e0b4921a-b996-11f0-b748-c018509200f9', 'd qjbdjw', 'kjbjbfej', NULL, 'jbjfehw', '<p><br></p>', 'posted', NULL, NULL, '2025-11-04 23:56:33', '2025-11-04 23:56:33', 12),
+('eb30e588-b996-11f0-b748-c018509200f9', 'ebfjbwe', 'kbjfehb', NULL, 'jbfjhwe', '<p>jbfjhew</p>', 'draft', NULL, NULL, '2025-11-04 23:56:51', '2025-11-04 23:56:51', 12);
 
 -- --------------------------------------------------------
 
@@ -240,12 +235,22 @@ INSERT INTO `page_views` (`page_name`, `view_date`, `visit_count`) VALUES
 ('/', '2025-11-22', 3),
 ('/about', '2025-11-22', 4),
 ('/announcements', '2025-11-22', 5),
+('/announcements', '2025-11-24', 26),
+('/announcements/jame', '2025-11-24', 5),
+('/announcements/null', '2025-11-24', 1),
+('/announcements/welcome-to-medisync', '2025-11-24', 6),
 ('/careers', '2025-11-22', 5),
 ('/contact', '2025-11-22', 3),
 ('/doctors', '2025-11-17', 7),
 ('/doctors', '2025-11-22', 3),
 ('/health', '2025-11-22', 4),
+('/health', '2025-11-24', 2),
+('/health/null', '2025-11-24', 10),
 ('/news', '2025-11-22', 3),
+('/news', '2025-11-24', 10),
+('/news/aaaaa', '2025-11-24', 2),
+('/news/jamesss', '2025-11-24', 9),
+('/news/null', '2025-11-24', 6),
 ('/services', '2025-11-17', 12),
 ('/services', '2025-11-22', 9);
 
@@ -279,6 +284,29 @@ INSERT INTO `page_views_backup` (`page_name`, `visit_count`, `view_date`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `post_logs`
+--
+
+CREATE TABLE `post_logs` (
+  `id` int(11) NOT NULL,
+  `post_id` varchar(255) NOT NULL,
+  `category` varchar(100) NOT NULL,
+  `action` varchar(100) NOT NULL,
+  `message` text DEFAULT NULL,
+  `editor` varchar(255) DEFAULT 'system',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `post_logs`
+--
+
+INSERT INTO `post_logs` (`id`, `post_id`, `category`, `action`, `message`, `editor`, `created_at`) VALUES
+(1, 'fe077a52-bdf7-11f0-9b30-c018509202f6', 'Announcements', 'edit', 'Post updated', 'James', '2025-11-24 14:09:55');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -301,7 +329,7 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `full_name`, `email`, `password`, `created_at`, `role`, `last_login`, `reset_code`, `code_expiry`) VALUES
 (8, 'Lynn', 'lynnzylameczdo@gmail.com', '$2b$10$ADe2OQ01nBT9Udz1/wJZaOc2XXdJ.OyPChMfN/PSD8x3Z2wzHkyOq', '2025-10-17 21:31:06', 'hr_administrator', '2025-11-08 02:03:38', '514594', '2025-10-25 10:41:31'),
 (11, 'Lynn Czyla Alpuerto', 'alpuerto_lynnczyla@plpasig.edu.ph', '$2b$10$ADe2OQ01nBT9Udz1/wJZaOc2XXdJ.OyPChMfN/PSD8x3Z2wzHkyOq', '2025-10-18 03:32:20', 'content_administrator', NULL, NULL, NULL),
-(12, 'James', 'flavierlaurence01@gmail.com', '$2b$10$ADe2OQ01nBT9Udz1/wJZaOc2XXdJ.OyPChMfN/PSD8x3Z2wzHkyOq', '2025-10-18 03:40:35', 'super_administrator', '2025-11-22 01:42:47', NULL, NULL),
+(12, 'James', 'flavierlaurence01@gmail.com', '$2b$10$ADe2OQ01nBT9Udz1/wJZaOc2XXdJ.OyPChMfN/PSD8x3Z2wzHkyOq', '2025-10-18 03:40:35', 'super_administrator', '2025-11-24 21:52:34', NULL, NULL),
 (26, 'Laurence HR', 'dumpblj@gmail.com', '$2b$10$Kx3YJuI3AzNiqMq/88FSUuuowi7bRwEJGU3AnyTzoEVT8QFwZ6VrK', '2025-11-09 11:04:50', 'hr_administrator', '2025-11-09 19:23:47', NULL, NULL);
 
 --
@@ -331,7 +359,8 @@ ALTER TABLE `files`
 -- Indexes for table `health_tips`
 --
 ALTER TABLE `health_tips`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `slug` (`slug`);
 
 --
 -- Indexes for table `jobs`
@@ -343,13 +372,21 @@ ALTER TABLE `jobs`
 -- Indexes for table `news`
 --
 ALTER TABLE `news`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `slug` (`slug`);
 
 --
 -- Indexes for table `page_views`
 --
 ALTER TABLE `page_views`
   ADD UNIQUE KEY `unique_page_date` (`page_name`,`view_date`);
+
+--
+-- Indexes for table `post_logs`
+--
+ALTER TABLE `post_logs`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_post_logs_created_at` (`created_at`);
 
 --
 -- Indexes for table `users`
@@ -372,19 +409,19 @@ ALTER TABLE `events_careers`
 -- AUTO_INCREMENT for table `files`
 --
 ALTER TABLE `files`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
-
---
--- AUTO_INCREMENT for table `health_tips`
---
-ALTER TABLE `health_tips`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `jobs`
 --
 ALTER TABLE `jobs`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `post_logs`
+--
+ALTER TABLE `post_logs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `users`
