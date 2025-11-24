@@ -42,14 +42,21 @@ export default function Doctors() {
         </div>
       </div>
 
-      <div className="doctors-card">
+      {/* Separate section for Add New Doctor Profile */}
+      <div className="doctors-card" style={{ marginBottom: '20px' }}>
         <div className="doctors-toolbar">
           <div className="doctors-toolbar-left">
             <span className="add-new-text">Add a New Doctor Profile</span>
           </div>
-          <button className="btn publish-btn">Publish</button>
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <button className="btn draft-btn">Draft</button>
+            <button className="btn publish-btn">Publish</button>
+          </div>
         </div>
+      </div>
 
+      {/* Separate section for Filter and Table */}
+      <div className="doctors-card">
         <div className="doctors-search-section">
           <div className="search-wrapper">
             <input
