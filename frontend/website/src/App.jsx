@@ -21,7 +21,7 @@ import Health from "./pages/Health";
 import ComponentNews from "./components/ComponentNews";
 import ComponentAnnouncement from "./components/ComponentAnnouncement";
 import ComponentHealth from "./components/ComponentHealth";
-
+import ComponentCareer from "./components/ComponentCareers";
 import "./App.css";
 
 function App() {
@@ -38,6 +38,8 @@ function App() {
         <Route path="/news" element={<News />} />
         <Route path="/announcements" element={<Announcements />} />
         <Route path="/careers" element={<Careers />} />
+        <Route path="/careers/:id" element={<ComponentCareer />} />
+
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/health" element={<Health />} />
