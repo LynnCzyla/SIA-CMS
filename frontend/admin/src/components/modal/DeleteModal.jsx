@@ -22,6 +22,22 @@ export default function DeleteModal({ post, onClose, onDeleted }) {
   return (
     <div className="modal-overlay">
       <div className="modal-box">
+        {/* Close button upper-right */}
+        <button
+          onClick={onClose}
+          style={{
+            position: "absolute",
+            top: "10px",
+            right: "10px",
+            border: "none",
+            background: "transparent",
+            fontSize: "18px",
+            cursor: "pointer"
+          }}
+        >
+          &times;
+        </button>
+
         <h2>Confirm Delete</h2>
         <p>Are you sure you want to move <strong>{post.title}</strong> to trash?</p>
         <div className="modal-buttons">

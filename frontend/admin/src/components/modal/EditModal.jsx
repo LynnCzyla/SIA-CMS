@@ -64,6 +64,22 @@ export default function EditModal({ post, onClose, onUpdated }) {
   return (
     <div className="modal-overlay">
       <div className="modal-box">
+        {/* Close button upper-right */}
+        <button
+          onClick={onClose}
+          style={{
+            position: "absolute",
+            top: "10px",
+            right: "10px",
+            border: "none",
+            background: "transparent",
+            fontSize: "18px",
+            cursor: "pointer"
+          }}
+        >
+          &times;
+        </button>
+
         <h2>Edit Post</h2>
         <div className="modal-form">
           <label>Short Title</label>

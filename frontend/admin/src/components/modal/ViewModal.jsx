@@ -22,6 +22,22 @@ export default function ViewModal({ post, onClose }) {
   return (
     <div className="modal-overlay">
       <div className="modal-box">
+        {/* Close button upper-right */}
+        <button
+          onClick={onClose}
+          style={{
+            position: "absolute",
+            top: "10px",
+            right: "10px",
+            border: "none",
+            background: "transparent",
+            fontSize: "18px",
+            cursor: "pointer"
+          }}
+        >
+          &times;
+        </button>
+
         <h2>{data?.full_title || post.title}</h2>
         <p><strong>Author:</strong> {data?.author || post.author}</p>
         <p><strong>Category:</strong> {post.category}</p>
