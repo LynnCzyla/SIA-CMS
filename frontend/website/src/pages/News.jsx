@@ -12,7 +12,7 @@ const News = () => {
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/news"); // your backend route
+        const response = await fetch("http://localhost:5000/api/news");
         const data = await response.json();
         setArticles(data);
       } catch (error) {
@@ -24,8 +24,15 @@ const News = () => {
     fetchNews();
   }, []);
 
+  // Helper function to extract plain text from HTML and limit to one sentence
+  const getFirstSentence = (htmlContent) => {
+    const text = htmlContent.replace(/<[^>]*>/g, '');
+    const match = text.match(/^[^.!?]*[.!?]/);
+    return match ? match[0].trim() : text.substring(0, 100) + '...';
+  };
+
   return (
-    <div className="news-section container py-5">
+    <div className="news-section1 container py-5">
       {loading ? (
         <div className="text-center mb-5">
           <Skeleton height={40} width={300} className="mx-auto mb-3" />
@@ -74,19 +81,14 @@ const News = () => {
 
                   <div className="card-body text-center d-flex flex-column justify-content-between">
                     <div>
+                      <p className="text-muted small mb-1">{article.short_title || 'No short title'}</p>
                       <h5 className="card-title fw-bold text-primary">{article.full_title}</h5>
                       <p className="text-muted small mb-2">
                         {new Date(article.created_at).toLocaleDateString()}
                       </p>
-                      <p
-                        className="card-text text-secondary small"
-                        dangerouslySetInnerHTML={{
-                          __html:
-                            article.description.length > 100
-                              ? article.description.slice(0, 100) + "..."
-                              : article.description,
-                        }}
-                      ></p>
+                      <p className="card-text text-secondary small">
+                        {getFirstSentence(article.description)}
+                      </p>
                     </div>
 
                     <Link
