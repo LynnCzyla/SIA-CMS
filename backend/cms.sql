@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 24, 2025 at 04:43 PM
+-- Generation Time: Nov 24, 2025 at 04:56 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -266,6 +266,7 @@ CREATE TABLE `page_views` (
 INSERT INTO `page_views` (`page_name`, `view_date`, `visit_count`) VALUES
 ('/', '2025-11-17', 19),
 ('/', '2025-11-22', 5),
+('/', '2025-11-24', 2),
 ('/about', '2025-11-22', 5),
 ('/announcements', '2025-11-22', 5),
 ('/careers', '2025-11-22', 5),
@@ -307,6 +308,32 @@ INSERT INTO `page_views_backup` (`page_name`, `visit_count`, `view_date`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `services`
+--
+
+CREATE TABLE `services` (
+  `id` char(36) NOT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `short_title` varchar(255) NOT NULL,
+  `full_title` varchar(255) NOT NULL,
+  `topic_tags` text DEFAULT NULL,
+  `description` text NOT NULL,
+  `status` enum('published','draft','archived') DEFAULT 'published',
+  `image` varchar(255) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `services`
+--
+
+INSERT INTO `services` (`id`, `user_id`, `short_title`, `full_title`, `topic_tags`, `description`, `status`, `image`, `created_at`, `updated_at`) VALUES
+('f7c25549-c94d-11f0-a10f-c018509200f9', 12, 'kfebfhk', 'kjfkwej', 'kjnkjbfekjw', '<p>efjbwefbjwhfe</p>', 'published', '6b70b638-7e9b-409e-8a9b-c32cd0143b35.webp', '2025-11-24 23:54:57', '2025-11-24 23:54:57');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -329,7 +356,7 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `full_name`, `email`, `password`, `created_at`, `role`, `last_login`, `reset_code`, `code_expiry`) VALUES
 (8, 'Lynn', 'lynnzylameczdo@gmail.com', '$2b$10$ADe2OQ01nBT9Udz1/wJZaOc2XXdJ.OyPChMfN/PSD8x3Z2wzHkyOq', '2025-10-17 21:31:06', 'hr_administrator', '2025-11-22 11:46:07', '514594', '2025-10-25 10:41:31'),
 (11, 'Lynn Czyla Alpuerto', 'alpuerto_lynnczyla@plpasig.edu.ph', '$2b$10$ADe2OQ01nBT9Udz1/wJZaOc2XXdJ.OyPChMfN/PSD8x3Z2wzHkyOq', '2025-10-18 03:32:20', 'content_administrator', NULL, NULL, NULL),
-(12, 'James', 'flavierlaurence01@gmail.com', '$2b$10$ADe2OQ01nBT9Udz1/wJZaOc2XXdJ.OyPChMfN/PSD8x3Z2wzHkyOq', '2025-10-18 03:40:35', 'super_administrator', '2025-11-22 10:52:07', NULL, NULL),
+(12, 'James', 'flavierlaurence01@gmail.com', '$2b$10$ADe2OQ01nBT9Udz1/wJZaOc2XXdJ.OyPChMfN/PSD8x3Z2wzHkyOq', '2025-10-18 03:40:35', 'super_administrator', '2025-11-24 23:54:09', NULL, NULL),
 (26, 'Laurence HR', 'dumpblj@gmail.com', '$2b$10$Kx3YJuI3AzNiqMq/88FSUuuowi7bRwEJGU3AnyTzoEVT8QFwZ6VrK', '2025-11-09 11:04:50', 'hr_administrator', '2025-11-09 19:23:47', NULL, NULL);
 
 --
@@ -386,6 +413,12 @@ ALTER TABLE `page_views`
   ADD UNIQUE KEY `unique_page_date` (`page_name`,`view_date`);
 
 --
+-- Indexes for table `services`
+--
+ALTER TABLE `services`
+  ADD KEY `fk_service_user` (`user_id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -431,6 +464,16 @@ ALTER TABLE `jobs`
 --
 ALTER TABLE `users`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `services`
+--
+ALTER TABLE `services`
+  ADD CONSTRAINT `fk_service_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
