@@ -2,35 +2,20 @@
 import React, { useEffect, useState } from "react";
 import { IoFilter } from "react-icons/io5";
 import { IoMdSearch } from "react-icons/io";
-
-import ViewModal from "../components/modal/ViewModal";
-import EditModal from "../components/modal/EditModal";
-import DeleteModal from "../components/modal/DeleteModal";
-
+import Swal from "sweetalert2";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/Posts.css";
 
 export default function Posts() {
   const [activeTab, setActiveTab] = useState("All");
   const [posts, setPosts] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
-
-  // filters
   const [filterAuthor, setFilterAuthor] = useState("All");
   const [filterCategory, setFilterCategory] = useState("All");
   const [filterDate, setFilterDate] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
-
-  // modals
-  const [selectedPost, setSelectedPost] = useState(null);
-  const [showViewModal, setShowViewModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-
-  // pagination (client-side)
   const [page, setPage] = useState(1);
   const pageSize = 10;
-
-  // logs (Edit Logs tab)
   const [logs, setLogs] = useState([]);
   const [logsPage, setLogsPage] = useState(1);
   const logsPerPage = 10;
@@ -40,12 +25,10 @@ export default function Posts() {
     fetchLogs();
   }, []);
 
-  // fetch aggregated posts
   const fetchPosts = async () => {
     try {
       const res = await fetch("http://localhost:5000/api/posts");
       const data = await res.json();
-      // ensure date is present
       const enriched = (data || []).map((p) => ({
         ...p,
         date: p.date || p.created_at || null,
@@ -58,7 +41,6 @@ export default function Posts() {
     }
   };
 
-  // fetch logs
   const fetchLogs = async () => {
     try {
       const res = await fetch("http://localhost:5000/api/posts/logs/all");
@@ -69,7 +51,6 @@ export default function Posts() {
     }
   };
 
-  // apply filters
   useEffect(() => {
     let filtered = posts.map((p) => ({
       ...p,
@@ -96,47 +77,82 @@ export default function Posts() {
     }
 
     if (searchQuery.trim()) {
-      filtered = filtered.filter((p) =>
-        (p.title || "").toLowerCase().includes(searchQuery.toLowerCase())
-      );
+      filtered = filtered.filter((p) => (p.title || "").toLowerCase().includes(searchQuery.toLowerCase()));
     }
 
     setFilteredPosts(filtered);
     setPage(1);
   }, [activeTab, posts, filterAuthor, filterCategory, filterDate, searchQuery]);
 
-  // open modals
-  const openView = (post) => {
-    setSelectedPost(post);
-    setShowViewModal(true);
-  };
-  const openEdit = (post) => {
-    setSelectedPost(post);
-    setShowEditModal(true);
-  };
-  const openDelete = (post) => {
-    setSelectedPost(post);
-    setShowDeleteModal(true);
-  };
-
-  const handleApplyEdit = (updated) => {
-    setPosts((prev) => prev.map((p) => (String(p.id) === String(updated.id) ? { ...p, ...updated } : p)));
-  };
-
-  const handleApplyDelete = (postId) => {
-    setPosts((prev) => prev.map((p) => (String(p.id) === String(postId) ? { ...p, status: "trash", normalizedStatus: "trash" } : p)));
+  // Handlers using SweetAlert2
+  const handleView = (post) => {
+    Swal.fire({
+      title: post.title,
+      html: `
+        <p><strong>Author:</strong> ${post.author || "Unknown"}</p>
+        <p><strong>Category:</strong> ${post.category || "Uncategorized"}</p>
+        <p><strong>Status:</strong> ${post.normalizedStatus}</p>
+        <p><strong>Date:</strong> ${post.date ? new Date(post.date).toLocaleString() : "—"}</p>
+        <hr>
+        <p>${post.content || "No content"}</p>
+      `,
+      width: 600,
+      showCloseButton: true,
+      focusConfirm: false,
+      confirmButtonText: "Close",
+    });
   };
 
-  // derived lists for filters
+  const handleEdit = (post) => {
+    Swal.fire({
+      title: "Edit Post",
+      html: `
+        <input id="swal-title" class="swal2-input" placeholder="Title" value="${post.title || ""}">
+        <input id="swal-category" class="swal2-input" placeholder="Category" value="${post.category || ""}">
+        <textarea id="swal-content" class="swal2-textarea" placeholder="Content">${post.content || ""}</textarea>
+      `,
+      showCancelButton: true,
+      confirmButtonText: "Save",
+      preConfirm: () => {
+        const title = document.getElementById("swal-title").value;
+        const category = document.getElementById("swal-category").value;
+        const content = document.getElementById("swal-content").value;
+        return { ...post, title, category, content };
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const updatedPost = result.value;
+        setPosts((prev) => prev.map((p) => (p.id === updatedPost.id ? updatedPost : p)));
+        Swal.fire("Saved!", "Post updated successfully.", "success");
+      }
+    });
+  };
+
+  const handleDelete = (post) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This will move the post to Trash!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setPosts((prev) =>
+          prev.map((p) => (p.id === post.id ? { ...p, status: "trash", normalizedStatus: "trash" } : p))
+        );
+        Swal.fire("Deleted!", "Post has been moved to Trash.", "success");
+      }
+    });
+  };
+
   const authors = ["All", ...Array.from(new Set(posts.map((p) => p.author || "Unknown")))];
   const categories = ["All", ...Array.from(new Set(posts.map((p) => p.category || "Uncategorized")))];
-  
-  // pagination helpers
+
   const total = filteredPosts.length;
   const pages = Math.max(1, Math.ceil(total / pageSize));
   const pageItems = filteredPosts.slice((page - 1) * pageSize, page * pageSize);
 
-  // logs pagination (simple client-side)
   const logsTotal = logs.length;
   const logsPages = Math.max(1, Math.ceil(logsTotal / logsPerPage));
   const logsPageItems = logs.slice((logsPage - 1) * logsPerPage, logsPage * logsPerPage);
@@ -144,7 +160,6 @@ export default function Posts() {
   return (
     <div className="cms-announcement-page">
       <h2 className="title">Posts</h2>
-
       <ul className="breadcrumbs">
         <li>Posts Log</li>
         <li className="divider">/</li>
@@ -165,28 +180,26 @@ export default function Posts() {
 
       {activeTab !== "Edit Logs" ? (
         <>
+          {/* Filters */}
           <div className="filter-bar">
             <button className="sort-btn"><IoFilter /> Sort</button>
-
             <select className="filter-select" value={filterAuthor} onChange={(e) => setFilterAuthor(e.target.value)}>
               {authors.map((a) => <option key={a}>{a}</option>)}
             </select>
-
             <select className="filter-select" value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
               {categories.map((c) => <option key={c}>{c}</option>)}
             </select>
-
             <select className="filter-select" value={filterDate} onChange={(e) => setFilterDate(e.target.value)}>
               <option>All</option>
               <option>Today</option>
             </select>
-
             <div className="search-box">
               <input type="text" placeholder="Search by title..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
               <button className="search-btn"><IoMdSearch /></button>
             </div>
           </div>
 
+          {/* Posts Table */}
           <div className="table-container">
             <table className="posts-table">
               <thead>
@@ -202,17 +215,17 @@ export default function Posts() {
               </thead>
               <tbody>
                 {pageItems.length ? pageItems.map((post, idx) => (
-                  <tr key={`${post.category}-${post.id}`}>
+                  <tr key={post.id}>
                     <td>{(page - 1) * pageSize + idx + 1}</td>
                     <td>{post.title}</td>
                     <td>{post.author}</td>
                     <td>{post.category}</td>
-                    <td>{(post.normalizedStatus || post.status || "draft").charAt(0).toUpperCase() + (post.normalizedStatus || post.status || "draft").slice(1)}</td>
-                    <td className={!post.date ? "empty-date" : ""}>{post.date ? new Date(post.date).toLocaleString() : "—"}</td>
+                    <td>{post.normalizedStatus.charAt(0).toUpperCase() + post.normalizedStatus.slice(1)}</td>
+                    <td>{post.date ? new Date(post.date).toLocaleString() : "—"}</td>
                     <td className="actions">
-                      <button className="actions-btn edit" onClick={() => openEdit(post)}>Edit</button>
-                      <button className="actions-btn view" onClick={() => openView(post)}>View</button>
-                      <button className="actions-btn delete" onClick={() => openDelete(post)}>Delete</button>
+                      <button className="actions-btn edit" onClick={() => handleEdit(post)}>Edit</button>
+                      <button className="actions-btn view" onClick={() => handleView(post)}>View</button>
+                      <button className="actions-btn delete" onClick={() => handleDelete(post)}>Delete</button>
                     </td>
                   </tr>
                 )) : (
@@ -222,19 +235,26 @@ export default function Posts() {
             </table>
           </div>
 
-          {/* pagination */}
-          <div className="pagination">
-            <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1}>Prev</button>
-            {Array.from({ length: pages }).map((_, i) => (
-              <button key={i} className={i + 1 === page ? "active-page" : ""} onClick={() => setPage(i + 1)}>{i + 1}</button>
-            ))}
-            <button onClick={() => setPage((p) => Math.min(pages, p + 1))} disabled={page === pages}>Next</button>
-          </div>
+          {/* Pagination */}
+          <nav aria-label="Posts pagination">
+            <ul className="pagination justify-content-center mt-3">
+              <li className={`page-item ${page === 1 ? "disabled" : ""}`}>
+                <button className="page-link" onClick={() => setPage(page - 1)}>Previous</button>
+              </li>
+              {Array.from({ length: pages }).map((_, i) => (
+                <li key={i} className={`page-item ${page === i + 1 ? "active" : ""}`}>
+                  <button className="page-link" onClick={() => setPage(i + 1)}>{i + 1}</button>
+                </li>
+              ))}
+              <li className={`page-item ${page === pages ? "disabled" : ""}`}>
+                <button className="page-link" onClick={() => setPage(page + 1)}>Next</button>
+              </li>
+            </ul>
+          </nav>
         </>
       ) : (
-        // Edit Logs tab
-        <div>
-          <h3>Edit Logs</h3>
+        <>
+          {/* Logs Table */}
           <div className="table-container">
             <table className="posts-table">
               <thead>
@@ -259,49 +279,28 @@ export default function Posts() {
                     <td style={{ maxWidth: 400, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{l.message}</td>
                     <td>{new Date(l.created_at).toLocaleString()}</td>
                   </tr>
-                )) : (
-                  <tr><td colSpan="7" className="no-posts">No logs</td></tr>
-                )}
+                )) : <tr><td colSpan="7" className="no-posts">No logs found.</td></tr>}
               </tbody>
             </table>
           </div>
 
-          <div className="pagination">
-            <button onClick={() => setLogsPage((p) => Math.max(1, p - 1))} disabled={logsPage === 1}>Prev</button>
-            {Array.from({ length: logsPages }).map((_, i) => (
-              <button key={i} className={logsPage === i + 1 ? "active-page" : ""} onClick={() => setLogsPage(i + 1)}>{i + 1}</button>
-            ))}
-            <button onClick={() => setLogsPage((p) => Math.min(logsPages, p + 1))} disabled={logsPage === logsPages}>Next</button>
-          </div>
-        </div>
-      )}
-
-      {/* Modals */}
-      {showViewModal && (
-        <ViewModal
-          post={selectedPost}
-          onClose={() => setShowViewModal(false)}
-        />
-      )}
-      {showEditModal && (
-        <EditModal
-          post={selectedPost}
-          onClose={() => setShowEditModal(false)}
-          onUpdated={(updated) => {
-            handleApplyEdit(updated);
-            setShowEditModal(false);
-          }}
-        />
-      )}
-      {showDeleteModal && (
-        <DeleteModal
-          post={selectedPost}
-          onClose={() => setShowDeleteModal(false)}
-          onDeleted={(id) => {
-            handleApplyDelete(id);
-            setShowDeleteModal(false);
-          }}
-        />
+          {/* Logs Pagination */}
+          <nav aria-label="Logs pagination">
+            <ul className="pagination justify-content-center mt-3">
+              <li className={`page-item ${logsPage === 1 ? "disabled" : ""}`}>
+                <button className="page-link" onClick={() => setLogsPage(logsPage - 1)}>Previous</button>
+              </li>
+              {Array.from({ length: logsPages }).map((_, i) => (
+                <li key={i} className={`page-item ${logsPage === i + 1 ? "active" : ""}`}>
+                  <button className="page-link" onClick={() => setLogsPage(i + 1)}>{i + 1}</button>
+                </li>
+              ))}
+              <li className={`page-item ${logsPage === logsPages ? "disabled" : ""}`}>
+                <button className="page-link" onClick={() => setLogsPage(logsPage + 1)}>Next</button>
+              </li>
+            </ul>
+          </nav>
+        </>
       )}
     </div>
   );
