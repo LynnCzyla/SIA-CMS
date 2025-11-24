@@ -26,6 +26,15 @@ const Announcements = () => {
     fetchAnnouncements();
   }, []);
 
+  // Helper function to extract plain text from HTML and limit to one sentence
+  const getFirstSentence = (htmlContent) => {
+    // Remove HTML tags
+    const text = htmlContent.replace(/<[^>]*>/g, '');
+    // Find first sentence (ends with . ! or ?)
+    const match = text.match(/^[^.!?]*[.!?]/);
+    return match ? match[0].trim() : text.substring(0, 100) + '...';
+  };
+
   return (
     <div className="announcements-section container py-5">
       {loading ? (
@@ -51,9 +60,10 @@ const Announcements = () => {
                 <div className="announcement-card card h-100 shadow-sm">
                   <Skeleton height={200} borderRadius={8} />
                   <div className="card-body text-center">
+                    <Skeleton height={20} width={150} className="mx-auto mb-2" />
                     <Skeleton height={25} width={250} className="mx-auto mb-2" />
                     <Skeleton height={15} width={100} className="mx-auto mb-2" />
-                    <Skeleton count={3} height={10} width={`80%`} className="mx-auto" />
+                    <Skeleton count={2} height={10} width={`80%`} className="mx-auto" />
                     <Skeleton height={35} width={120} className="mt-3 mx-auto rounded-pill" />
                   </div>
                 </div>
@@ -75,19 +85,21 @@ const Announcements = () => {
                   ></div>
                   <div className="card-body text-center d-flex flex-column justify-content-between">
                     <div>
-                      <h5 className="card-title fw-bold text-primary">{announcement.full_title}</h5>
-                      <p className="text-muted small mb-2">
+                      <p className="text-muted small mb-1 fw-semibold text-uppercase" style={{ fontSize: '0.85rem', letterSpacing: '0.5px' }}>
+                        {announcement.short_title}
+                      </p>
+                    
+                      <h5 className="card-title fw-bold text-primary mb-2">
+                        {announcement.full_title}
+                      </h5>
+                      
+                      <p className="text-muted small mb-3" style={{ fontSize: '0.8rem' }}>
                         {new Date(announcement.created_at).toLocaleDateString()}
                       </p>
-                      <p
-                        className="card-text text-secondary small"
-                        dangerouslySetInnerHTML={{
-                          __html:
-                            announcement.description.length > 100
-                              ? announcement.description.slice(0, 100) + "..."
-                              : announcement.description,
-                        }}
-                      ></p>
+                      
+                      <p className="card-text text-secondary small">
+                        {getFirstSentence(announcement.description)}
+                      </p>
                     </div>
                     <Link
                       to={`/announcements/${announcement.slug}`}
