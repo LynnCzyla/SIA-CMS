@@ -4,5 +4,8 @@
   },
   "scripts": {
     "start:all": "concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix frontend/admin\" \"npm run dev --prefix frontend/website\""
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.2"
   }
 }
