@@ -26,30 +26,24 @@ const upload = multer({ storage });
 // CREATE SERVICE
 // -----------------------------
 router.post("/", upload.single("image"), (req, res) => {
-  const { shortTitle, fullTitle, topicTags, description, status, author } = req.body;
+  console.log("FormData body:", req.body);
+  const { shortTitle, fullTitle, topicTags, description, status, userId } = req.body;
   const image = req.file ? req.file.filename : null;
 
-  if (!shortTitle || !fullTitle || !description) {
+  // Check required fields
+  if (!shortTitle || !fullTitle || !description || !userId) {
     return res.status(400).json({ success: false, message: "Missing required fields" });
   }
 
   const sql = `
     INSERT INTO services
-    (id, short_title, full_title, topic_tags, description, status, image, created_at, updated_at, author)
-    VALUES (UUID(), ?, ?, ?, ?, ?, ?, NOW(), NOW(), ?)
+    (id, user_id, short_title, full_title, topic_tags, description, status, image, created_at, updated_at)
+    VALUES (UUID(), ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
   `;
 
   db.query(
     sql,
-    [
-      shortTitle,
-      fullTitle,
-      topicTags || null,
-      description,
-      status || "published", // default to "published"
-      image,
-      author || "Admin",
-    ],
+    [userId, shortTitle, fullTitle, topicTags || null, description, status || "published", image],
     (err) => {
       if (err) return res.status(500).json({ success: false, message: err.sqlMessage });
 
@@ -61,6 +55,7 @@ router.post("/", upload.single("image"), (req, res) => {
     }
   );
 });
+
 
 // -----------------------------
 // GET ALL PUBLISHED SERVICES
