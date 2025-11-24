@@ -6,7 +6,7 @@ import axios from "axios";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
-import usePageTracker from "./hooks/usePageTracker";
+import UsePageTracker from "./hooks/usePageTracker"; // ✅ Fixed casing
 
 import Home from "./pages/Home";  // ← Make sure you import Home!
 import Services from "./pages/Services";
@@ -25,11 +25,9 @@ import ComponentHealth from "./components/ComponentHealth";
 import "./App.css";
 
 function App() {
-  
-
   return (
     <Router>
-      <usePageTracker />
+      <UsePageTracker /> {/* ✅ Fixed casing */}
       <ScrollToTop />
       <Navbar />
 
@@ -44,9 +42,10 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/health" element={<Health />} />
 
-        <Route path="/news/:id" element={<ComponentNews />} />
-        <Route path="/announcements/:id" element={<ComponentAnnouncement />} />
-        <Route path="/health/:id" element={<ComponentHealth />} />
+        <Route path="/news/:slug" element={<ComponentNews />} />
+        <Route path="/news" element={<News />} />
+        <Route path="/announcements/:slug" element={<ComponentAnnouncement />} />
+        <Route path="/health/:slug" element={<ComponentHealth />} />
       </Routes>
 
       <Footer />

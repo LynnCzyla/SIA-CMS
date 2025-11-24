@@ -1,167 +1,150 @@
-import "../css/Posts.css";
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // ← navigation
+// src/pages/Posts.jsx
+import React, { useEffect, useState } from "react";
 import { IoFilter } from "react-icons/io5";
 import { IoMdSearch } from "react-icons/io";
-import Swal from "sweetalert2";
+
+import ViewModal from "../components/modal/ViewModal";
+import EditModal from "../components/modal/EditModal";
+import DeleteModal from "../components/modal/DeleteModal";
+
+import "../css/Posts.css";
 
 export default function Posts() {
-  const navigate = useNavigate();
-
   const [activeTab, setActiveTab] = useState("All");
   const [posts, setPosts] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
 
-  // Filter states
+  // filters
   const [filterAuthor, setFilterAuthor] = useState("All");
   const [filterCategory, setFilterCategory] = useState("All");
   const [filterDate, setFilterDate] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
 
+  // modals
+  const [selectedPost, setSelectedPost] = useState(null);
+  const [showViewModal, setShowViewModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  // Fetch posts
+  // pagination (client-side)
+  const [page, setPage] = useState(1);
+  const pageSize = 10;
+
+  // logs (Edit Logs tab)
+  const [logs, setLogs] = useState([]);
+  const [logsPage, setLogsPage] = useState(1);
+  const logsPerPage = 10;
+
   useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const res = await fetch("http://localhost:5000/api/posts");
-        const data = await res.json();
-        setPosts(data);
-      } catch (err) {
-        console.error("❌ Fetch error:", err);
-      }
-    };
     fetchPosts();
+    fetchLogs();
   }, []);
 
-  
-
-  // Apply filters
-  useEffect(() => {
-    let filtered = [...posts];
-
-    filtered = filtered.map((p) => {
-      const normalizedStatus = p.status?.toLowerCase();
-      return {
+  // fetch aggregated posts
+  const fetchPosts = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/api/posts");
+      const data = await res.json();
+      // ensure date is present
+      const enriched = (data || []).map((p) => ({
         ...p,
-        normalizedStatus:
-          normalizedStatus === "posted" ||
-          normalizedStatus === "publish" ||
-          normalizedStatus === "published"
-            ? "published"
-            : normalizedStatus || "draft",
-      };
-    });
-
-    if (activeTab === "Published") {
-      filtered = filtered.filter((p) => p.normalizedStatus === "published");
-    } else if (activeTab === "Drafts") {
-      filtered = filtered.filter((p) => p.normalizedStatus === "draft");
-    } else if (activeTab === "Trash") {
-      filtered = filtered.filter((p) => p.normalizedStatus === "trash");
+        date: p.date || p.created_at || null,
+        status: (p.status || "").toLowerCase(),
+      }));
+      setPosts(enriched);
+    } catch (err) {
+      console.error("Failed to fetch posts", err);
+      alert("Failed to load posts");
     }
+  };
 
-    if (filterAuthor !== "All") {
-      filtered = filtered.filter((p) => p.author === filterAuthor);
+  // fetch logs
+  const fetchLogs = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/api/posts/logs/all");
+      const data = await res.json();
+      setLogs(data || []);
+    } catch (err) {
+      console.error("Failed to fetch logs", err);
     }
+  };
 
-    if (filterCategory !== "All") {
-      filtered = filtered.filter((p) => p.category === filterCategory);
-    }
+  // apply filters
+  useEffect(() => {
+    let filtered = posts.map((p) => ({
+      ...p,
+      normalizedStatus:
+        ["posted", "publish", "published"].includes((p.status || "").toLowerCase())
+          ? "published"
+          : ["draft", "pending"].includes((p.status || "").toLowerCase())
+          ? "draft"
+          : ["trash", "deleted", "archived"].includes((p.status || "").toLowerCase())
+          ? "trash"
+          : p.status || "draft",
+    }));
+
+    if (activeTab === "Published") filtered = filtered.filter((p) => p.normalizedStatus === "published");
+    if (activeTab === "Drafts") filtered = filtered.filter((p) => p.normalizedStatus === "draft");
+    if (activeTab === "Trash") filtered = filtered.filter((p) => p.normalizedStatus === "trash");
+
+    if (filterAuthor !== "All") filtered = filtered.filter((p) => (p.author || "Unknown") === filterAuthor);
+    if (filterCategory !== "All") filtered = filtered.filter((p) => (p.category || "Uncategorized") === filterCategory);
 
     if (filterDate === "Today") {
       const today = new Date().toISOString().split("T")[0];
-      filtered = filtered.filter((p) => p.date?.startsWith(today));
+      filtered = filtered.filter((p) => (p.date || "").startsWith(today));
     }
 
     if (searchQuery.trim()) {
       filtered = filtered.filter((p) =>
-        p.title.toLowerCase().includes(searchQuery.toLowerCase())
+        (p.title || "").toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
     setFilteredPosts(filtered);
-  }, [
-    activeTab,
-    posts,
-    filterAuthor,
-    filterCategory,
-    filterDate,
-    searchQuery,
-  ]);
+    setPage(1);
+  }, [activeTab, posts, filterAuthor, filterCategory, filterDate, searchQuery]);
 
-  // Handle delete
-  const handleDelete = async (post) => {
-    Swal.fire({
-      title: "Move to Trash?",
-      text: `Are you sure you want to move "${post.title}" to trash?`,
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, move to trash",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          const res = await fetch(
-            `http://localhost:5000/api/posts/trash/${encodeURIComponent(
-              post.category
-            )}/${post.id}`,
-            { method: "PUT" }
-          );
-          const data = await res.json();
-          if (res.ok) {
-            Swal.fire("Moved!", data.message, "success");
-            setPosts((prev) =>
-              prev.map((p) =>
-                p.id === post.id && p.category === post.category
-                  ? { ...p, status: "trash" }
-                  : p
-              )
-            );
-          } else {
-            Swal.fire("Error", data.message, "error");
-          }
-        } catch (error) {
-          Swal.fire("Error", "Failed to connect to backend.", "error");
-        }
-      }
-    });
+  // open modals
+  const openView = (post) => {
+    setSelectedPost(post);
+    setShowViewModal(true);
+  };
+  const openEdit = (post) => {
+    setSelectedPost(post);
+    setShowEditModal(true);
+  };
+  const openDelete = (post) => {
+    setSelectedPost(post);
+    setShowDeleteModal(true);
   };
 
-  // Handle edit
-  const handleEdit = (post) => {
-    const category = post.category.toLowerCase().replace(/\s+/g, ''); // remove spaces
-    let path;
+  const handleApplyEdit = (updated) => {
+    setPosts((prev) => prev.map((p) => (String(p.id) === String(updated.id) ? { ...p, ...updated } : p)));
+  };
+
+  const handleApplyDelete = (postId) => {
+    setPosts((prev) => prev.map((p) => (String(p.id) === String(postId) ? { ...p, status: "trash", normalizedStatus: "trash" } : p)));
+  };
+
+  // derived lists for filters
+  const authors = ["All", ...Array.from(new Set(posts.map((p) => p.author || "Unknown")))];
+  const categories = ["All", ...Array.from(new Set(posts.map((p) => p.category || "Uncategorized")))];
   
-    switch (category) {
-      case "announcement":
-        path = "/announcements";
-        break;
-      case "career":
-      case "events":
-      case "events&careers":
-        path = "/events";
-        break;
-      case "healthtips":
-        path = "/health";
-        break;
-      case "news":
-        path = "/news";
-        break;
-      default:
-        path = "/announcements";
-    }
-   // Pass the whole post as state
-   navigate(path, { state: { post } });
-  };
+  // pagination helpers
+  const total = filteredPosts.length;
+  const pages = Math.max(1, Math.ceil(total / pageSize));
+  const pageItems = filteredPosts.slice((page - 1) * pageSize, page * pageSize);
 
-  // Dynamic dropdowns
-  const authors = ["All", ...new Set(posts.map((p) => p.author))];
-  const categories = ["All", ...new Set(posts.map((p) => p.category))];
+  // logs pagination (simple client-side)
+  const logsTotal = logs.length;
+  const logsPages = Math.max(1, Math.ceil(logsTotal / logsPerPage));
+  const logsPageItems = logs.slice((logsPage - 1) * logsPerPage, logsPage * logsPerPage);
 
   return (
     <div className="cms-announcement-page">
       <h2 className="title">Posts</h2>
+
       <ul className="breadcrumbs">
         <li>Posts Log</li>
         <li className="divider">/</li>
@@ -169,7 +152,7 @@ export default function Posts() {
       </ul>
 
       <div className="tab-row">
-        {["All", "Published", "Drafts", "Trash"].map((label) => (
+        {["All", "Published", "Drafts", "Trash", "Edit Logs"].map((label) => (
           <span
             key={label}
             className={`tab-item ${activeTab === label ? "active" : ""}`}
@@ -180,110 +163,146 @@ export default function Posts() {
         ))}
       </div>
 
-      <div className="filter-bar">
-        <button className="sort-btn">
-          <IoFilter /> Sort
-        </button>
-        <select
-          className="filter-select"
-          value={filterAuthor}
-          onChange={(e) => setFilterAuthor(e.target.value)}
-        >
-          {authors.map((a) => (
-            <option key={a}>{a}</option>
-          ))}
-        </select>
-        <select
-          className="filter-select"
-          value={filterCategory}
-          onChange={(e) => setFilterCategory(e.target.value)}
-        >
-          {categories.map((c) => (
-            <option key={c}>{c}</option>
-          ))}
-        </select>
-        <select
-          className="filter-select"
-          value={filterDate}
-          onChange={(e) => setFilterDate(e.target.value)}
-        >
-          <option>All</option>
-          <option>Today</option>
-        </select>
-        <div className="search-box">
-          <input
-            type="text"
-            placeholder="Search by title..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <button className="search-btn">
-            <IoMdSearch />
-          </button>
-        </div>
-      </div>
+      {activeTab !== "Edit Logs" ? (
+        <>
+          <div className="filter-bar">
+            <button className="sort-btn"><IoFilter /> Sort</button>
 
-      <div className="table-container">
-        <table className="posts-table">
-          <thead>
-            <tr>
-              <th>No.</th>
-              <th>Title</th>
-              <th>Published By</th>
-              <th>Category</th>
-              <th>Status</th>
-              <th>Date</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredPosts.length > 0 ? (
-              filteredPosts.map((post, index) => (
-                <tr key={`${post.category}-${post.id}`}>
-                  <td>{index + 1}</td>
-                  <td>{post.title}</td>
-                  <td>{post.author}</td>
-                  <td>{post.category}</td>
-                  <td>
-                    {post.normalizedStatus
-                      ? post.normalizedStatus.charAt(0).toUpperCase() +
-                        post.normalizedStatus.slice(1)
-                      : post.status}
-                  </td>
-                  <td className={!post.date ? "empty-date" : ""}>
-                    {post.date || "—"}
-                  </td>
-                  <td className="actions">
-                    <span
-                      className="table-action"
-                      onClick={() => handleEdit(post)}
-                    >
-                      [Edit]
-                    </span>
-                    <span className="divider">|</span>
-                    <span className="table-action">[View]</span>
-                    <span
-                      className="divider"
-                    ></span>
-                    <span
-                      className="table-action delete"
-                      onClick={() => handleDelete(post)}
-                    >
-                      [Delete]
-                    </span>
-                  </td>
+            <select className="filter-select" value={filterAuthor} onChange={(e) => setFilterAuthor(e.target.value)}>
+              {authors.map((a) => <option key={a}>{a}</option>)}
+            </select>
+
+            <select className="filter-select" value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
+              {categories.map((c) => <option key={c}>{c}</option>)}
+            </select>
+
+            <select className="filter-select" value={filterDate} onChange={(e) => setFilterDate(e.target.value)}>
+              <option>All</option>
+              <option>Today</option>
+            </select>
+
+            <div className="search-box">
+              <input type="text" placeholder="Search by title..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+              <button className="search-btn"><IoMdSearch /></button>
+            </div>
+          </div>
+
+          <div className="table-container">
+            <table className="posts-table">
+              <thead>
+                <tr>
+                  <th>No.</th>
+                  <th>Title</th>
+                  <th>Published By</th>
+                  <th>Category</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                  <th>Actions</th>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="7" style={{ textAlign: "center", color: "#666" }}>
-                  No posts found.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+              </thead>
+              <tbody>
+                {pageItems.length ? pageItems.map((post, idx) => (
+                  <tr key={`${post.category}-${post.id}`}>
+                    <td>{(page - 1) * pageSize + idx + 1}</td>
+                    <td>{post.title}</td>
+                    <td>{post.author}</td>
+                    <td>{post.category}</td>
+                    <td>{(post.normalizedStatus || post.status || "draft").charAt(0).toUpperCase() + (post.normalizedStatus || post.status || "draft").slice(1)}</td>
+                    <td className={!post.date ? "empty-date" : ""}>{post.date ? new Date(post.date).toLocaleString() : "—"}</td>
+                    <td className="actions">
+                      <button className="actions-btn edit" onClick={() => openEdit(post)}>Edit</button>
+                      <button className="actions-btn view" onClick={() => openView(post)}>View</button>
+                      <button className="actions-btn delete" onClick={() => openDelete(post)}>Delete</button>
+                    </td>
+                  </tr>
+                )) : (
+                  <tr><td colSpan="7" className="no-posts">No posts found.</td></tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {/* pagination */}
+          <div className="pagination">
+            <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1}>Prev</button>
+            {Array.from({ length: pages }).map((_, i) => (
+              <button key={i} className={i + 1 === page ? "active-page" : ""} onClick={() => setPage(i + 1)}>{i + 1}</button>
+            ))}
+            <button onClick={() => setPage((p) => Math.min(pages, p + 1))} disabled={page === pages}>Next</button>
+          </div>
+        </>
+      ) : (
+        // Edit Logs tab
+        <div>
+          <h3>Edit Logs</h3>
+          <div className="table-container">
+            <table className="posts-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Post ID</th>
+                  <th>Category</th>
+                  <th>Action</th>
+                  <th>Editor</th>
+                  <th>Message</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {logsPageItems.length ? logsPageItems.map((l, idx) => (
+                  <tr key={l.id}>
+                    <td>{(logsPage - 1) * logsPerPage + idx + 1}</td>
+                    <td style={{ fontFamily: "monospace" }}>{l.post_id}</td>
+                    <td>{l.category}</td>
+                    <td>{l.action}</td>
+                    <td>{l.editor}</td>
+                    <td style={{ maxWidth: 400, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{l.message}</td>
+                    <td>{new Date(l.created_at).toLocaleString()}</td>
+                  </tr>
+                )) : (
+                  <tr><td colSpan="7" className="no-posts">No logs</td></tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="pagination">
+            <button onClick={() => setLogsPage((p) => Math.max(1, p - 1))} disabled={logsPage === 1}>Prev</button>
+            {Array.from({ length: logsPages }).map((_, i) => (
+              <button key={i} className={logsPage === i + 1 ? "active-page" : ""} onClick={() => setLogsPage(i + 1)}>{i + 1}</button>
+            ))}
+            <button onClick={() => setLogsPage((p) => Math.min(logsPages, p + 1))} disabled={logsPage === logsPages}>Next</button>
+          </div>
+        </div>
+      )}
+
+      {/* Modals */}
+      {showViewModal && (
+        <ViewModal
+          post={selectedPost}
+          onClose={() => setShowViewModal(false)}
+        />
+      )}
+      {showEditModal && (
+        <EditModal
+          post={selectedPost}
+          onClose={() => setShowEditModal(false)}
+          onUpdated={(updated) => {
+            handleApplyEdit(updated);
+            setShowEditModal(false);
+          }}
+        />
+      )}
+      {showDeleteModal && (
+        <DeleteModal
+          post={selectedPost}
+          onClose={() => setShowDeleteModal(false)}
+          onDeleted={(id) => {
+            handleApplyDelete(id);
+            setShowDeleteModal(false);
+          }}
+        />
+      )}
     </div>
   );
 }
