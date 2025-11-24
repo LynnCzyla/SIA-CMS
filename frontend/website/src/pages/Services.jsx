@@ -102,9 +102,9 @@ export default function Services() {
     <div className="services-page">
       {/* Our Services Section */}
       <div className="services-header-section">
-        <h1 className="services-main-title">
-          Our <span className="title-highlight">Services</span>
-        </h1>
+        <h2 className="title-center mb-4 text-primary">
+            Latest <span className="title-primary">Careers</span>
+          </h2>
         
         <div className="top-services-grid">
           {topServices.map((service) => (

@@ -199,9 +199,7 @@ export default function Hospital() {
             {activeTab === "contact" && "Contact Update"}
           </h3>
           <div className="announcement-actions">
-            <button className="btn draft" onClick={() => handleSubmit("draft")}>
-              Draft
-            </button>
+           
             <button className="btn submit" onClick={() => handleSubmit("published")}>
               Publish
             </button>
