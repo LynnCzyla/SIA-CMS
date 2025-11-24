@@ -79,7 +79,7 @@ function Appearance() {
           confirmButtonText: "Preview Website",
           confirmButtonColor: "#2563eb",
         }).then(() => {
-          window.open("http://localhost:5174/", "_blank");
+          window.open("http://localhost:5173/", "_blank");
         });
       }
     } catch (err) {
@@ -301,7 +301,7 @@ function Appearance() {
 
             <button
               className="btn btn-outline-info px-4 py-2 ms-auto"
-              onClick={() => window.open("http://localhost:5174/", "_blank")}
+              onClick={() => window.open("http://localhost:5173/", "_blank")}
             >
               Preview Website
             </button>

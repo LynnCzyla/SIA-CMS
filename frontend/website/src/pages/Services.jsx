@@ -3,13 +3,33 @@ import { useEffect, useState } from "react";
 
 export default function Services() {
   const [servicesData, setServicesData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetch("http://localhost:5000/api/services")
-      .then(res => res.json())
-      .then(data => setServicesData(data))
-      .catch(err => console.log(err));
+      .then(res => {
+        if (!res.ok) throw new Error("Failed to fetch services");
+        return res.json();
+      })
+      .then(data => {
+        setServicesData(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error(err);
+        setError("Unable to load services.");
+        setLoading(false);
+      });
   }, []);
+
+  if (loading) {
+    return <div className="text-center py-5">Loading services...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center text-danger py-5">{error}</div>;
+  }
 
   return (
     <section className="py-5" style={{ backgroundColor: "var(--white)" }}>
@@ -19,19 +39,20 @@ export default function Services() {
         </h2>
 
         <div className="row g-5">
-          {servicesData.map((service, index) => (
-            <div key={index} className="col-12 col-lg-6">
+          {servicesData.map(service => (
+            <div key={service.id || service.short_title} className="col-12 col-lg-6">
               <div className="service-card-modern d-flex align-items-center bg-white rounded-4 overflow-hidden shadow-sm">
+
                 {/* Left: Image Container */}
-                <div className="service-image flex-shrink-0">
+                <div className="service-image flex-shrink-0" style={{ width: "180px" }}>
                   {service.image_url ? (
                     <img
                       src={service.image_url}
                       alt={service.short_title}
                       className="img-fluid"
+                      style={{ width: "100%", height: "auto", objectFit: "cover" }}
                     />
                   ) : (
-                    // Default fallback brain SVG (you can replace with your actual SVG)
                     <svg
                       width="180"
                       height="180"
@@ -62,23 +83,33 @@ export default function Services() {
                   <h3 className="h4 fw-bold text-primary mb-3">
                     {service.short_title || "Psychiatry / Behavioral Health"}
                   </h3>
-                  <p
-                    className="text-gray mb-4"
-                    dangerouslySetInnerHTML={{ __html: service.description }}
-                  />
-                  <a href="#" className="btn btn-outline-primary rounded-pill px-4">
+
+                  {service.description ? (
+                    <p
+                      className="text-gray mb-4"
+                      dangerouslySetInnerHTML={{ __html: service.description }}
+                    />
+                  ) : (
+                    <p className="text-gray mb-4">No description available.</p>
+                  )}
+
+                  <button className="btn btn-outline-primary rounded-pill px-4">
                     Read More →
-                  </a>
+                  </button>
+
                   {service.created_at && (
                     <p className="text-muted small mt-3 mb-0">
-                      Added on {new Date(service.created_at).toLocaleDateString()}
+                      Added on{" "}
+                      {new Date(service.created_at).toLocaleDateString()}
                     </p>
                   )}
                 </div>
+
               </div>
             </div>
           ))}
         </div>
+
       </div>
     </section>
   );
