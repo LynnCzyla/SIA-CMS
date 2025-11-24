@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 24, 2025 at 04:56 PM
+-- Generation Time: Nov 24, 2025 at 05:03 PM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -304,6 +304,29 @@ INSERT INTO `page_views_backup` (`page_name`, `visit_count`, `view_date`) VALUES
 ('/health', 4, '2025-11-22'),
 ('/news', 3, '2025-11-22'),
 ('/services', 12, '2025-11-17');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `post_logs`
+--
+
+CREATE TABLE `post_logs` (
+  `id` int(11) NOT NULL,
+  `post_id` varchar(255) NOT NULL,
+  `category` varchar(100) NOT NULL,
+  `action` varchar(100) NOT NULL,
+  `message` text DEFAULT NULL,
+  `editor` varchar(255) DEFAULT 'system',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `post_logs`
+--
+
+INSERT INTO `post_logs` (`id`, `post_id`, `category`, `action`, `message`, `editor`, `created_at`) VALUES
+(1, 'fe077a52-bdf7-11f0-9b30-c018509202f6', 'Announcements', 'edit', 'Post updated', 'James', '2025-11-24 06:09:55');
 
 -- --------------------------------------------------------
 
