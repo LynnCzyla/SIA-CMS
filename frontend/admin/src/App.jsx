@@ -13,6 +13,7 @@ import Media from "./pages/Media";
 import ForgotPassword from "./pages/ForgotPassword";
 import Hospital from "./pages/Hospital";
 import Analytics from "./pages/Analytics";
+import Doctors from "./pages/Doctors";
 
 export default function App() {
   return (
@@ -37,6 +38,7 @@ export default function App() {
           <Route path="media" element={<Media />} />
           <Route path="hospital" element={<Hospital />} />
           <Route path="analytics" element={<Analytics />} />
+          <Route path="doctors" element={<Doctors />} />
         </Route>
 
         {/* Catch-all Redirect */}
