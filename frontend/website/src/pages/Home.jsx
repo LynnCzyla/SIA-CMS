@@ -154,7 +154,7 @@ function Home() {
                   <h1 className="display-4 fw-bold mb-4">
                     <em>Your Health, Our Priority.</em>
                   </h1>
-                  <p className="fs-6 text-secondary mb-4">
+                  <p className="fs-6 text-secondary mb-4 text ">
                     We unite innovation and empathy to redefine healthcare —
                     blending modern medical expertise with heartfelt human
                     connection to help you heal, recover, and thrive.
