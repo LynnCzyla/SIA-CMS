@@ -6,7 +6,8 @@ import "react-loading-skeleton/dist/skeleton.css";
 import "../components/components-css/ComponentNews.css";
 
 const ComponentAnnouncement = () => {
-  const { id } = useParams();
+  // Changed from 'id' to 'slug' to match the URL parameter
+  const { slug } = useParams();
   const navigate = useNavigate();
 
   const [announcement, setAnnouncement] = useState(null);
@@ -14,11 +15,12 @@ const ComponentAnnouncement = () => {
   const [loading, setLoading] = useState(true);
   const [sidebarLoading, setSidebarLoading] = useState(true);
 
-  // Fetch single announcement
+  // Fetch single announcement by slug
   useEffect(() => {
     const fetchAnnouncement = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/announcements/${id}`);
+        // Now using slug instead of id
+        const res = await fetch(`http://localhost:5000/api/announcements/${slug}`);
         const data = await res.json();
         setAnnouncement(data);
       } catch (error) {
@@ -27,8 +29,12 @@ const ComponentAnnouncement = () => {
         setLoading(false);
       }
     };
-    fetchAnnouncement();
-  }, [id]);
+    
+    // Only fetch if slug exists
+    if (slug) {
+      fetchAnnouncement();
+    }
+  }, [slug]); // Changed dependency from 'id' to 'slug'
 
   // Fetch all announcements for sidebar
   useEffect(() => {
@@ -46,10 +52,10 @@ const ComponentAnnouncement = () => {
     fetchAllAnnouncements();
   }, []);
 
-  // Scroll to top on ID change
+  // Scroll to top on slug change
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [id]);
+  }, [slug]); // Changed dependency from 'id' to 'slug'
 
   if (loading) {
     return (
@@ -146,29 +152,28 @@ const ComponentAnnouncement = () => {
                 <Skeleton count={5} height={60} className="mb-2" />
               ) : (
                 <ul className="sidebar-list">
-  {allAnnouncements
-    .filter((a) => a.id !== announcement.id)
-    .slice(0, 6)
-    .map((a) => (
-      <li key={a.id} className="sidebar-item">
-        {/* Use slug instead of id for route */}
-        <Link
-          to={`/announcements/${a.slug}`}  
-          className="sidebar-link"
-        >
-          <div className="sidebar-content">
-            <h5 className="sidebar-title-text">
-              {a.short_title || a.full_title}
-            </h5>
-            <p className="sidebar-date">
-              {new Date(a.created_at).toLocaleDateString()}
-            </p>
-          </div>
-        </Link>
-      </li>
-    ))}
-</ul>
-
+                  {allAnnouncements
+                    .filter((a) => a.slug !== announcement.slug) // Filter by slug instead of id
+                    .slice(0, 6)
+                    .map((a) => (
+                      <li key={a.id} className="sidebar-item">
+                        {/* Using slug for the route */}
+                        <Link
+                          to={`/announcements/${a.slug}`}  
+                          className="sidebar-link"
+                        >
+                          <div className="sidebar-content">
+                            <h5 className="sidebar-title-text">
+                              {a.short_title || a.full_title}
+                            </h5>
+                            <p className="sidebar-date">
+                              {new Date(a.created_at).toLocaleDateString()}
+                            </p>
+                          </div>
+                        </Link>
+                      </li>
+                    ))}
+                </ul>
               )}
             </div>
           </div>

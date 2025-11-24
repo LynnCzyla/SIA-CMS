@@ -379,7 +379,7 @@
 .services-header h2 {
   font-family: "Inter", sans-serif;
   font-size: 2.2rem;
-  color: var(--secondary-color);
+  color: var(--primary-color2);
 }
 
 .services-header h2 span,

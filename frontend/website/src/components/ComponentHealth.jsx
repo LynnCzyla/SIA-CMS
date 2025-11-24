@@ -6,7 +6,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import "../components/components-css/ComponentNews.css";
 
 const ComponentHealth = () => {
-  const { id } = useParams();
+  const { slug } = useParams();
   const navigate = useNavigate();
 
   const [article, setArticle] = useState(null);
@@ -14,11 +14,10 @@ const ComponentHealth = () => {
   const [loading, setLoading] = useState(true);
   const [sidebarLoading, setSidebarLoading] = useState(true);
 
-  // Fetch single health tip article
   useEffect(() => {
     const fetchArticle = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/health-tips/${id}`);
+        const res = await fetch(`http://localhost:5000/api/health-tips/${slug}`);
         const data = await res.json();
         setArticle(data);
       } catch (error) {
@@ -28,9 +27,8 @@ const ComponentHealth = () => {
       }
     };
     fetchArticle();
-  }, [id]);
+  }, [slug]);
 
-  // Fetch all health tips for sidebar
   useEffect(() => {
     const fetchAllHealthTips = async () => {
       try {
@@ -46,12 +44,10 @@ const ComponentHealth = () => {
     fetchAllHealthTips();
   }, []);
 
-  // Scroll to top on article change
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [id]);
+  }, [slug]);
 
-  // Loading skeleton
   if (loading) {
     return (
       <div className="container py-5">
@@ -75,12 +71,10 @@ const ComponentHealth = () => {
 
   return (
     <div className="news-container">
-      {/* Back Button */}
       <button className="back-btn" onClick={() => navigate("/health")}>
         <FaArrowLeft className="back-icon" /> Back
       </button>
 
-      {/* Breadcrumb */}
       <div className="breadcrumb">
         <Link to="/health">Health Tips</Link>
         <span>/</span>
@@ -90,15 +84,14 @@ const ComponentHealth = () => {
       <h2 className="news-section-title">HEALTH TIPS</h2>
 
       <div className="news-layout">
-        {/* MAIN ARTICLE */}
         <div className="news-main">
           <h4 className="news-short-title">{article.short_title}</h4>
           <h3 className="news-title">{article.full_title}</h3>
 
           {article.topic_tags && (
             <div className="news-tags">
-              {article.topic_tags.split(",").map((tag, index) => (
-                <span key={index} className="tag">
+              {article.topic_tags.split(",").map((tag, idx) => (
+                <span key={idx} className="tag">
                   <FaTag className="tag-icon" /> {tag.trim()}
                 </span>
               ))}
@@ -112,15 +105,12 @@ const ComponentHealth = () => {
 
           {(article.image_url || article.image) && (
             <div className="news-image">
-              <img
-                src={article.image_url || article.image}
-                alt={article.full_title}
-              />
+              <img src={article.image_url || article.image} alt={article.full_title} />
             </div>
           )}
 
           <p className="photo-credit">
-            Author: {article.author || "TMC News Desk"}
+            Author: {article.author_name || "TMC News Desk"}
           </p>
 
           <div
@@ -129,26 +119,22 @@ const ComponentHealth = () => {
           ></div>
         </div>
 
-        {/* SIDEBAR */}
         <aside className="news-sidebar">
           <div className="sidebar-box">
             <h4 className="sidebar-title">More Health Tips</h4>
-
             <div className="sidebar-scroll">
               {sidebarLoading ? (
                 <Skeleton count={5} height={60} className="mb-3" />
               ) : (
                 <ul className="sidebar-list">
                   {allHealthTips
-                    .filter((tip) => tip.id !== article.id)
+                    .filter(tip => tip.id !== article.id)
                     .slice(0, 6)
-                    .map((tip) => (
+                    .map(tip => (
                       <li key={tip.id} className="sidebar-item">
-                        <Link to={`/health/${tip.id}`} className="sidebar-link">
+                        <Link to={`/health/${tip.slug}`} className="sidebar-link">
                           <div className="sidebar-content">
-                            <h5 className="sidebar-title-text">
-                              {tip.full_title}
-                            </h5>
+                            <h5 className="sidebar-title-text">{tip.full_title}</h5>
                             <p className="sidebar-date">
                               {new Date(tip.created_at).toLocaleDateString()}
                             </p>
@@ -161,12 +147,9 @@ const ComponentHealth = () => {
             </div>
           </div>
 
-          {/* Sponsor box */}
           <div className="ad-box">
             <h4 className="ad-title">Sponsored</h4>
-            <div className="ad-placeholder">
-              💙 I MISS YOU HANNI & NEW JEANS 💙
-            </div>
+            <div className="ad-placeholder">💙 I MISS YOU HANNI & NEW JEANS 💙</div>
           </div>
         </aside>
       </div>

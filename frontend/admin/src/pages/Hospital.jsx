@@ -36,6 +36,12 @@ export default function Hospital() {
     topicTags: "",
   });
 
+  const currentUser = JSON.parse(localStorage.getItem("user"));
+  if (!currentUser) {
+    alert("Please log in first!");
+    return null;
+  }
+
   // Initialize Quill editor for Services
   useEffect(() => {
     if (activeTab === "services" && quillRef.current && !quillRef.current.__quill) {
@@ -82,87 +88,90 @@ export default function Hospital() {
       const isImage = file.type.startsWith("image/");
       const preview = isImage ? URL.createObjectURL(file) : null;
       setFileInfo({ name: file.name, type: file.type, preview, isImage });
+    } else {
+      setFileInfo(null);
     }
   };
 
   const handleAboutFormChange = (field, value) =>
-    setAboutForm((prev) => ({ ...prev, [field]: value }));
+    setAboutForm((prev) => ({ ...prev, [field]: value || "" }));
 
   const handleContactFormChange = (field, value) =>
-    setContactForm((prev) => ({ ...prev, [field]: value }));
+    setContactForm((prev) => ({ ...prev, [field]: value || "" }));
 
   const handleServicesFormChange = (field, value) =>
-    setServicesForm((prev) => ({ ...prev, [field]: value }));
+    setServicesForm((prev) => ({ ...prev, [field]: value || "" }));
 
   // Submit handler
   const handleSubmit = async (status) => {
     const mode = status === "draft" ? "Draft Saved" : "Published";
 
     try {
-      let content;
-
       if (activeTab === "general") {
-        content = "General Settings Updated";
+        Swal.fire({ icon: "success", title: "General Settings Updated!" });
       } else if (activeTab === "about") {
-        // Send About form to backend
         const res = await fetch("http://localhost:5000/api/about", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(aboutForm),
         });
-
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || "Save failed");
 
-        // Refetch latest about info to update input fields
-        const latest = await fetch("http://localhost:5000/api/about").then((r) => r.json());
-        setAboutForm({
-          aboutHospital: latest.aboutHospital || "",
-          mission: latest.mission || "",
-          vision: latest.vision || "",
-          qualityPolicy: latest.qualityPolicy || "",
-          coreValues: latest.coreValues || "",
-          ourHistory: latest.ourHistory || "",
-          privacyPolicy: latest.privacyPolicy || "",
-        });
-
-        content = data;
+        Swal.fire({ icon: "success", title: "About Info Updated!" });
       } else if (activeTab === "contact") {
-        content = contactForm;
+        Swal.fire({ icon: "success", title: "Contact Info Updated!" });
       } else if (activeTab === "services") {
-        const description = quillRef.current?.__quill?.root.innerHTML || "";
+        const description = quillRef.current?.__quill?.root.innerHTML.trim();
+
+        if (
+          !servicesForm.shortTitle.trim() ||
+          !servicesForm.fullTitle.trim() ||
+          !description ||
+          description === "<p><br></p>"
+        ) {
+          Swal.fire({
+            icon: "error",
+            title: "Missing Fields",
+            text: "Please fill in Short Title, Full Title, and Description.",
+          });
+          return;
+        }
 
         const formData = new FormData();
-        formData.append("shortTitle", servicesForm.shortTitle);
-        formData.append("fullTitle", servicesForm.fullTitle);
-        formData.append("topicTags", servicesForm.topicTags);
+        formData.append("shortTitle", servicesForm.shortTitle.trim());
+        formData.append("fullTitle", servicesForm.fullTitle.trim());
+        formData.append("topicTags", servicesForm.topicTags.trim());
         formData.append("description", description);
         formData.append("status", status);
-        formData.append("author", "Admin");
-        if (fileInfo?.preview) formData.append("image", fileInputRef.current.files[0]);
+
+        if (fileInputRef.current?.files[0]) {
+          formData.append("image", fileInputRef.current.files[0]);
+        }
+
+        formData.append("userId", currentUser.id); // replace with actual logged-in user ID
 
         const res = await fetch("http://localhost:5000/api/services", {
           method: "POST",
-          body: formData,
+          body: formData, // do NOT set Content-Type manually
         });
+
         const data = await res.json();
         if (!data.success) throw new Error(data.message);
 
-        content = data;
+        Swal.fire({
+          icon: "success",
+          title: status === "draft" ? "Draft Saved!" : "Published Successfully!",
+          confirmButtonColor: "#043873",
+        });
+
+        // Reset form
         setServicesForm({ shortTitle: "", fullTitle: "", topicTags: "" });
         setFileInfo(null);
         quillRef.current.__quill.setContents([]);
       }
-
-      Swal.fire({
-        icon: "success",
-        title: `${mode} Successfully!`,
-        text: `Your content has been ${status}.`,
-        confirmButtonColor: "#043873",
-      });
-
-      console.log({ tab: activeTab, content, status });
     } catch (err) {
+      console.error("Submission error:", err);
       Swal.fire({ icon: "error", title: "Error", text: err.message });
     }
   };
@@ -226,14 +235,14 @@ export default function Hospital() {
                 "privacyPolicy",
               ].map((field) => (
                 <div className="about-form-group" key={field}>
-                <label>{field.replace(/([A-Z])/g, " $1")}</label>
-                <textarea
-                  value={aboutForm[field]}
-                  placeholder={`Enter ${field.replace(/([A-Z])/g, " $1")}`}
-                  onChange={(e) => handleAboutFormChange(field, e.target.value)}
-                  rows={4} // you can adjust the number of visible rows
-                />
-              </div>
+                  <label>{field.replace(/([A-Z])/g, " $1")}</label>
+                  <textarea
+                    value={aboutForm[field] || ""}
+                    placeholder={`Enter ${field.replace(/([A-Z])/g, " $1")}`}
+                    onChange={(e) => handleAboutFormChange(field, e.target.value)}
+                    rows={4}
+                  />
+                </div>
               ))}
             </div>
           )}
@@ -246,7 +255,7 @@ export default function Hospital() {
                   <label>{field.replace(/([A-Z])/g, " $1")}</label>
                   <input
                     type="text"
-                    value={contactForm[field]}
+                    value={contactForm[field] || ""}
                     placeholder={`Enter ${field.replace(/([A-Z])/g, " $1")}`}
                     onChange={(e) => handleContactFormChange(field, e.target.value)}
                   />
@@ -259,12 +268,12 @@ export default function Hospital() {
           {activeTab === "services" && (
             <>
               <div className="cms-form-row">
-                {["ShortTitle", "FullTitle", "TopicTags"].map((field) => (
+                {["shortTitle", "fullTitle", "topicTags"].map((field) => (
                   <div className="cms-form-group" key={field}>
                     <label>{field.replace(/([A-Z])/g, " $1")}</label>
                     <input
                       type="text"
-                      value={servicesForm[field]}
+                      value={servicesForm[field] || ""}
                       placeholder={`Enter ${field.replace(/([A-Z])/g, " $1")}`}
                       onChange={(e) => handleServicesFormChange(field, e.target.value)}
                     />

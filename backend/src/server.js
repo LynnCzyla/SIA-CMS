@@ -2,6 +2,8 @@ import express from "express";
 import path from "path";
 import cors from "cors";
 import dotenv from "dotenv";
+// in your server index file where routes are registered
+import postLogsRoute from "../routes/postLogs.js"; // adjust path
 
 // 📦 Route Imports
 import loginRoute from "../routes/login.js";
@@ -17,7 +19,7 @@ import pageViewsRoute from "../routes/pageViews.js";
 import layoutRoute from "../routes/layout.js";
 import serviceRoute from "../routes/services.js";
 import aboutRoute from "../routes/about.js";
-
+import chatbotGeminiRoute from "../routes/chatbot_Gemini.js";
 
 dotenv.config({ path: "../.env" });
 
@@ -28,6 +30,9 @@ app.use(express.json());
 
 // Serve uploads globally
 app.use("/uploads", express.static(path.join(path.resolve(), "uploads")));
+app.use("/uploads/announcements", express.static(path.join(process.cwd(), "uploads/announcements")));
+app.use("/uploads/news", express.static(path.join(process.cwd(), "uploads/news")));
+app.use("/uploads/health_tips", express.static(path.join(process.cwd(), "uploads/health_tips")));
 
 // Routes
 app.use("/api/login", loginRoute);
@@ -43,6 +48,7 @@ app.use("/api/track", pageViewsRoute);
 app.use("/api/layout", layoutRoute);
 app.use("/api/services", serviceRoute);
 app.use("/api/about", aboutRoute);
+app.use("/api/post-logs", postLogsRoute);
 
 
 // Test route
