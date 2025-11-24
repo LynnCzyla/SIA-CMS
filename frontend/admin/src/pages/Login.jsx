@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import Swal from "sweetalert2";
 import "../css/Login.css";
 import { Link } from "react-router-dom";
+import logoCross from "../assets/logo+.svg";
+import logoLine from "../assets/logo-.svg";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -58,12 +60,15 @@ export default function Login() {
     <div className="login-wrapper">
       {/* Left Branding Section */}
       <div className="login-left">
+        <img className="cross" src={logoCross}/>
+        <img className="line" src={logoLine} />
         <div className="login-brand">
           <h1>
             Medi
             <span style={{ color: "var(--primary-color2)" }}>Sync</span>
           </h1>
-          <p>Health Medical Center</p>
+          <p className="info">Health Medical Center</p>
+          <p className="copyright">© 2025 BSIT-3E. All rights reserved.</p>
         </div>
       </div>
 
