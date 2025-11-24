@@ -1,159 +1,194 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { FaArrowLeft, FaTag } from "react-icons/fa";
+import { FaArrowLeft, FaTag, FaMapMarkerAlt, FaBuilding } from "react-icons/fa";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import "../components/components-css/ComponentNews.css";
 
-const ComponentCareers = () => {
+const ComponentCareer = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  const [job, setJob] = useState(null);
+  const [allJobs, setAllJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [sidebarLoading, setSidebarLoading] = useState(true);
+
+  // Fetch job info
+  useEffect(() => {
+    const fetchJob = async () => {
+      try {
+        const res = await fetch(`http://localhost:5000/api/jobs/${id}`);
+        const data = await res.json();
+        if (data.success) {
+          setJob(data.job);
+        } else {
+          setJob(null);
+        }
+      } catch (error) {
+        console.error("Error fetching job:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchJob();
+  }, [id]);
+
+  // Fetch all posted jobs for sidebar
+  useEffect(() => {
+    const fetchAllJobs = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/jobs");
+        const data = await res.json();
+        if (data.success) {
+          setAllJobs(data.jobs);
+        } else {
+          setAllJobs([]);
+        }
+      } catch (error) {
+        console.error("Error loading job list:", error);
+      } finally {
+        setSidebarLoading(false);
+      }
+    };
+    fetchAllJobs();
+  }, []);
+
+  // Scroll to top on page change
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [id]);
 
-  const careers = {
-    1: {
-      shortTitle: "Registered Nurse",
-      title: "Registered Nurse",
-      date: "October 10, 2025",
-      author: "HR Department",
-      tags: ["Healthcare", "Patient Care", "Nursing"],
-      description:
-        "Provide quality nursing care and support to patients in a compassionate hospital environment.",
-      content: `
-        As a Registered Nurse, you’ll be part of a dedicated team providing
-        patient-centered care and ensuring the highest standards of safety
-        and professionalism. You’ll assist physicians, administer medications,
-        and monitor patient progress to promote recovery and wellness.
-      `,
-    },
-    2: {
-      shortTitle: "Medical Technologist",
-      title: "Medical Technologist",
-      date: "October 8, 2025",
-      author: "Laboratory Department",
-      tags: ["Diagnostics", "Medical Lab", "Testing"],
-      description:
-        "Perform diagnostic laboratory tests and assist in the early detection of diseases.",
-      content: `
-        As a Medical Technologist, you will conduct various clinical tests that
-        aid in disease diagnosis and patient treatment. Attention to detail,
-        precision, and a passion for medical science are key to this role.
-      `,
-    },
-    3: {
-      shortTitle: "Radiologic Technologist",
-      title: "Radiologic Technologist",
-      date: "October 5, 2025",
-      author: "Imaging Department",
-      tags: ["Radiology", "Diagnostics", "Technology"],
-      description:
-        "Operate imaging equipment and ensure safety and accuracy in radiologic procedures.",
-      content: `
-        This role involves capturing high-quality diagnostic images while ensuring
-        patient safety. You will work closely with physicians and other healthcare
-        professionals to aid in accurate diagnoses.
-      `,
-    },
-  };
+  // Loading UI
+  if (loading) {
+    return (
+      <div className="container py-5">
+        <Skeleton height={40} width={300} className="mb-3" />
+        <Skeleton height={20} width={200} className="mb-4" />
+        <Skeleton height={400} />
+      </div>
+    );
+  }
 
-  const job = careers[id] || careers[1];
+  // Job not found UI
+  if (!job) {
+    return (
+      <div className="container py-5 text-center">
+        <h3>Job not found 😢</h3>
+        <Link to="/careers" className="btn btn-primary mt-3">
+          Back to Careers
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="news-container">
-      {/* Back Button */}
+      {/* BACK BUTTON */}
       <button className="back-btn" onClick={() => navigate("/careers")}>
         <FaArrowLeft className="back-icon" /> Back
       </button>
 
-      {/* Breadcrumb Navigation */}
+      {/* BREADCRUMB */}
       <div className="breadcrumb">
-        <Link to="/careers">Career Opportunities</Link>
+        <Link to="/careers">Latest Careers</Link>
         <span>/</span>
-        <span className="active">{job.shortTitle}</span>
+        <span className="active">{job.short_title || job.job_title}</span>
       </div>
 
-      {/* Section Header */}
-      <h2 className="news-section-title">CAREER OPPORTUNITY & EVENTS</h2>
+      <h2 className="news-section-title">CAREER OPPORTUNITY</h2>
 
       <div className="news-layout">
         {/* MAIN CONTENT */}
         <div className="news-main">
-          <h4 className="news-short-title">{job.shortTitle}</h4>
-          <h3 className="news-title">{job.title}</h3>
+          <h4 className="news-short-title">{job.short_title}</h4>
+          <h3 className="news-title">{job.full_title || job.job_title}</h3>
 
+          {/* Tags */}
           <div className="news-tags">
-            {job.tags.map((tag, index) => (
-              <span key={index} className="tag">
-                <FaTag className="tag-icon" /> {tag}
+            {job.department && (
+              <span className="tag">
+                <FaBuilding className="tag-icon" /> {job.department}
               </span>
-            ))}
+            )}
+
+            {job.location && (
+              <span className="tag">
+                <FaMapMarkerAlt className="tag-icon" /> {job.location}
+              </span>
+            )}
+
+            {job.job_type && (
+              <span className="tag">
+                <FaTag className="tag-icon" /> {job.job_type}
+              </span>
+            )}
           </div>
 
-          <p className="news-description">{job.description}</p>
-          <p className="news-date">{job.date}</p>
+          <p className="news-date">
+            Application Deadline:{" "}
+            {job.application_deadline
+              ? new Date(job.application_deadline).toLocaleDateString()
+              : "N/A"}
+          </p>
+
           <hr />
 
-          <div className="news-image"></div>
-          <p className="photo-credit">Posted by: {job.author}</p>
+          {/* IMAGE */}
+          {job.image && (
+            <div className="news-image">
+              <img
+                src={`http://localhost:5000/uploads/jobs/${job.image}`}
+                alt={job.full_title}
+                className="news-img"
+              />
+            </div>
+          )}
 
-          <div className="news-body">
-            <p>{job.content}</p>
-          </div>
+          <p className="photo-credit">
+            Author: {job.author || "TMC HR Department"}
+          </p>
+
+          {/* MAIN BODY */}
+          <div
+            className="news-body"
+            dangerouslySetInnerHTML={{ __html: job.description }}
+          ></div>
         </div>
 
         {/* SIDEBAR */}
         <aside className="news-sidebar">
           <div className="sidebar-box">
-            <h4 className="sidebar-title">More Job Openings</h4>
-            <ul
-              className="sidebar-list"
-              style={{
-                maxHeight: "400px",
-                overflowY: "auto",
-                scrollbarWidth: "thin",
-                paddingRight: "8px",
-              }}
-            >
-              <li className="sidebar-item">
-                <Link to="/careers/1" className="sidebar-link">
-                  <h5>Registered Nurse</h5>
-                  <p className="sidebar-date">October 10, 2025</p>
-                </Link>
-              </li>
-              <li className="sidebar-item">
-                <Link to="/careers/2" className="sidebar-link">
-                  <h5>Medical Technologist</h5>
-                  <p className="sidebar-date">October 8, 2025</p>
-                </Link>
-              </li>
-              <li className="sidebar-item">
-                <Link to="/careers/3" className="sidebar-link">
-                  <h5>Radiologic Technologist</h5>
-                  <p className="sidebar-date">October 5, 2025</p>
-                </Link>
-              </li>
-              <li className="sidebar-item">
-                <a href="#" className="sidebar-link">
-                  <h5>Pharmacist</h5>
-                  <p className="sidebar-date">October 3, 2025</p>
-                </a>
-              </li>
-              <li className="sidebar-item">
-                <a href="#" className="sidebar-link">
-                  <h5>Front Desk Officer</h5>
-                  <p className="sidebar-date">October 1, 2025</p>
-                </a>
-              </li>
-              <li className="sidebar-item">
-                <a href="#" className="sidebar-link">
-                  <h5>HR Assistant</h5>
-                  <p className="sidebar-date">September 25, 2025</p>
-                </a>
-              </li>
-            </ul>
+            <h4 className="sidebar-title">More Careers</h4>
+
+            <div className="sidebar-scroll">
+              {sidebarLoading ? (
+                <Skeleton count={5} height={60} className="mb-2" />
+              ) : (
+                <ul className="sidebar-list">
+                  {allJobs
+                    .filter((j) => j.id !== job.id)
+                    .slice(0, 6)
+                    .map((j) => (
+                      <li key={j.id} className="sidebar-item">
+                        <Link to={`/careers/${j.id}`} className="sidebar-link">
+                          <div className="sidebar-content">
+                            <h5 className="sidebar-title-text">
+                              {j.short_title || j.job_title}
+                            </h5>
+                            <p className="sidebar-date">
+                              {new Date(j.application_deadline).toLocaleDateString()}
+                            </p>
+                          </div>
+                        </Link>
+                      </li>
+                    ))}
+                </ul>
+              )}
+            </div>
           </div>
 
+          {/* AD BOX */}
           <div className="ad-box">
             <h4 className="ad-title">Sponsored</h4>
             <div className="ad-placeholder">Ad Space</div>
@@ -164,4 +199,4 @@ const ComponentCareers = () => {
   );
 };
 
-export default ComponentCareers;
+export default ComponentCareer;
