@@ -2,24 +2,41 @@
 import React, { useEffect, useState } from "react";
 import { IoFilter } from "react-icons/io5";
 import { IoMdSearch } from "react-icons/io";
-import Swal from "sweetalert2";
-import "bootstrap/dist/css/bootstrap.min.css";
+
+import ViewModal from "../components/modal/ViewModal";
+import EditModal from "../components/modal/EditModal";
+import DeleteModal from "../components/modal/DeleteModal";
+
+import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
 import "../css/Posts.css";
 
 export default function Posts() {
   const [activeTab, setActiveTab] = useState("All");
   const [posts, setPosts] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
+
+  // Filters
   const [filterAuthor, setFilterAuthor] = useState("All");
   const [filterCategory, setFilterCategory] = useState("All");
   const [filterDate, setFilterDate] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
+
+  // Modals
+  const [selectedPost, setSelectedPost] = useState(null);
+  const [showViewModal, setShowViewModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  // Pagination
   const [page, setPage] = useState(1);
   const pageSize = 10;
+
+  // Logs
   const [logs, setLogs] = useState([]);
   const [logsPage, setLogsPage] = useState(1);
   const logsPerPage = 10;
 
+  // Fetch posts and logs
   useEffect(() => {
     fetchPosts();
     fetchLogs();
@@ -51,6 +68,7 @@ export default function Posts() {
     }
   };
 
+  // Filter posts
   useEffect(() => {
     let filtered = posts.map((p) => ({
       ...p,
@@ -77,78 +95,42 @@ export default function Posts() {
     }
 
     if (searchQuery.trim()) {
-      filtered = filtered.filter((p) => (p.title || "").toLowerCase().includes(searchQuery.toLowerCase()));
+      filtered = filtered.filter((p) =>
+        (p.title || "").toLowerCase().includes(searchQuery.toLowerCase())
+      );
     }
 
     setFilteredPosts(filtered);
     setPage(1);
   }, [activeTab, posts, filterAuthor, filterCategory, filterDate, searchQuery]);
 
-  // Handlers using SweetAlert2
-  const handleView = (post) => {
-    Swal.fire({
-      title: post.title,
-      html: `
-        <p><strong>Author:</strong> ${post.author || "Unknown"}</p>
-        <p><strong>Category:</strong> ${post.category || "Uncategorized"}</p>
-        <p><strong>Status:</strong> ${post.normalizedStatus}</p>
-        <p><strong>Date:</strong> ${post.date ? new Date(post.date).toLocaleString() : "—"}</p>
-        <hr>
-        <p>${post.content || "No content"}</p>
-      `,
-      width: 600,
-      showCloseButton: true,
-      focusConfirm: false,
-      confirmButtonText: "Close",
-    });
+  // Open modal helpers
+  const openView = (post) => {
+    setSelectedPost(post);
+    setShowViewModal(true);
+  };
+  const openEdit = (post) => {
+    setSelectedPost(post);
+    setShowEditModal(true);
+  };
+  const openDelete = (post) => {
+    setSelectedPost(post);
+    setShowDeleteModal(true);
   };
 
-  const handleEdit = (post) => {
-    Swal.fire({
-      title: "Edit Post",
-      html: `
-        <input id="swal-title" class="swal2-input" placeholder="Title" value="${post.title || ""}">
-        <input id="swal-category" class="swal2-input" placeholder="Category" value="${post.category || ""}">
-        <textarea id="swal-content" class="swal2-textarea" placeholder="Content">${post.content || ""}</textarea>
-      `,
-      showCancelButton: true,
-      confirmButtonText: "Save",
-      preConfirm: () => {
-        const title = document.getElementById("swal-title").value;
-        const category = document.getElementById("swal-category").value;
-        const content = document.getElementById("swal-content").value;
-        return { ...post, title, category, content };
-      },
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const updatedPost = result.value;
-        setPosts((prev) => prev.map((p) => (p.id === updatedPost.id ? updatedPost : p)));
-        Swal.fire("Saved!", "Post updated successfully.", "success");
-      }
-    });
-  };
+  // Apply changes after edit or delete
+  const handleApplyEdit = (updated) =>
+    setPosts((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
+  const handleApplyDelete = (postId) =>
+    setPosts((prev) =>
+      prev.map((p) => (p.id === postId ? { ...p, status: "trash", normalizedStatus: "trash" } : p))
+    );
 
-  const handleDelete = (post) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "This will move the post to Trash!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Yes, delete it!",
-      cancelButtonText: "Cancel",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        setPosts((prev) =>
-          prev.map((p) => (p.id === post.id ? { ...p, status: "trash", normalizedStatus: "trash" } : p))
-        );
-        Swal.fire("Deleted!", "Post has been moved to Trash.", "success");
-      }
-    });
-  };
-
+  // Generate unique authors/categories for filters
   const authors = ["All", ...Array.from(new Set(posts.map((p) => p.author || "Unknown")))];
   const categories = ["All", ...Array.from(new Set(posts.map((p) => p.category || "Uncategorized")))];
 
+  // Pagination logic
   const total = filteredPosts.length;
   const pages = Math.max(1, Math.ceil(total / pageSize));
   const pageItems = filteredPosts.slice((page - 1) * pageSize, page * pageSize);
@@ -160,6 +142,7 @@ export default function Posts() {
   return (
     <div className="cms-announcement-page">
       <h2 className="title">Posts</h2>
+
       <ul className="breadcrumbs">
         <li>Posts Log</li>
         <li className="divider">/</li>
@@ -182,7 +165,9 @@ export default function Posts() {
         <>
           {/* Filters */}
           <div className="filter-bar">
-            <button className="sort-btn"><IoFilter /> Sort</button>
+            <button className="sort-btn">
+              <IoFilter /> Sort
+            </button>
             <select className="filter-select" value={filterAuthor} onChange={(e) => setFilterAuthor(e.target.value)}>
               {authors.map((a) => <option key={a}>{a}</option>)}
             </select>
@@ -223,9 +208,9 @@ export default function Posts() {
                     <td>{post.normalizedStatus.charAt(0).toUpperCase() + post.normalizedStatus.slice(1)}</td>
                     <td>{post.date ? new Date(post.date).toLocaleString() : "—"}</td>
                     <td className="actions">
-                      <button className="actions-btn edit" onClick={() => handleEdit(post)}>Edit</button>
-                      <button className="actions-btn view" onClick={() => handleView(post)}>View</button>
-                      <button className="actions-btn delete" onClick={() => handleDelete(post)}>Delete</button>
+                      <button className="actions-btn edit" onClick={() => openEdit(post)}>Edit</button>
+                      <button className="actions-btn view" onClick={() => openView(post)}>View</button>
+                      <button className="actions-btn delete" onClick={() => openDelete(post)}>Delete</button>
                     </td>
                   </tr>
                 )) : (
@@ -254,7 +239,7 @@ export default function Posts() {
         </>
       ) : (
         <>
-          {/* Logs Table */}
+          {/* Edit Logs Table */}
           <div className="table-container">
             <table className="posts-table">
               <thead>
@@ -302,6 +287,11 @@ export default function Posts() {
           </nav>
         </>
       )}
+
+      {/* Modals */}
+      {showViewModal && <ViewModal post={selectedPost} onClose={() => setShowViewModal(false)} />}
+      {showEditModal && <EditModal post={selectedPost} onClose={() => setShowEditModal(false)} onUpdated={handleApplyEdit} />}
+      {showDeleteModal && <DeleteModal post={selectedPost} onClose={() => setShowDeleteModal(false)} onDeleted={handleApplyDelete} />}
     </div>
   );
 }
