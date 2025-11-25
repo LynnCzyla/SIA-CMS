@@ -33,10 +33,7 @@
   align-items: center;
   justify-content: center;
 
-
-  /* Multiple layered background with random-like scattered crosses */
   background-image: 
-
     radial-gradient(circle at 20% 30%, rgba(255,255,255,0.08) 0%, transparent 60%),
     radial-gradient(circle at 80% 70%, rgba(255,255,255,0.06) 0%, transparent 60%),
     
@@ -222,13 +219,6 @@
 @media (max-width: 1200px) {
   .cross { width: 10%; }
   .line { width: 34%; }
-}
-
-@media (max-width: 992px) {
-  .cross { width: 20%}
-  .line { width: 20% }
-  .login-brand h1 { font-size: 3.5rem; }
-  .login-brand .info { font-size: 1.6rem; }
 }
 
 @media (max-width: 768px) {
