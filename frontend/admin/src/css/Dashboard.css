@@ -119,10 +119,9 @@
   flex: 0 0 300px;
   min-width: 380px;
   max-width: 100%;
-  height: 20%;
+  height: 10%;
   background: var(--white);
   border-radius: var(--card-radius);
-  padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;

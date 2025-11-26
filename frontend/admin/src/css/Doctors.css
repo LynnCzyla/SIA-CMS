@@ -29,7 +29,8 @@
 .stats-card {
   background-color: white;
   border-radius: 0.75rem;
-  padding: 1.5rem;
+  box-sizing: border-box;
+  padding: 2.5rem;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   border: 1px solid #f3f4f6;
   margin-bottom: 1.5rem;
@@ -41,6 +42,7 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 5rem;
+  box-sizing: border-box;
 }
 
 @media (min-width: 1024px) {
@@ -59,11 +61,16 @@
 
 /* ApexCharts Donut Chart Container */
 .apex-chart {
-  width: 180px;
-  height: 180px;
+  width: 250px;
+  height: 250px;
 }
 
 /* Legend */
+.legend{
+  box-sizing: border-box;
+  padding: rem;
+}
+
 .legend-title {
   font-size: 0.875rem;
   font-weight: 600;
@@ -113,7 +120,7 @@
 }
 
 .stat-value {
-  font-size: 3.5rem;
+  font-size: 50px;
   font-weight: 700;
   margin: 0;
 }
@@ -377,6 +384,16 @@ input:checked + .slider:before {
   letter-spacing: 0.05em;
   position: relative;
   z-index: 1;
+}
+
+/* Add to doctors.css */
+.unsaved-indicator {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
 }
 
 /* Show All Active Button */

@@ -42,64 +42,12 @@ const colorPalette = [
 ];
 
 export default function DoctorsPage() {
-  const [doctors, setDoctors] = useState([]);
+const [doctors, setDoctors] = useState([]);
+  const [filteredDoctors, setFilteredDoctors] = useState([]);
+  const [pendingChanges, setPendingChanges] = useState({});
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
 
-  useEffect(() => {
-    async function fetchData() {
-  try {
-    const [empRes, deptRes] = await Promise.all([
-      fetch(
-        "http://147.185.221.27:34249/Group-4-SIA-EMS/api/api.php?module=employee&filter_doctors=1"
-      ),
-      fetch(
-        "http://147.185.221.27:34249/Group-4-SIA-EMS/api/api.php?module=departments"
-      )
-    ]);
-
-    if (!empRes.ok || !deptRes.ok) {
-      throw new Error("API failure.");
-    }
-
-    const employees = await empRes.json();
-    const departments = await deptRes.json();
-
-    console.log("Fetched Employees:", employees);
-    console.log("Fetched Departments:", departments);
-
-    // Lookup table: departmentID → DepartmentName
-    const deptMap = {};
-    departments.forEach((d) => {
-      deptMap[d.departmentID] = d.DepartmentName;
-    });
-
-    const formatted = employees.map((emp, index) => ({
-      id: emp.employeeID || index,
-      name: `${emp.firstName} ${emp.lastName}`,
-      department: deptMap[emp.departmentID] || "Unknown Department",
-      specialization: emp.position,
-      contactNumber: emp.Number,
-      email: emp.Email,
-      schedule: "N/A",
-      visualStatus: "Shown",
-      isActive: true,
-      image: emp.image || defaultProfile,
-    }));
-
-    setDoctors(formatted);
-  } catch (err) {
-    console.error(err);
-    Swal.fire({
-      icon: "error",
-      title: "API Error",
-      text: err.message,
-    });
-  }
-}
-
-fetchData();
-  }, []);
-
-  const [filteredDoctors, setFilteredDoctors] = useState(doctors);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [specializationFilter, setSpecializationFilter] = useState("");
@@ -109,9 +57,59 @@ fetchData();
 
   const chartRef = useRef(null);
   const chartInstance = useRef(null);
-
-  // NEW: Store the colors for the current specializations
   const [specializationColors, setSpecializationColors] = useState({});
+
+  const fetchData = async () => {
+    try {
+      const [empRes, deptRes] = await Promise.all([
+        fetch("http://147.185.221.27:34249/Group-4-SIA-EMS/api/api.php?module=employee&filter_doctors=1"),
+        fetch("http://147.185.221.27:34249/Group-4-SIA-EMS/api/api.php?module=departments"),
+      ]);
+
+      if (!empRes.ok || !deptRes.ok) throw new Error("API error");
+
+      const employees = await empRes.json();
+      const departments = await deptRes.json();
+
+      const deptMap = {};
+      departments.forEach(d => deptMap[d.departmentID] = d.DepartmentName);
+
+      const formatted = employees.map((emp, i) => ({
+        id: emp.employeeID || i + 1,
+        name: `${emp.firstName} ${emp.lastName}`.trim(),
+        department: deptMap[emp.departmentID] || "Unknown",
+        specialization: emp.position || "General",
+        contactNumber: emp.Number || "N/A",
+        email: emp.Email || "N/A",
+        schedule: emp.schedule || "Not set",
+        visualStatus: "Shown",
+        isActive: true,
+        image: emp.profile_image || defaultProfile,
+      }));
+
+      const visRes = await fetch("http://localhost:5000/api/doctors/visibility");
+      const visibility = await visRes.json();
+      const visMap = {};
+      visibility.forEach(v => visMap[v.employee_id] = v.is_shown === 1);
+
+      const final = formatted.map(doc => ({
+        ...doc,
+        isActive: visMap[doc.id] ?? true,
+        visualStatus: visMap[doc.id] ?? true ? "Shown" : "Not Shown",
+      }));
+
+      setDoctors(final);
+      setPendingChanges({}); // Clear any unsaved changes
+      setSaveSuccess(false);
+    } catch (err) {
+      console.error(err);
+      Swal.fire("Error", "Failed to refresh data", "error");
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   // Generate consistent colors once per specialization
   useEffect(() => {
@@ -212,7 +210,6 @@ fetchData();
     }
 
     setFilteredDoctors(filtered);
-    setCurrentPage(1); // Reset to first page on filter
   }, [searchTerm, statusFilter, specializationFilter, showAll, doctors]);
 
   const totalPages = Math.ceil(filteredDoctors.length / doctorsPerPage);
@@ -230,18 +227,79 @@ fetchData();
   };
 
   const handleToggle = (id) => {
+    const doctor = doctors.find((d) => d.id === id);
+    const newIsActive = !doctor.isActive;
+
+    // Update UI immediately
     setDoctors((prev) =>
       prev.map((doc) =>
         doc.id === id
           ? {
               ...doc,
-              isActive: !doc.isActive,
-              visualStatus: doc.isActive ? "Not Shown" : "Shown",
+              isActive: newIsActive,
+              visualStatus: newIsActive ? "Shown" : "Not Shown",
             }
           : doc
       )
     );
+
+    // Mark as pending change
+    setPendingChanges((prev) => ({
+      ...prev,
+      [id]: newIsActive ? 1 : 0,
+    }));
+
+    // Clear success message
+    setSaveSuccess(false);
   };
+
+  // NEW: Save all pending changes
+  const handleSaveChanges = async () => {
+    if (Object.keys(pendingChanges).length === 0) return;
+
+    setIsSaving(true);
+
+    try {
+      const updates = Object.entries(pendingChanges).map(
+        ([employeeID, isShown]) => ({
+          employeeID: Number(employeeID),
+          isShown,
+        })
+      );
+
+      await Promise.all(
+        updates.map(({ employeeID, isShown }) =>
+          fetch("http://localhost:5000/api/doctors/visibility", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ employeeID, isShown }),
+          }).then((res) => {
+            if (!res.ok) throw new Error("Failed");
+          })
+        )
+      );
+
+      setPendingChanges({});
+      setSaveSuccess(true);
+      Swal.fire({
+        icon: "success",
+        title: "Saved!",
+        text: "All visibility changes have been saved.",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+    } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Save Failed",
+        text: "Some changes could not be saved.",
+      });
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const hasChanges = Object.keys(pendingChanges).length > 0;
 
   const totalDoctors = doctors.length;
   const visibleDoctors = doctors.filter(
@@ -287,11 +345,13 @@ fetchData();
 
           <div className="stats-numbers">
             <div className="stat-item">
-              <p className="stat-value stat-value-primary">{totalDoctors}</p>
+              <p className="stat-value stat-value-primary fs-1">
+                {totalDoctors}
+              </p>
               <p className="stat-label">DOCTORS</p>
             </div>
             <div className="stat-item">
-              <p className="stat-value stat-value-secondary">
+              <p className="stat-value stat-value-secondary fs-1">
                 {visibleDoctors}
               </p>
               <p className="stat-label">PUBLICLY VISIBLE</p>
@@ -344,14 +404,67 @@ fetchData();
           </button>
         </div>
 
-        <div className="secondary-filter-row">
+        <div className="secondary-filter-row d-flex align-items-center gap-3">
           <button
             className={`btn ${showAll ? "btn-active" : "btn-show-all"}`}
             onClick={() => setShowAll(!showAll)}
           >
-            {showAll ? "Filtered View" : "Show All"}
+            {showAll ? "Filtered View" : "Show All Records"}
           </button>
-          <button className="btn btn-refresh">Refresh</button>
+
+          {/* NEW: Toggle All ON/OFF */}
+          <button
+            className="btn btn-warning text-white fw-bold"
+            onClick={() => {
+              const allCurrentlyOn = doctors.every((d) => d.isActive);
+              const newState = !allCurrentlyOn; // flip
+
+              const updates = {};
+              setDoctors((prev) =>
+                prev.map((doc) => {
+                  updates[doc.id] = newState ? 1 : 0;
+                  return {
+                    ...doc,
+                    isActive: newState,
+                    visualStatus: newState ? "Shown" : "Not Shown",
+                  };
+                })
+              );
+
+              setPendingChanges((prev) => ({ ...prev, ...updates }));
+              setSaveSuccess(false);
+            }}
+          >
+            {doctors.every((d) => d.isActive) ? "Unshow All" : "Show All ON"}
+          </button>
+
+          {/* Refresh button now reloads from API */}
+          <button className="btn btn-refresh" onClick={fetchData}>
+            Refresh Data
+          </button>
+
+          {/* Save button */}
+          {hasChanges && (
+            <button
+              onClick={handleSaveChanges}
+              disabled={isSaving}
+              className="btn d-flex align-items-center gap-2"
+              style={{
+                backgroundColor: "#10b981",
+                color: "white",
+                padding: "0.75rem 1.5rem",
+                borderRadius: "0.5rem",
+              }}
+            >
+              {isSaving
+                ? "Saving..."
+                : `Save Changes (${Object.keys(pendingChanges).length})`}
+            </button>
+          )}
+
+          {saveSuccess && !hasChanges && (
+            <span className="text-success fw-bold">All changes saved!</span>
+          )}
         </div>
 
         {/* Table */}
@@ -400,10 +513,24 @@ fetchData();
                     </span>
                   </td>
                   <td className="table-cell">
-                    <ToggleSwitch
-                      isOn={doctor.isActive}
-                      onToggle={() => handleToggle(doctor.id)}
-                    />
+                    <div className="d-flex align-items-center gap-2">
+                      {/* The toggle */}
+                      <ToggleSwitch
+                        isOn={doctor.isActive}
+                        onToggle={() => handleToggle(doctor.id)}
+                      />
+
+                      {/* ←←← PUT THE DOT HERE ←←← */}
+                      {pendingChanges[doctor.id] !== undefined && (
+                        <span
+                          className="text-warning unsaved-indicator"
+                          title="Unsaved change"
+                          style={{ fontSize: "1.4em" }}
+                        >
+                          ●
+                        </span>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}
