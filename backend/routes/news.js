@@ -1,3 +1,4 @@
+// backend/routes/news.js
 import express from "express";
 import db from "../src/db.js";
 import multer from "multer";

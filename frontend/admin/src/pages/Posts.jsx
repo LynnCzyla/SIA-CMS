@@ -1,4 +1,4 @@
-// src/pages/Posts.jsx
+// frontend/admin/src/pages/Posts.jsx
 import React, { useEffect, useState } from "react";
 import { IoFilter } from "react-icons/io5";
 import { IoMdSearch } from "react-icons/io";

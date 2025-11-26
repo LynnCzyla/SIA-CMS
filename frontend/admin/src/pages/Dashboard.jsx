@@ -1,3 +1,4 @@
+// frontend/admin/src/pages/Dashboard.jsx
 import React, { useEffect, useState } from "react";
 import "../css/Dashboard.css";
 import ApexCharts from "apexcharts";

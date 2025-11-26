@@ -1,3 +1,4 @@
+/// frontend/website/src/pages/Doctors.jsx
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
