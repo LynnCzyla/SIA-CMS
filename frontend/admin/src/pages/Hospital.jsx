@@ -24,10 +24,20 @@ export default function Hospital() {
     privacyPolicy: "",
   });
 
+  // ✅ UPDATED: Contact form state structure
   const [contactForm, setContactForm] = useState({
-    contactUs: "",
-    contactInfo: "",
-    mobileNumbers: "",
+    contact_us: "",
+    contact_info: "",
+    hospital_address: "",
+    telephone: "",
+    mobile_numbers: {
+      admitting: "",
+      sales: "",
+      emergency: "",
+      outpatient: "",
+      radiology: ""
+    },
+    email: ""
   });
 
   const [servicesForm, setServicesForm] = useState({
@@ -82,6 +92,31 @@ export default function Hospital() {
     }
   }, [activeTab]);
 
+  // ✅ NEW: Fetch contact info when Contact tab is active
+  useEffect(() => {
+    if (activeTab === "contact") {
+      fetch("http://localhost:5000/api/contact")
+        .then((res) => res.json())
+        .then((data) => {
+          setContactForm({
+            contact_us: data.contact_us || "",
+            contact_info: data.contact_info || "",
+            hospital_address: data.hospital_address || "",
+            telephone: data.telephone || "",
+            mobile_numbers: data.mobile_numbers || {
+              admitting: "",
+              sales: "",
+              emergency: "",
+              outpatient: "",
+              radiology: ""
+            },
+            email: data.email || ""
+          });
+        })
+        .catch((err) => console.error("Error fetching contact info:", err));
+    }
+  }, [activeTab]);
+
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -96,8 +131,20 @@ export default function Hospital() {
   const handleAboutFormChange = (field, value) =>
     setAboutForm((prev) => ({ ...prev, [field]: value || "" }));
 
+  // ✅ UPDATED: Handle contact form changes
   const handleContactFormChange = (field, value) =>
     setContactForm((prev) => ({ ...prev, [field]: value || "" }));
+
+  // ✅ NEW: Handle mobile number changes
+  const handleMobileNumberChange = (key, value) => {
+    setContactForm((prev) => ({
+      ...prev,
+      mobile_numbers: {
+        ...prev.mobile_numbers,
+        [key]: value || ""
+      }
+    }));
+  };
 
   const handleServicesFormChange = (field, value) =>
     setServicesForm((prev) => ({ ...prev, [field]: value || "" }));
@@ -120,6 +167,15 @@ export default function Hospital() {
 
         Swal.fire({ icon: "success", title: "About Info Updated!" });
       } else if (activeTab === "contact") {
+        // ✅ UPDATED: Actually save contact info to database
+        const res = await fetch("http://localhost:5000/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(contactForm),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Save failed");
+
         Swal.fire({ icon: "success", title: "Contact Info Updated!" });
       } else if (activeTab === "services") {
         const description = quillRef.current?.__quill?.root.innerHTML.trim();
@@ -149,11 +205,11 @@ export default function Hospital() {
           formData.append("image", fileInputRef.current.files[0]);
         }
 
-        formData.append("userId", currentUser.id); // replace with actual logged-in user ID
+        formData.append("userId", currentUser.id);
 
         const res = await fetch("http://localhost:5000/api/services", {
           method: "POST",
-          body: formData, // do NOT set Content-Type manually
+          body: formData,
         });
 
         const data = await res.json();
@@ -208,7 +264,6 @@ export default function Hospital() {
             {activeTab === "contact" && "Contact Update"}
           </h3>
           <div className="announcement-actions">
-           
             <button className="btn submit" onClick={() => handleSubmit("published")}>
               Publish
             </button>
@@ -247,20 +302,114 @@ export default function Hospital() {
             </div>
           )}
 
-          {/* CONTACT */}
+          {/* ✅ UPDATED: CONTACT SECTION - Completely replaced */}
           {activeTab === "contact" && (
             <div className="about-form-container">
-              {["contactUs", "contactInfo", "mobileNumbers"].map((field) => (
-                <div className="about-form-group" key={field}>
-                  <label>{field.replace(/([A-Z])/g, " $1")}</label>
-                  <input
-                    type="text"
-                    value={contactForm[field] || ""}
-                    placeholder={`Enter ${field.replace(/([A-Z])/g, " $1")}`}
-                    onChange={(e) => handleContactFormChange(field, e.target.value)}
-                  />
+              <div className="about-form-group">
+                <label>Contact Us Title</label>
+                <input
+                  type="text"
+                  value={contactForm.contact_us || ""}
+                  placeholder="Enter title (e.g., Get in Touch)"
+                  onChange={(e) => handleContactFormChange("contact_us", e.target.value)}
+                />
+              </div>
+
+              <div className="about-form-group">
+                <label>Contact Info Description</label>
+                <textarea
+                  value={contactForm.contact_info || ""}
+                  placeholder="Enter description"
+                  onChange={(e) => handleContactFormChange("contact_info", e.target.value)}
+                  rows={3}
+                />
+              </div>
+
+              <div className="about-form-group">
+                <label>Hospital Address</label>
+                <textarea
+                  value={contactForm.hospital_address || ""}
+                  placeholder="Enter hospital address"
+                  onChange={(e) => handleContactFormChange("hospital_address", e.target.value)}
+                  rows={2}
+                />
+              </div>
+
+              <div className="about-form-group">
+                <label>Telephone</label>
+                <input
+                  type="text"
+                  value={contactForm.telephone || ""}
+                  placeholder="Enter telephone number"
+                  onChange={(e) => handleContactFormChange("telephone", e.target.value)}
+                />
+              </div>
+
+              <div className="about-form-group">
+                <label>Email</label>
+                <input
+                  type="email"
+                  value={contactForm.email || ""}
+                  placeholder="Enter email address"
+                  onChange={(e) => handleContactFormChange("email", e.target.value)}
+                />
+              </div>
+
+              <div className="about-form-group">
+                <label>Mobile Numbers</label>
+                
+                <div style={{ marginLeft: "20px", marginTop: "10px" }}>
+                  <div style={{ marginBottom: "10px" }}>
+                    <label style={{ fontSize: "14px", fontWeight: "normal" }}>Admitting Section</label>
+                    <input
+                      type="text"
+                      value={contactForm.mobile_numbers?.admitting || ""}
+                      placeholder="Enter admitting section number"
+                      onChange={(e) => handleMobileNumberChange("admitting", e.target.value)}
+                    />
+                  </div>
+
+                  <div style={{ marginBottom: "10px" }}>
+                    <label style={{ fontSize: "14px", fontWeight: "normal" }}>Sales and Marketing</label>
+                    <input
+                      type="text"
+                      value={contactForm.mobile_numbers?.sales || ""}
+                      placeholder="Enter sales number"
+                      onChange={(e) => handleMobileNumberChange("sales", e.target.value)}
+                    />
+                  </div>
+
+                  <div style={{ marginBottom: "10px" }}>
+                    <label style={{ fontSize: "14px", fontWeight: "normal" }}>Emergency Department</label>
+                    <input
+                      type="text"
+                      value={contactForm.mobile_numbers?.emergency || ""}
+                      placeholder="Enter emergency number"
+                      onChange={(e) => handleMobileNumberChange("emergency", e.target.value)}
+                    />
+                  </div>
+
+                  <div style={{ marginBottom: "10px" }}>
+                    <label style={{ fontSize: "14px", fontWeight: "normal" }}>Outpatient Department</label>
+                    <input
+                      type="text"
+                      value={contactForm.mobile_numbers?.outpatient || ""}
+                      placeholder="Enter outpatient number"
+                      onChange={(e) => handleMobileNumberChange("outpatient", e.target.value)}
+                    />
+                  </div>
+
+                  <div style={{ marginBottom: "10px" }}>
+                    <label style={{ fontSize: "14px", fontWeight: "normal" }}>Radiology Department</label>
+                    <input
+                      type="text"
+                      value={contactForm.mobile_numbers?.radiology || ""}
+                      placeholder="Enter radiology number"
+                      onChange={(e) => handleMobileNumberChange("radiology", e.target.value)}
+                    />
+                  </div>
                 </div>
-              ))}
+              </div>
             </div>
           )}
 

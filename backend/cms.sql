@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 24, 2025 at 05:49 PM
+-- Generation Time: Nov 25, 2025 at 12:14 PM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- PHP Version: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -54,6 +54,30 @@ INSERT INTO `announcement` (`id`, `short_title`, `full_title`, `topic_tags`, `de
 ('d361c0ac-b99e-11f0-b748-c018509200f9', 'dbqjhbdj', 'jhbejfbj', 'jbjhbw', '<p>jfbejhwef</p>', '1762275207204-65518573.webp', 'published', NULL, '2025-11-05 00:53:27', '2025-11-05 00:53:27', 12, NULL),
 ('f7c6d85e-b98e-11f0-b748-c018509200f9', 'jndjedj', 'bfjwe', 'jbfjhwe', '<p>enfjnefef</p>', '1762268396313-221346.webp', 'published', NULL, '2025-11-04 22:59:56', '2025-11-04 22:59:56', 1, NULL),
 ('fe077a52-bdf7-11f0-9b30-c018509202f6', NULL, 'Welcome to the Lorem Ipsum MediSync', 'Welcome, Hello, Goodluck', '<p class=\"ql-align-justify\"><span style=\"background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);\">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eu pellentesque diam. Maecenas lacinia aliquet imperdiet. Ut luctus pharetra sem, sit amet facilisis velit tincidunt nec. Phasellus eget eros neque. Etiam risus felis, lacinia sed rhoncus lobortis, sagittis sed ligula. Quisque ac orci est. Donec quis velit lacus. Aliquam in lacus odio. Aenean pulvinar semper dictum. Nullam gravida hendrerit velit ac mattis. Donec consectetur tellus risus, eu commodo mi ullamcorper non. Morbi in lobortis purus, sed interdum ex. Nulla sapien diam, sagittis non leo id, mattis tincidunt purus.</span></p><p class=\"ql-align-justify\"><span style=\"background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);\">Mauris viverra tincidunt nisl vel dapibus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse in libero tempus, interdum libero eget, lacinia velit. Vestibulum bibendum sem non scelerisque rutrum. Duis dignissim risus quis ex commodo posuere. Vestibulum sed elit eget lacus ornare ultricies at a tortor. Quisque dui risus, efficitur eu congue a, laoreet a ante.</span></p><p><br></p>', '1762753326480-6937911.jpg', 'published', NULL, '2025-11-10 13:42:06', '2025-11-24 22:09:55', 12, 'welcome-to-medisync');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `contact_info`
+--
+
+CREATE TABLE `contact_info` (
+  `id` int(11) NOT NULL,
+  `contact_us` text DEFAULT NULL,
+  `contact_info` text DEFAULT NULL,
+  `hospital_address` text DEFAULT NULL,
+  `telephone` varchar(100) DEFAULT NULL,
+  `mobile_numbers` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`mobile_numbers`)),
+  `email` varchar(255) DEFAULT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `contact_info`
+--
+
+INSERT INTO `contact_info` (`id`, `contact_us`, `contact_info`, `hospital_address`, `telephone`, `mobile_numbers`, `email`, `updated_at`) VALUES
+(1, 'Get in Touch', 'We value your feedback and are happy to assist you with inquiries about our hospital services.', '123 Health Avenue, Kapasigan, Pasig City, Philippines', 'Tel: (+632) 123-4567', '{\"admitting\": \"+63 900-111-2222\", \"sales\": \"+63 900-333-4444\", \"emergency\": \"+63 900-555-6666\", \"outpatient\": \"+63 900-777-8888\", \"radiology\": \"+63 900-999-0000\"}', 'info@yourhospital.com', '2025-11-25 11:08:59');
 
 -- --------------------------------------------------------
 
@@ -233,24 +257,31 @@ CREATE TABLE `page_views` (
 INSERT INTO `page_views` (`page_name`, `view_date`, `visit_count`) VALUES
 ('/', '2025-11-17', 19),
 ('/', '2025-11-22', 3),
+('/', '2025-11-25', 3),
 ('/about', '2025-11-22', 4),
 ('/announcements', '2025-11-22', 5),
 ('/announcements', '2025-11-24', 26),
+('/announcements', '2025-11-25', 1),
 ('/announcements/jame', '2025-11-24', 5),
+('/announcements/jame', '2025-11-25', 1),
 ('/announcements/null', '2025-11-24', 1),
 ('/announcements/welcome-to-medisync', '2025-11-24', 6),
 ('/careers', '2025-11-22', 5),
 ('/contact', '2025-11-22', 3),
+('/contact', '2025-11-25', 1),
 ('/doctors', '2025-11-17', 7),
 ('/doctors', '2025-11-22', 3),
 ('/health', '2025-11-22', 4),
 ('/health', '2025-11-24', 2),
+('/health', '2025-11-25', 2),
 ('/health/null', '2025-11-24', 10),
+('/health/null', '2025-11-25', 1),
 ('/news', '2025-11-22', 3),
 ('/news', '2025-11-24', 10),
 ('/news/aaaaa', '2025-11-24', 2),
 ('/news/jamesss', '2025-11-24', 9),
 ('/news/null', '2025-11-24', 6),
+('/news/undefined', '2025-11-25', 2),
 ('/services', '2025-11-17', 12),
 ('/services', '2025-11-22', 9);
 
@@ -329,7 +360,7 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `full_name`, `email`, `password`, `created_at`, `role`, `last_login`, `reset_code`, `code_expiry`) VALUES
 (8, 'Lynn', 'lynnzylameczdo@gmail.com', '$2b$10$ADe2OQ01nBT9Udz1/wJZaOc2XXdJ.OyPChMfN/PSD8x3Z2wzHkyOq', '2025-10-17 21:31:06', 'hr_administrator', '2025-11-08 02:03:38', '514594', '2025-10-25 10:41:31'),
 (11, 'Lynn Czyla Alpuerto', 'alpuerto_lynnczyla@plpasig.edu.ph', '$2b$10$ADe2OQ01nBT9Udz1/wJZaOc2XXdJ.OyPChMfN/PSD8x3Z2wzHkyOq', '2025-10-18 03:32:20', 'content_administrator', NULL, NULL, NULL),
-(12, 'James', 'flavierlaurence01@gmail.com', '$2b$10$ADe2OQ01nBT9Udz1/wJZaOc2XXdJ.OyPChMfN/PSD8x3Z2wzHkyOq', '2025-10-18 03:40:35', 'super_administrator', '2025-11-24 21:52:34', NULL, NULL),
+(12, 'James', 'flavierlaurence01@gmail.com', '$2b$10$ADe2OQ01nBT9Udz1/wJZaOc2XXdJ.OyPChMfN/PSD8x3Z2wzHkyOq', '2025-10-18 03:40:35', 'super_administrator', '2025-11-25 18:59:07', NULL, NULL),
 (26, 'Laurence HR', 'dumpblj@gmail.com', '$2b$10$Kx3YJuI3AzNiqMq/88FSUuuowi7bRwEJGU3AnyTzoEVT8QFwZ6VrK', '2025-11-09 11:04:50', 'hr_administrator', '2025-11-09 19:23:47', NULL, NULL);
 
 --
@@ -342,6 +373,12 @@ INSERT INTO `users` (`id`, `full_name`, `email`, `password`, `created_at`, `role
 ALTER TABLE `announcement`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `slug` (`slug`);
+
+--
+-- Indexes for table `contact_info`
+--
+ALTER TABLE `contact_info`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `events_careers`
@@ -398,6 +435,12 @@ ALTER TABLE `users`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `contact_info`
+--
+ALTER TABLE `contact_info`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `events_careers`

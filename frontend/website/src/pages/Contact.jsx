@@ -8,12 +8,30 @@ import Chatbot from "../components/Chatbot";
 
 const Contact = () => {
   const [loading, setLoading] = useState(true);
+  const [contactData, setContactData] = useState(null);
 
-  // Simulate data loading
+  // Fetch contact data from API
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 2000);
-    return () => clearTimeout(timer);
+    fetch("http://localhost:5000/api/contact")
+      .then((res) => res.json())
+      .then((data) => {
+        setContactData(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching contact data:", err);
+        setLoading(false);
+      });
   }, []);
+
+  // Default mobile number labels
+  const mobileLabels = {
+    admitting: "Admitting Section",
+    sales: "Sales and Marketing",
+    emergency: "Emergency Department",
+    outpatient: "Outpatient Department",
+    radiology: "Radiology Department (calls only)"
+  };
 
   return (
     <div className="contact-section container py-5">
@@ -69,7 +87,7 @@ const Contact = () => {
           )}
         </div>
 
-        {/* Right Column: Contact Info */}
+        {/* Right Column: Contact Info - NOW DYNAMIC */}
         <div className="col-12 col-lg-6">
           {loading ? (
             <div className="contact-info p-4">
@@ -79,33 +97,35 @@ const Contact = () => {
             </div>
           ) : (
             <div className="contact-info p-4">
-              <h4 className="mb-3">Get in Touch</h4>
-              <p>We value your feedback and are happy to assist you with inquiries about our hospital services.</p>
+              <h4 className="mb-3">{contactData?.contact_us || "Get in Touch"}</h4>
+              <p>{contactData?.contact_info || "We value your feedback and are happy to assist you with inquiries about our hospital services."}</p>
 
               <div className="mb-4">
                 <h5><FaMapMarkerAlt className="me-2 text-primary"/>Hospital Address</h5>
-                <p>123 Health Avenue, Kapasigan, Pasig City, Philippines</p>
+                <p>{contactData?.hospital_address || "123 Health Avenue, Kapasigan, Pasig City, Philippines"}</p>
               </div>
 
               <div className="mb-4">
                 <h5><FaPhoneAlt className="me-2 text-primary"/>Telephone</h5>
-                <p>Tel: (+632) 123-4567</p>
+                <p>{contactData?.telephone || "Tel: (+632) 123-4567"}</p>
               </div>
 
               <div className="mb-4">
                 <h5><FaPhoneAlt className="me-2 text-primary"/>Mobile Numbers</h5>
                 <ul className="list-unstyled">
-                  <li>Admitting Section: +63 900-111-2222</li>
-                  <li>Sales and Marketing: +63 900-333-4444</li>
-                  <li>Emergency Department: +63 900-555-6666</li>
-                  <li>Outpatient Department: +63 900-777-8888</li>
-                  <li>Radiology Department (calls only): +63 900-999-0000</li>
+                  {contactData?.mobile_numbers && Object.keys(contactData.mobile_numbers).map((key) => (
+                    contactData.mobile_numbers[key] && (
+                      <li key={key}>
+                        {mobileLabels[key] || key}: {contactData.mobile_numbers[key]}
+                      </li>
+                    )
+                  ))}
                 </ul>
               </div>
 
               <div>
                 <h5><FaEnvelope className="me-2 text-primary"/>Email</h5>
-                <p>info@yourhospital.com</p>
+                <p>{contactData?.email || "info@yourhospital.com"}</p>
               </div>
             </div>
           )}

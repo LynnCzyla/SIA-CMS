@@ -19,6 +19,7 @@ import pageViewsRoute from "../routes/pageViews.js";
 import layoutRoute from "../routes/layout.js";
 import serviceRoute from "../routes/services.js";
 import aboutRoute from "../routes/about.js";
+import contactRoute from "../routes/contact.js";
 import chatbotGeminiRoute from "../routes/chatbot_Gemini.js";
 
 dotenv.config({ path: "../.env" });
@@ -49,6 +50,7 @@ app.use("/api/layout", layoutRoute);
 app.use("/api/services", serviceRoute);
 app.use("/api/about", aboutRoute);
 app.use("/api/post-logs", postLogsRoute);
+app.use("/api/contact", contactRoute);
 
 
 // Test route
