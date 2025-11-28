@@ -8,8 +8,7 @@
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.5);
     padding-top: 50px;
-
-}
+  }
 
 /* Modal Container - Wide Layout with Background Image */
 .appointment-modal-container-wide {
@@ -240,5 +239,22 @@
 
   .appointment-modal-btn {
     width: 100%;
+  }
+}
+
+/* Full width for notes when specifyType is hidden */
+.appointment-modal-form-group-full {
+  grid-column: span 3;
+}
+
+@media (max-width: 1200px) {
+  .appointment-modal-form-group-full {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .appointment-modal-form-group-full {
+    grid-column: span 1;
   }
 }

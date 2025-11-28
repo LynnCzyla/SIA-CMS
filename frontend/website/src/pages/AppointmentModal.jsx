@@ -9,7 +9,7 @@ const AppointmentModal = ({ isOpen, onClose }) => {
     doctor: "",
     appointmentDate: "",
     appointmentTime: "",
-    appointmentType: "Other",
+    appointmentType: "Consultation",
     specifyType: "",
     notes: "",
   });
@@ -19,6 +19,8 @@ const AppointmentModal = ({ isOpen, onClose }) => {
     setFormData((prev) => ({
       ...prev,
       [name]: value,
+      // Clear specifyType when appointmentType changes to non-Other
+      ...(name === "appointmentType" && value !== "Other" && { specifyType: "" })
     }));
   };
 
@@ -88,15 +90,14 @@ const AppointmentModal = ({ isOpen, onClose }) => {
                 name="doctor"
                 value={formData.doctor}
                 onChange={handleChange}
-                
                 className="appointment-modal-select"
                 required
               >
                 <option value="">Select a doctor</option>
-                <option value="dr-smith">Dr. Andrea Orel Valle</option>
-                <option value="dr-johnson">Dr. Eileen Liesl Cubillan</option>
-                <option value="dr-williams">Dr. Patricia Maningat</option>
-                <option value="dr-brown">Dr. Evelyn Paraan</option>
+                <option value="dr-orel-valle">Dr. Andrea Orel Valle</option>
+                <option value="dr-cubillan">Dr. Eileen Liesl Cubillan</option>
+                <option value="dr-maningat">Dr. Patricia Maningat</option>
+                <option value="dr-paraan">Dr. Evelyn Paraan</option>
               </select>
             </div>
           </div>
@@ -152,28 +153,31 @@ const AppointmentModal = ({ isOpen, onClose }) => {
             </div>
           </div>
 
-          {/* Row 3: Specify Type and Notes */}
+          {/* Row 3: Specify Type (conditional) and Notes */}
           <div className="appointment-modal-row">
-            <div className="appointment-modal-form-group">
-              <label htmlFor="specifyType" className="appointment-modal-label-blue">
-                Specify Appointment Type
-              </label>
-              <input
-                type="text"
-                id="specifyType"
-                name="specifyType"
-                value={formData.specifyType}
-                onChange={handleChange}
-                placeholder="Specify your appointment (e.g Dental Checkup)"
-                className="appointment-modal-input"
-                required={formData.appointmentType === "Other"}
-              />
-              <p className="appointment-modal-helper-text-blue">
-                Required when selecting "Other"
-              </p>
-            </div>
+            {/* Only show Specify Type when "Other" is selected */}
+            {formData.appointmentType === "Other" && (
+              <div className="appointment-modal-form-group">
+                <label htmlFor="specifyType" className="appointment-modal-label-blue">
+                  Specify Appointment Type
+                </label>
+                <input
+                  type="text"
+                  id="specifyType"
+                  name="specifyType"
+                  value={formData.specifyType}
+                  onChange={handleChange}
+                  placeholder="Specify your appointment (e.g Dental Checkup)"
+                  className="appointment-modal-input"
+                  required
+                />
+                <p className="appointment-modal-helper-text-blue">
+                  Please specify the appointment type
+                </p>
+              </div>
+            )}
 
-            <div className="appointment-modal-form-group appointment-modal-form-group-wide">
+            <div className={`appointment-modal-form-group ${formData.appointmentType === "Other" ? "" : "appointment-modal-form-group-full"}`}>
               <label htmlFor="notes" className="appointment-modal-label-blue">
                 Notes
               </label>
