@@ -7,6 +7,8 @@
   align-items: center;
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.5);
+    padding-top: 50px;
+
 }
 
 /* Modal Container - Wide Layout with Background Image */
@@ -22,7 +24,7 @@
   width: 100%;
   max-width: 90rem;
   margin: 0 1rem;
-  max-height: 95vh;
+  height: 75vh;
   overflow-y: auto;
   /* Add semi-transparent overlay to ensure text readability */
   position: relative;
