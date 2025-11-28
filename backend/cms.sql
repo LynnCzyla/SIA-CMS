@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 25, 2025 at 12:14 PM
+-- Generation Time: Nov 27, 2025 at 09:22 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -20,6 +20,32 @@ SET time_zone = "+00:00";
 --
 -- Database: `cms`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `about_hospital`
+--
+
+CREATE TABLE `about_hospital` (
+  `id` int(11) NOT NULL,
+  `aboutHospital` text DEFAULT NULL,
+  `mission` text DEFAULT NULL,
+  `vision` text DEFAULT NULL,
+  `qualityPolicy` text DEFAULT NULL,
+  `coreValues` text DEFAULT NULL,
+  `ourHistory` text DEFAULT NULL,
+  `privacyPolicy` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `about_hospital`
+--
+
+INSERT INTO `about_hospital` (`id`, `aboutHospital`, `mission`, `vision`, `qualityPolicy`, `coreValues`, `ourHistory`, `privacyPolicy`, `created_at`, `updated_at`) VALUES
+(1, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eu pellentesque diam. Maecenas lacinia aliquet imperdiet. Ut luctus pharetra sem, sit amet facilisis velit tincidunt nec. Phasellus eget eros neque. Etiam risus felis, lacinia sed rhoncus lobortis, sagittis sed ligula. Quisque ac orci est. Donec quis velit lacus. Aliquam in lacus odio. Aenean pulvinar semper dictum. Nullam gravida hendrerit velit ac mattis. Donec consectetur tellus risus, eu commodo mi ullamcorper non. Morbi in lobortis purus, sed interdum ex. Nulla sapien diam, sagittis non leo id, mattis tincidunt purus.\n\nMauris viverra tincidunt nisl vel dapibus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse in libero tempus, interdum libero eget, lacinia velit. Vestibulum bibendum sem non scelerisque rutrum. Duis dignissim risus quis ex commodo posuere. Vestibulum sed elit eget lacus ornare ultricies at a tortor. Quisque dui risus, efficitur eu congue a, laoreet a ante.', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eu pellentesque diam. Maecenas lacinia aliquet imperdiet. Ut luctus pharetra sem, sit amet facilisis velit tincidunt nec. Phasellus eget eros neque. Etiam risus felis, lacinia sed rhoncus lobortis, sagittis sed ligula. Quisque ac orci est. Donec quis velit lacus. Aliquam in lacus odio. Aenean pulvinar semper dictum. Nullam gravida hendrerit velit ac mattis. Donec consectetur tellus risus, eu commodo mi ullamcorper non. Morbi in lobortis purus, sed interdum ex. Nulla sapien diam, sagittis non leo id, mattis tincidunt purus.\n\nMauris viverra tincidunt nisl vel dapibus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse in libero tempus, interdum libero eget, lacinia velit. Vestibulum bibendum sem non scelerisque rutrum. Duis dignissim risus quis ex commodo posuere. Vestibulum sed elit eget lacus ornare ultricies at a tortor. Quisque dui risus, efficitur eu congue a, laoreet a ante.', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eu pellentesque diam. Maecenas lacinia aliquet imperdiet. Ut luctus pharetra sem, sit amet facilisis velit tincidunt nec. Phasellus eget eros neque. Etiam risus felis, lacinia sed rhoncus lobortis, sagittis sed ligula. Quisque ac orci est. Donec quis velit lacus. Aliquam in lacus odio. Aenean pulvinar semper dictum. Nullam gravida hendrerit velit ac mattis. Donec consectetur tellus risus, eu commodo mi ullamcorper non. Morbi in lobortis purus, sed interdum ex. Nulla sapien diam, sagittis non leo id, mattis tincidunt purus.\n\nMauris viverra tincidunt nisl vel dapibus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse in libero tempus, interdum libero eget, lacinia velit. Vestibulum bibendum sem non scelerisque rutrum. Duis dignissim risus quis ex commodo posuere. Vestibulum sed elit eget lacus ornare ultricies at a tortor. Quisque dui risus, efficitur eu congue a, laoreet a ante.', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eu pellentesque diam. Maecenas lacinia aliquet imperdiet. Ut luctus pharetra sem, sit amet facilisis velit tincidunt nec. Phasellus eget eros neque. Etiam risus felis, lacinia sed rhoncus lobortis, sagittis sed ligula. Quisque ac orci est. Donec quis velit lacus. Aliquam in lacus odio. Aenean pulvinar semper dictum. Nullam gravida hendrerit velit ac mattis. Donec consectetur tellus risus, eu commodo mi ullamcorper non. Morbi in lobortis purus, sed interdum ex. Nulla sapien diam, sagittis non leo id, mattis tincidunt purus.\n\nMauris viverra tincidunt nisl vel dapibus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse in libero tempus, interdum libero eget, lacinia velit. Vestibulum bibendum sem non scelerisque rutrum. Duis dignissim risus quis ex commodo posuere. Vestibulum sed elit eget lacus ornare ultricies at a tortor. Quisque dui risus, efficitur eu congue a, laoreet a ante.', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eu pellentesque diam. Maecenas lacinia aliquet imperdiet. Ut luctus pharetra sem, sit amet facilisis velit tincidunt nec. Phasellus eget eros neque. Etiam risus felis, lacinia sed rhoncus lobortis, sagittis sed ligula. Quisque ac orci est. Donec quis velit lacus. Aliquam in lacus odio. Aenean pulvinar semper dictum. Nullam gravida hendrerit velit ac mattis. Donec consectetur tellus risus, eu commodo mi ullamcorper non. Morbi in lobortis purus, sed interdum ex. Nulla sapien diam, sagittis non leo id, mattis tincidunt purus.\n\nMauris viverra tincidunt nisl vel dapibus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse in libero tempus, interdum libero eget, lacinia velit. Vestibulum bibendum sem non scelerisque rutrum. Duis dignissim risus quis ex commodo posuere. Vestibulum sed elit eget lacus ornare ultricies at a tortor. Quisque dui risus, efficitur eu congue a, laoreet a ante.', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eu pellentesque diam. Maecenas lacinia aliquet imperdiet. Ut luctus pharetra sem, sit amet facilisis velit tincidunt nec. Phasellus eget eros neque. Etiam risus felis, lacinia sed rhoncus lobortis, sagittis sed ligula. Quisque ac orci est. Donec quis velit lacus. Aliquam in lacus odio. Aenean pulvinar semper dictum. Nullam gravida hendrerit velit ac mattis. Donec consectetur tellus risus, eu commodo mi ullamcorper non. Morbi in lobortis purus, sed interdum ex. Nulla sapien diam, sagittis non leo id, mattis tincidunt purus.\n\nMauris viverra tincidunt nisl vel dapibus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse in libero tempus, interdum libero eget, lacinia velit. Vestibulum bibendum sem non scelerisque rutrum. Duis dignissim risus quis ex commodo posuere. Vestibulum sed elit eget lacus ornare ultricies at a tortor. Quisque dui risus, efficitur eu congue a, laoreet a ante.', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eu pellentesque diam. Maecenas lacinia aliquet imperdiet. Ut luctus pharetra sem, sit amet facilisis velit tincidunt nec. Phasellus eget eros neque. Etiam risus felis, lacinia sed rhoncus lobortis, sagittis sed ligula. Quisque ac orci est. Donec quis velit lacus. Aliquam in lacus odio. Aenean pulvinar semper dictum. Nullam gravida hendrerit velit ac mattis. Donec consectetur tellus risus, eu commodo mi ullamcorper non. Morbi in lobortis purus, sed interdum ex. Nulla sapien diam, sagittis non leo id, mattis tincidunt purus.\n\nMauris viverra tincidunt nisl vel dapibus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse in libero tempus, interdum libero eget, lacinia velit. Vestibulum bibendum sem non scelerisque rutrum. Duis dignissim risus quis ex commodo posuere. Vestibulum sed elit eget lacus ornare ultricies at a tortor. Quisque dui risus, efficitur eu congue a, laoreet a ante.', '2025-11-27 08:19:02', '2025-11-27 08:19:02');
 
 -- --------------------------------------------------------
 
@@ -48,6 +74,7 @@ CREATE TABLE `announcement` (
 
 INSERT INTO `announcement` (`id`, `short_title`, `full_title`, `topic_tags`, `description`, `image`, `status`, `scheduled_at`, `created_at`, `updated_at`, `author`, `slug`) VALUES
 ('2bc0948c-b990-11f0-b748-c018509200f9', 'jfjhwbjfe', 'jbwjbw', 'jbjhbe', '<p>jfbjebfjwefjhfe</p>', '1762268913014-777763467.webp', 'published', NULL, '2025-11-04 23:08:33', '2025-11-10 13:41:07', 12, 'Kuromi'),
+('3ae25719-cb63-11f0-9e6e-c0185091f4ff', 'Lorem Ipsum', 'Lorem Ipusm', 'Lorem Ipsum', '<p>Lorem Ipsum</p>', '1764228749833-182185891.jpg', 'published', NULL, '2025-11-27 15:32:29', '2025-11-27 15:32:29', 12, 'lorem-ipsum'),
 ('5649a7dc-b997-11f0-b748-c018509200f9', 'jfjhweb', 'jbwejfeb', 'jbjeh', '<p>bfhebfewf</p>', '1762271990847-429750890.webp', 'published', NULL, '2025-11-04 23:59:50', '2025-11-04 23:59:50', 12, NULL),
 ('a7bd5fcb-b98f-11f0-b748-c018509200f9', 'jndje', 'jhbfjqehbf', 'jbfjbef', '<p>jfjhefwe</p>', '1762268691532-524275736.webp', 'published', NULL, '2025-11-04 23:04:51', '2025-11-04 23:04:51', 1, NULL),
 ('bcd7af8b-c943-11f0-b8ab-c018509202f6', 'Jame', 'x', 'j', '<p>xx	</p>', '1763995321666-206657281.png', 'published', NULL, '2025-11-24 22:42:01', '2025-11-24 22:42:01', 12, 'jame'),
@@ -77,7 +104,7 @@ CREATE TABLE `contact_info` (
 --
 
 INSERT INTO `contact_info` (`id`, `contact_us`, `contact_info`, `hospital_address`, `telephone`, `mobile_numbers`, `email`, `updated_at`) VALUES
-(1, 'Get in Touch', 'We value your feedback and are happy to assist you with inquiries about our hospital services.', '123 Health Avenue, Kapasigan, Pasig City, Philippines', 'Tel: (+632) 123-4567', '{\"admitting\": \"+63 900-111-2222\", \"sales\": \"+63 900-333-4444\", \"emergency\": \"+63 900-555-6666\", \"outpatient\": \"+63 900-777-8888\", \"radiology\": \"+63 900-999-0000\"}', 'info@yourhospital.com', '2025-11-25 11:08:59');
+(1, 'Get in Touch with me', 'We value your feedback and are happy to assist you with inquiries about our hospital services.', '123 Health Avenue, Kapasigan, Pasig City, Philippines', 'Tel: (+632) 123-4567 ', '{\"admitting\":\"+63 900-111-2222\",\"sales\":\"+63 900-333-4444\",\"emergency\":\"+63 900-555-6666\",\"outpatient\":\"+63 900-777-8888\",\"radiology\":\"+63 900-999-0000\"}', 'info@yourhospital.com', '2025-11-27 08:13:15');
 
 -- --------------------------------------------------------
 
@@ -141,7 +168,7 @@ INSERT INTO `files` (`id`, `name`, `filename`, `url`, `size`, `status`, `date_up
 --
 
 CREATE TABLE `health_tips` (
-  `id` char(36) NOT NULL,
+  `id` int(11) NOT NULL,
   `short_title` varchar(255) NOT NULL,
   `full_title` varchar(255) NOT NULL,
   `topic_tags` varchar(255) DEFAULT NULL,
@@ -160,7 +187,8 @@ CREATE TABLE `health_tips` (
 --
 
 INSERT INTO `health_tips` (`id`, `short_title`, `full_title`, `topic_tags`, `description`, `status`, `image`, `slug`, `author`, `scheduled_at`, `created_at`, `updated_at`) VALUES
-('', 'James', 'James', 'james', '<p>James</p>', 'published', '1763994793359-535401115.png', NULL, '12', NULL, '2025-11-24 22:33:13', '2025-11-24 22:33:13');
+(1, 'wowwo', 'wowow', 'wowow', '<p>wowow</p>', 'published', '1764231110302-395518667.webp', 'wowwo', '12', NULL, '2025-11-27 16:11:50', '2025-11-27 16:11:50'),
+(2, 'wiwiwwi', 'wiwiwi', 'wiwiw', '<p>wiwiwi</p>', 'published', '1764231124073-818807281.png', 'wiwiwwi', '12', NULL, '2025-11-27 16:12:04', '2025-11-27 16:12:04');
 
 -- --------------------------------------------------------
 
@@ -257,60 +285,50 @@ CREATE TABLE `page_views` (
 INSERT INTO `page_views` (`page_name`, `view_date`, `visit_count`) VALUES
 ('/', '2025-11-17', 19),
 ('/', '2025-11-22', 3),
-('/', '2025-11-25', 3),
+('/', '2025-11-25', 5),
+('/', '2025-11-27', 8),
 ('/about', '2025-11-22', 4),
+('/about', '2025-11-27', 3),
 ('/announcements', '2025-11-22', 5),
 ('/announcements', '2025-11-24', 26),
 ('/announcements', '2025-11-25', 1),
+('/announcements', '2025-11-27', 5),
+('/announcements/3ae25719-cb63-11f0-9e6e-c0185091f4ff', '2025-11-27', 1),
 ('/announcements/jame', '2025-11-24', 5),
 ('/announcements/jame', '2025-11-25', 1),
+('/announcements/jame', '2025-11-27', 1),
+('/announcements/lorem-ipsum', '2025-11-27', 2),
 ('/announcements/null', '2025-11-24', 1),
 ('/announcements/welcome-to-medisync', '2025-11-24', 6),
+('/announcements/welcome-to-medisync', '2025-11-27', 1),
 ('/careers', '2025-11-22', 5),
+('/careers', '2025-11-27', 3),
+('/careers/3', '2025-11-27', 2),
 ('/contact', '2025-11-22', 3),
-('/contact', '2025-11-25', 1),
+('/contact', '2025-11-25', 14),
+('/contact', '2025-11-27', 1),
 ('/doctors', '2025-11-17', 7),
 ('/doctors', '2025-11-22', 3),
+('/doctors', '2025-11-27', 3),
 ('/health', '2025-11-22', 4),
 ('/health', '2025-11-24', 2),
 ('/health', '2025-11-25', 2),
+('/health', '2025-11-27', 15),
 ('/health/null', '2025-11-24', 10),
 ('/health/null', '2025-11-25', 1),
+('/health/wiwiwwi', '2025-11-27', 1),
 ('/news', '2025-11-22', 3),
 ('/news', '2025-11-24', 10),
+('/news', '2025-11-27', 2),
 ('/news/aaaaa', '2025-11-24', 2),
+('/news/aaaaa', '2025-11-27', 1),
 ('/news/jamesss', '2025-11-24', 9),
 ('/news/null', '2025-11-24', 6),
 ('/news/undefined', '2025-11-25', 2),
+('/posts', '2025-11-27', 2),
 ('/services', '2025-11-17', 12),
-('/services', '2025-11-22', 9);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `page_views_backup`
---
-
-CREATE TABLE `page_views_backup` (
-  `page_name` varchar(255) NOT NULL,
-  `visit_count` int(11) DEFAULT 1,
-  `view_date` date NOT NULL DEFAULT curdate()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `page_views_backup`
---
-
-INSERT INTO `page_views_backup` (`page_name`, `visit_count`, `view_date`) VALUES
-('/', 19, '2025-11-17'),
-('/about', 4, '2025-11-22'),
-('/announcements', 5, '2025-11-22'),
-('/careers', 5, '2025-11-22'),
-('/contact', 3, '2025-11-22'),
-('/doctors', 7, '2025-11-17'),
-('/health', 4, '2025-11-22'),
-('/news', 3, '2025-11-22'),
-('/services', 12, '2025-11-17');
+('/services', '2025-11-22', 9),
+('/services', '2025-11-27', 3);
 
 -- --------------------------------------------------------
 
@@ -360,12 +378,18 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `full_name`, `email`, `password`, `created_at`, `role`, `last_login`, `reset_code`, `code_expiry`) VALUES
 (8, 'Lynn', 'lynnzylameczdo@gmail.com', '$2b$10$ADe2OQ01nBT9Udz1/wJZaOc2XXdJ.OyPChMfN/PSD8x3Z2wzHkyOq', '2025-10-17 21:31:06', 'hr_administrator', '2025-11-08 02:03:38', '514594', '2025-10-25 10:41:31'),
 (11, 'Lynn Czyla Alpuerto', 'alpuerto_lynnczyla@plpasig.edu.ph', '$2b$10$ADe2OQ01nBT9Udz1/wJZaOc2XXdJ.OyPChMfN/PSD8x3Z2wzHkyOq', '2025-10-18 03:32:20', 'content_administrator', NULL, NULL, NULL),
-(12, 'James', 'flavierlaurence01@gmail.com', '$2b$10$ADe2OQ01nBT9Udz1/wJZaOc2XXdJ.OyPChMfN/PSD8x3Z2wzHkyOq', '2025-10-18 03:40:35', 'super_administrator', '2025-11-25 18:59:07', NULL, NULL),
+(12, 'James', 'flavierlaurence01@gmail.com', '$2b$10$ADe2OQ01nBT9Udz1/wJZaOc2XXdJ.OyPChMfN/PSD8x3Z2wzHkyOq', '2025-10-18 03:40:35', 'super_administrator', '2025-11-27 16:00:32', NULL, NULL),
 (26, 'Laurence HR', 'dumpblj@gmail.com', '$2b$10$Kx3YJuI3AzNiqMq/88FSUuuowi7bRwEJGU3AnyTzoEVT8QFwZ6VrK', '2025-11-09 11:04:50', 'hr_administrator', '2025-11-09 19:23:47', NULL, NULL);
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `about_hospital`
+--
+ALTER TABLE `about_hospital`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `announcement`
@@ -437,6 +461,12 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `about_hospital`
+--
+ALTER TABLE `about_hospital`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `contact_info`
 --
 ALTER TABLE `contact_info`
@@ -453,6 +483,12 @@ ALTER TABLE `events_careers`
 --
 ALTER TABLE `files`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+
+--
+-- AUTO_INCREMENT for table `health_tips`
+--
+ALTER TABLE `health_tips`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `jobs`

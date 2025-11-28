@@ -35,6 +35,7 @@ router.post("/", async (req, res) => {
       if (err) {
         console.error("Error checking row:", err);
         return res.status(500).json({ error: "Server error" });
+        
       }
 
       if (rows.length === 0) {
