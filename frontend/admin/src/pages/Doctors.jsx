@@ -314,13 +314,33 @@ const [doctors, setDoctors] = useState([]);
         <p className="header-breadcrumb">Admin Dashboard / Doctors</p>
       </div>
 
-      {/* Separate section for Add New Doctor Profile */}
-      <div className="doctors-card" style={{ marginBottom: '20px' }}>
-        <div className="doctors-toolbar">
-          <div className="doctors-toolbar-left">
-            <span className="add-new-text">Add a New Doctor Profile</span>
+    <div className="stats-card">
+        <div className="stats-card-content">
+          <div className="chart-section">
+            <div ref={chartRef} className="apex-chart"></div>
+            <div className="legend">
+              <h3 className="legend-title">SPECIALIZATION</h3>
+              <div className="legend-grid">
+                {legendData.map(([spec], i) => (
+                  <div key={i} className="legend-item">
+                    <span
+                      className="legend-color"
+                      style={{
+                        backgroundColor:
+                          specializationColors[spec] || "#A855F7",
+                      }}
+                    />
+                    <span className="legend-text">{spec}</span>
+                  </div>
+                ))}
+                {legendData.length < 6 && (
+                  <div className="legend-item">
+                    <span className="legend-text more">More...</span>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
-
           <div className="stats-numbers">
             <div className="stat-item">
               <p className="stat-value stat-value-primary fs-1">
