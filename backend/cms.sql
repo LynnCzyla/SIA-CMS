@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 27, 2025 at 09:22 AM
+-- Generation Time: Nov 28, 2025 at 04:03 PM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -79,6 +79,7 @@ INSERT INTO `announcement` (`id`, `short_title`, `full_title`, `topic_tags`, `de
 ('a7bd5fcb-b98f-11f0-b748-c018509200f9', 'jndje', 'jhbfjqehbf', 'jbfjbef', '<p>jfjhefwe</p>', '1762268691532-524275736.webp', 'published', NULL, '2025-11-04 23:04:51', '2025-11-04 23:04:51', 1, NULL),
 ('bcd7af8b-c943-11f0-b8ab-c018509202f6', 'Jame', 'x', 'j', '<p>xx	</p>', '1763995321666-206657281.png', 'published', NULL, '2025-11-24 22:42:01', '2025-11-24 22:42:01', 12, 'jame'),
 ('d361c0ac-b99e-11f0-b748-c018509200f9', 'dbqjhbdj', 'jhbejfbj', 'jbjhbw', '<p>jfbejhwef</p>', '1762275207204-65518573.webp', 'published', NULL, '2025-11-05 00:53:27', '2025-11-05 00:53:27', 12, NULL),
+('eddf2d4e-cc6a-11f0-88eb-c0185091f91d', 'aNNOUNCE,MENT', 'aNNOUNCE,MENT', 'aNNOUNCE,MENT', '<p>aNNOUNCE,MENTATGWQTGW</p>', '1764342007786-62377200.jpg', 'published', NULL, '2025-11-28 23:00:07', '2025-11-28 23:00:07', 12, 'announcement'),
 ('f7c6d85e-b98e-11f0-b748-c018509200f9', 'jndjedj', 'bfjwe', 'jbfjhwe', '<p>enfjnefef</p>', '1762268396313-221346.webp', 'published', NULL, '2025-11-04 22:59:56', '2025-11-04 22:59:56', 1, NULL),
 ('fe077a52-bdf7-11f0-9b30-c018509202f6', NULL, 'Welcome to the Lorem Ipsum MediSync', 'Welcome, Hello, Goodluck', '<p class=\"ql-align-justify\"><span style=\"background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);\">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eu pellentesque diam. Maecenas lacinia aliquet imperdiet. Ut luctus pharetra sem, sit amet facilisis velit tincidunt nec. Phasellus eget eros neque. Etiam risus felis, lacinia sed rhoncus lobortis, sagittis sed ligula. Quisque ac orci est. Donec quis velit lacus. Aliquam in lacus odio. Aenean pulvinar semper dictum. Nullam gravida hendrerit velit ac mattis. Donec consectetur tellus risus, eu commodo mi ullamcorper non. Morbi in lobortis purus, sed interdum ex. Nulla sapien diam, sagittis non leo id, mattis tincidunt purus.</span></p><p class=\"ql-align-justify\"><span style=\"background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);\">Mauris viverra tincidunt nisl vel dapibus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse in libero tempus, interdum libero eget, lacinia velit. Vestibulum bibendum sem non scelerisque rutrum. Duis dignissim risus quis ex commodo posuere. Vestibulum sed elit eget lacus ornare ultricies at a tortor. Quisque dui risus, efficitur eu congue a, laoreet a ante.</span></p><p><br></p>', '1762753326480-6937911.jpg', 'published', NULL, '2025-11-10 13:42:06', '2025-11-24 22:09:55', 12, 'welcome-to-medisync');
 
@@ -105,6 +106,17 @@ CREATE TABLE `contact_info` (
 
 INSERT INTO `contact_info` (`id`, `contact_us`, `contact_info`, `hospital_address`, `telephone`, `mobile_numbers`, `email`, `updated_at`) VALUES
 (1, 'Get in Touch with me', 'We value your feedback and are happy to assist you with inquiries about our hospital services.', '123 Health Avenue, Kapasigan, Pasig City, Philippines', 'Tel: (+632) 123-4567 ', '{\"admitting\":\"+63 900-111-2222\",\"sales\":\"+63 900-333-4444\",\"emergency\":\"+63 900-555-6666\",\"outpatient\":\"+63 900-777-8888\",\"radiology\":\"+63 900-999-0000\"}', 'info@yourhospital.com', '2025-11-27 08:13:15');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `doctors_visibility`
+--
+
+CREATE TABLE `doctors_visibility` (
+  `employee_id` int(11) NOT NULL,
+  `is_shown` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -188,7 +200,8 @@ CREATE TABLE `health_tips` (
 
 INSERT INTO `health_tips` (`id`, `short_title`, `full_title`, `topic_tags`, `description`, `status`, `image`, `slug`, `author`, `scheduled_at`, `created_at`, `updated_at`) VALUES
 (1, 'wowwo', 'wowow', 'wowow', '<p>wowow</p>', 'published', '1764231110302-395518667.webp', 'wowwo', '12', NULL, '2025-11-27 16:11:50', '2025-11-27 16:11:50'),
-(2, 'wiwiwwi', 'wiwiwi', 'wiwiw', '<p>wiwiwi</p>', 'published', '1764231124073-818807281.png', 'wiwiwwi', '12', NULL, '2025-11-27 16:12:04', '2025-11-27 16:12:04');
+(2, 'wiwiwwi', 'wiwiwi', 'wiwiw', '<p>wiwiwi</p>', 'published', '1764231124073-818807281.png', 'wiwiwwi', '12', NULL, '2025-11-27 16:12:04', '2025-11-27 16:12:04'),
+(3, 'Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostru', 'Nutrition', '<p>Drink your water beach!!</p>', 'published', '1764341891865-680915894.jpg', 'lorem-ipsum-dolor-sit-amet', '12', NULL, '2025-11-28 22:58:11', '2025-11-28 22:58:11');
 
 -- --------------------------------------------------------
 
@@ -251,6 +264,7 @@ CREATE TABLE `news` (
 --
 
 INSERT INTO `news` (`id`, `short_title`, `full_title`, `slug`, `topic_tags`, `description`, `status`, `image`, `scheduled_at`, `created_at`, `updated_at`, `author`) VALUES
+('0ae11583-cc6b-11f0-88eb-c0185091f91d', 'aNNOUNCE,MENT', 'ar4ctle', 'announcement', 'ar4ctle', '<p>ar4ctleastj</p>', 'posted', '1764342056445-790033629.png', NULL, '2025-11-28 23:00:56', '2025-11-28 23:00:56', 12),
 ('1bbf2721-b99b-11f0-b748-c018509200f9', 'mn fwbje ', 'jjebfj', NULL, 'jbjhebf', '<p>jfbjhbfwe</p>', 'draft', NULL, NULL, '2025-11-05 00:26:50', '2025-11-05 00:26:50', 12),
 ('1f254804-b996-11f0-b748-c018509200f9', 'hjbjheb', 'jbfjbjweb', NULL, 'jbefjbwe', '<p>jbfjwhfebwef</p>', 'posted', '00de2686-c72b-4515-bb46-1b1d1bd3adef.webp', NULL, '2025-11-04 23:51:08', '2025-11-04 23:51:08', 12),
 ('3457a777-b996-11f0-b748-c018509200f9', 'dvfhwvefh', 'kbfjebj', NULL, 'jbfjwbe', '<p>bdjhjbdqw</p>', 'draft', NULL, NULL, '2025-11-04 23:51:44', '2025-11-04 23:51:44', 12),
@@ -287,13 +301,16 @@ INSERT INTO `page_views` (`page_name`, `view_date`, `visit_count`) VALUES
 ('/', '2025-11-22', 3),
 ('/', '2025-11-25', 5),
 ('/', '2025-11-27', 8),
+('/', '2025-11-28', 4),
 ('/about', '2025-11-22', 4),
 ('/about', '2025-11-27', 3),
 ('/announcements', '2025-11-22', 5),
 ('/announcements', '2025-11-24', 26),
 ('/announcements', '2025-11-25', 1),
 ('/announcements', '2025-11-27', 5),
+('/announcements', '2025-11-28', 4),
 ('/announcements/3ae25719-cb63-11f0-9e6e-c0185091f4ff', '2025-11-27', 1),
+('/announcements/announcement', '2025-11-28', 4),
 ('/announcements/jame', '2025-11-24', 5),
 ('/announcements/jame', '2025-11-25', 1),
 ('/announcements/jame', '2025-11-27', 1),
@@ -314,21 +331,26 @@ INSERT INTO `page_views` (`page_name`, `view_date`, `visit_count`) VALUES
 ('/health', '2025-11-24', 2),
 ('/health', '2025-11-25', 2),
 ('/health', '2025-11-27', 15),
+('/health', '2025-11-28', 3),
+('/health/lorem-ipsum-dolor-sit-amet', '2025-11-28', 1),
 ('/health/null', '2025-11-24', 10),
 ('/health/null', '2025-11-25', 1),
 ('/health/wiwiwwi', '2025-11-27', 1),
 ('/news', '2025-11-22', 3),
 ('/news', '2025-11-24', 10),
 ('/news', '2025-11-27', 2),
+('/news', '2025-11-28', 1),
 ('/news/aaaaa', '2025-11-24', 2),
 ('/news/aaaaa', '2025-11-27', 1),
+('/news/announcement', '2025-11-28', 1),
 ('/news/jamesss', '2025-11-24', 9),
 ('/news/null', '2025-11-24', 6),
 ('/news/undefined', '2025-11-25', 2),
 ('/posts', '2025-11-27', 2),
 ('/services', '2025-11-17', 12),
 ('/services', '2025-11-22', 9),
-('/services', '2025-11-27', 3);
+('/services', '2025-11-27', 3),
+('/services', '2025-11-28', 8);
 
 -- --------------------------------------------------------
 
@@ -356,6 +378,33 @@ INSERT INTO `post_logs` (`id`, `post_id`, `category`, `action`, `message`, `edit
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `services`
+--
+
+CREATE TABLE `services` (
+  `id` char(36) NOT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `short_title` varchar(255) NOT NULL,
+  `full_title` varchar(255) NOT NULL,
+  `topic_tags` text DEFAULT NULL,
+  `description` text NOT NULL,
+  `status` enum('published','draft','archived') DEFAULT 'published',
+  `image` varchar(255) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `services`
+--
+
+INSERT INTO `services` (`id`, `user_id`, `short_title`, `full_title`, `topic_tags`, `description`, `status`, `image`, `created_at`, `updated_at`) VALUES
+('f7c25549-c94d-11f0-a10f-c018509200f9', 12, 'kfebfhk', 'kjfkwej', 'kjnkjbfekjw', '<p>efjbwefbjwhfe</p>', 'published', '6b70b638-7e9b-409e-8a9b-c32cd0143b35.webp', '2025-11-24 23:54:57', '2025-11-24 23:54:57'),
+('346aae8b-cc6b-11f0-88eb-c0185091f91d', 12, 'Mental health', 'Mental health', 'Mental health', '<p>Mental healthMental healthMental healthMental healthMental health</p>', 'published', '55d4c3f9-dd53-4d31-b7c5-8650e42d0387.png', '2025-11-28 23:02:06', '2025-11-28 23:02:06');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -378,7 +427,7 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `full_name`, `email`, `password`, `created_at`, `role`, `last_login`, `reset_code`, `code_expiry`) VALUES
 (8, 'Lynn', 'lynnzylameczdo@gmail.com', '$2b$10$ADe2OQ01nBT9Udz1/wJZaOc2XXdJ.OyPChMfN/PSD8x3Z2wzHkyOq', '2025-10-17 21:31:06', 'hr_administrator', '2025-11-08 02:03:38', '514594', '2025-10-25 10:41:31'),
 (11, 'Lynn Czyla Alpuerto', 'alpuerto_lynnczyla@plpasig.edu.ph', '$2b$10$ADe2OQ01nBT9Udz1/wJZaOc2XXdJ.OyPChMfN/PSD8x3Z2wzHkyOq', '2025-10-18 03:32:20', 'content_administrator', NULL, NULL, NULL),
-(12, 'James', 'flavierlaurence01@gmail.com', '$2b$10$ADe2OQ01nBT9Udz1/wJZaOc2XXdJ.OyPChMfN/PSD8x3Z2wzHkyOq', '2025-10-18 03:40:35', 'super_administrator', '2025-11-27 16:00:32', NULL, NULL),
+(12, 'James', 'flavierlaurence01@gmail.com', '$2b$10$ADe2OQ01nBT9Udz1/wJZaOc2XXdJ.OyPChMfN/PSD8x3Z2wzHkyOq', '2025-10-18 03:40:35', 'super_administrator', '2025-11-28 22:57:33', NULL, NULL),
 (26, 'Laurence HR', 'dumpblj@gmail.com', '$2b$10$Kx3YJuI3AzNiqMq/88FSUuuowi7bRwEJGU3AnyTzoEVT8QFwZ6VrK', '2025-11-09 11:04:50', 'hr_administrator', '2025-11-09 19:23:47', NULL, NULL);
 
 --
@@ -403,6 +452,12 @@ ALTER TABLE `announcement`
 --
 ALTER TABLE `contact_info`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `doctors_visibility`
+--
+ALTER TABLE `doctors_visibility`
+  ADD UNIQUE KEY `employee_id` (`employee_id`);
 
 --
 -- Indexes for table `events_careers`
@@ -450,6 +505,12 @@ ALTER TABLE `post_logs`
   ADD KEY `idx_post_logs_created_at` (`created_at`);
 
 --
+-- Indexes for table `services`
+--
+ALTER TABLE `services`
+  ADD KEY `fk_service_user` (`user_id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -488,7 +549,7 @@ ALTER TABLE `files`
 -- AUTO_INCREMENT for table `health_tips`
 --
 ALTER TABLE `health_tips`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `jobs`
@@ -507,6 +568,16 @@ ALTER TABLE `post_logs`
 --
 ALTER TABLE `users`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `services`
+--
+ALTER TABLE `services`
+  ADD CONSTRAINT `fk_service_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
