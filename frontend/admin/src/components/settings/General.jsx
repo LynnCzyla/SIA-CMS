@@ -2,7 +2,7 @@ import { FaUpload } from "react-icons/fa";
 
 export default function General() {
   return (
-    <div className="cms-card">
+    <div className="cms-card1">
       <h3 className="cms-section-title">General Settings</h3>
       <div className="row">
         <div className="col-md-6">

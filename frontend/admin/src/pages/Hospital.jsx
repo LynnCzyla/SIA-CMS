@@ -234,7 +234,7 @@ export default function Hospital() {
 
   return (
     <div className="cms-announcement-page">
-      <h2 className="title">Hospital CMS Management</h2>
+      <h2 className="title">About Hospital</h2>
       <ul className="breadcrumbs">
         <li>CMS</li>
         <li className="divider">/</li>
@@ -281,13 +281,13 @@ export default function Hospital() {
           {activeTab === "about" && (
             <div className="about-form-container">
               {[
-                "aboutHospital",
-                "mission",
-                "vision",
-                "qualityPolicy",
-                "coreValues",
-                "ourHistory",
-                "privacyPolicy",
+                "Update the About Hospital",
+                "Update the Mission",
+                "Update the Vision",
+                "Update the Quality Policy",
+                "Update the Core Values",
+                "Update the Our History",
+                "Update the Privacy Policy",
               ].map((field) => (
                 <div className="about-form-group" key={field}>
                   <label>{field.replace(/([A-Z])/g, " $1")}</label>
@@ -417,7 +417,7 @@ export default function Hospital() {
           {activeTab === "services" && (
             <>
               <div className="cms-form-row">
-                {["shortTitle", "fullTitle", "topicTags"].map((field) => (
+                {["Short Title", "Full Title", "Topic Tags"].map((field) => (
                   <div className="cms-form-group" key={field}>
                     <label>{field.replace(/([A-Z])/g, " $1")}</label>
                     <input
