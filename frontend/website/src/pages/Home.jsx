@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useLayout } from "../context/LayoutContext"; // We'll create this
 import "../css/HomeLayout1.css"; // Classic look
 import "../css/HomeLayout2.css"; // Your new modern look
-
+import AppointmentModal from './AppointmentModal';
 
 import {
   MdLocalHospital,
@@ -33,7 +33,8 @@ function Home() {
   const navigate = useNavigate();
 
   console.log('🏠 Home component rendering with layout:', layout);
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  console.log('Current modal state:', isModalOpen);
   const [carouselSlides, setCarouselSlides] = useState([]);
   const [heroSlides, setHeroSlides] = useState([]);
   const [currentCarousel, setCurrentCarousel] = useState(0);
@@ -160,9 +161,16 @@ function Home() {
                     blending modern medical expertise with heartfelt human
                     connection to help you heal, recover, and thrive.
                   </p>
-                  <button className="home-btn m-1 ">
-                    Book Appointment <MdOutlineBookmarkBorder />
-                  </button>
+                  <button 
+  className="home-btn m-1"
+  onClick={() => {
+    console.log('Book Appointment clicked!');
+    setIsModalOpen(true);
+    console.log('Modal state set to:', true);
+  }}
+>
+  Book Appointment <MdOutlineBookmarkBorder />
+</button>
                   <button className="doc-btn">
                     Find a Doctor <FaUserDoctor />
                   </button>
@@ -453,9 +461,13 @@ function Home() {
           </section>
         </div>
       </div>
-
+      <div>Modal state: {isModalOpen ? 'OPEN' : 'CLOSED'}</div>
       {/* Chatbot */}
       <Chatbot />
+      <AppointmentModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+      />
       {/* <LayoutTester /> */}
     </div>
   );

@@ -1,0 +1,242 @@
+/* Modal Overlay */
+.appointment-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Modal Container - Wide Layout with Background Image */
+.appointment-modal-container-wide {
+  background-color: white;
+  background-image: url('/public/Appointment.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 0;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  width: 100%;
+  max-width: 90rem;
+  margin: 0 1rem;
+  max-height: 95vh;
+  overflow-y: auto;
+  /* Add semi-transparent overlay to ensure text readability */
+  position: relative;
+}
+
+/* Optional: Add overlay for better text readability */
+.appointment-modal-container-wide::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(245, 247, 250, 0.92);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Ensure content appears above the overlay */
+.appointment-modal-header-blue,
+.appointment-modal-form-wide {
+  position: relative;
+  z-index: 1;
+}
+
+/* Header - Blue Background */
+.appointment-modal-header-blue {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 2rem;
+  background-color: rgba(0, 61, 130, 0.95); /* Semi-transparent */
+}
+
+.appointment-modal-title-white {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: white;
+  margin: 0;
+}
+
+.appointment-modal-close-btn-white {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 0;
+  transition: opacity 0.2s;
+}
+
+.appointment-modal-close-btn-white:hover {
+  opacity: 0.8;
+}
+
+/* Form - Wide Layout */
+.appointment-modal-form-wide {
+  padding: 3rem 2rem 2rem;
+}
+
+/* Row Layout - 3 columns */
+.appointment-modal-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+/* Form Group */
+.appointment-modal-form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.appointment-modal-form-group-wide {
+  grid-column: span 2;
+}
+
+.appointment-modal-label-blue {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #003d82;
+  margin-bottom: 0.5rem;
+}
+
+/* Input Fields */
+.appointment-modal-input,
+.appointment-modal-select,
+.appointment-modal-textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #d1d5db;
+  border-radius: 0;
+  font-size: 1rem;
+  color: #111827;
+  background-color: rgba(255, 255, 255, 0.95); /* Semi-transparent white */
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.appointment-modal-input:focus,
+.appointment-modal-select:focus,
+.appointment-modal-textarea:focus {
+  outline: none;
+  border-color: #003d82;
+  box-shadow: 0 0 0 3px rgba(0, 61, 130, 0.1);
+  background-color: white;
+}
+
+.appointment-modal-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+  background-position: right 0.75rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  padding-right: 2.5rem;
+}
+
+.appointment-modal-textarea {
+  resize: none;
+  font-family: inherit;
+  min-height: 100px;
+}
+
+/* Helper Text */
+.appointment-modal-helper-text-blue {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: #3b82f6;
+  font-style: italic;
+}
+
+/* Action Buttons */
+.appointment-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.appointment-modal-btn {
+  padding: 0.875rem 2.5rem;
+  border-radius: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.appointment-modal-btn-cancel-red {
+  color: white;
+  background-color: #dc2626;
+}
+
+.appointment-modal-btn-cancel-red:hover {
+  background-color: #b91c1c;
+}
+
+.appointment-modal-btn-submit-blue {
+  color: white;
+  background-color: #003d82;
+}
+
+.appointment-modal-btn-submit-blue:hover {
+  background-color: #002d5f;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .appointment-modal-row {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .appointment-modal-form-group-wide {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .appointment-modal-container-wide {
+    max-width: 95%;
+    margin: 0 0.5rem;
+  }
+
+  .appointment-modal-row {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .appointment-modal-form-group-wide {
+    grid-column: span 1;
+  }
+
+  .appointment-modal-header-blue {
+    padding: 1rem 1.5rem;
+  }
+
+  .appointment-modal-title-white {
+    font-size: 1.25rem;
+  }
+
+  .appointment-modal-form-wide {
+    padding: 2rem 1.5rem 1.5rem;
+  }
+
+  .appointment-modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .appointment-modal-btn {
+    width: 100%;
+  }
+}
