@@ -22,7 +22,6 @@ export default function ViewModal({ post, onClose }) {
   return (
     <div className="modal-overlay">
       <div className="modal-box">
-        {/* Close button upper-right */}
         <button
           onClick={onClose}
           style={{

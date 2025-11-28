@@ -291,7 +291,7 @@ const Analytics = () => {
   };
 
   return (
-    <div className="dashboard-page">
+    <div className="cms-announcement-page">
       <div className="page-header">
         <div>
           <h1 className="title">Analytics & Reports</h1>

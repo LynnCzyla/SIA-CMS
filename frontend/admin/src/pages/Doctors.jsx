@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import '../css/doctors.css';
 
-// Simple SVG Icons
 const SearchIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <circle cx="11" cy="11" r="8"></circle>
@@ -15,6 +14,8 @@ const EditIcon = () => (
     <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
   </svg>
 );
+
+
 
 export default function Doctors() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -43,10 +44,10 @@ export default function Doctors() {
       </div>
 
       {/* Separate section for Add New Doctor Profile */}
-      <div className="doctors-card" style={{ marginBottom: '20px' }}>
+      <div className="card announcement-card" style={{ marginBottom: '20px' }}>
         <div className="doctors-toolbar">
           <div className="doctors-toolbar-left">
-            <span className="add-new-text">Add a New Doctor Profile</span>
+            <span className="announcement-title">Add a New Doctor Profile</span>
           </div>
           <div style={{ display: 'flex', gap: '10px' }}>
             <button className="btn draft-btn">Draft</button>

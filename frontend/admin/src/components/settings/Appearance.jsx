@@ -211,31 +211,7 @@ function Appearance() {
         </div>
 
         {/* THEME COLORS */}
-        <div className="col-md-12 mb-4">
-          <h6 className="fw-semibold mb-3">Theme Colors</h6>
-          <div className="d-flex gap-3">
-            {[
-              { color: "bg-primary", name: "Primary Blue", box: "#2563eb" },
-              { color: "bg-info", name: "Info Cyan", box: "#0ea5e9" },
-              { color: "bg-light", name: "Light Gray", box: "#d1d5db" },
-            ].map((theme) => (
-              <div key={theme.color} className="text-center">
-                <div
-                  className="rounded"
-                  style={{
-                    width: "60px",
-                    height: "60px",
-                    cursor: "pointer",
-                    background: theme.box,
-                    border: themeColor === theme.color ? "3px solid #000" : "2px solid #ccc",
-                  }}
-                  onClick={() => setThemeColor(theme.color)}
-                ></div>
-                <small>{theme.name}</small>
-              </div>
-            ))}
-          </div>
-        </div>
+        
 
         {/* LAYOUT CARDS */}
         <div className="col-md-12 mt-4">
