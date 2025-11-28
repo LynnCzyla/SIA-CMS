@@ -4,8 +4,11 @@ import "../css/Navbar.css";
 import { IoMdArrowDropdown } from "react-icons/io";
 import "boxicons/css/boxicons.min.css";
 import Logo from "/src/assets/logo1.svg";
+import AppointmentModal from "../pages/AppointmentModal"; // Import modal
+
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false); // Modal state
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -14,19 +17,13 @@ function Navbar() {
     location.pathname.startsWith("/announcements") ||
     location.pathname.startsWith("/health");
 
-  // ✅ Universal scroll + navigate function
   const handleNavClick = (e, path) => {
     e.preventDefault();
-
     if (location.pathname === path) {
-      // If already on the page, scroll to top
       window.scrollTo({ top: 0, behavior: "smooth" });
     } else {
-      // Otherwise, navigate normally
       navigate(path);
     }
-
-    // Close mobile menu after clicking
     setMenuOpen(false);
   };
 
@@ -40,7 +37,7 @@ function Navbar() {
 
       {/* Navbar */}
       <nav className="navbar">
-            <NavLink to="/" className="brand" onClick={(e) => handleNavClick(e, "/")}>
+        <NavLink to="/" className="brand" onClick={(e) => handleNavClick(e, "/")}>
           <img src={Logo} alt="MediSync Logo" className="brand-logo" />
           <span className="brand-name">
             <span className="brand-text">Medi</span>
@@ -48,7 +45,6 @@ function Navbar() {
           </span>
         </NavLink>
 
-        {/* Hamburger */}
         <button
           className="hamburger d-lg-none"
           onClick={() => setMenuOpen(!menuOpen)}
@@ -57,26 +53,20 @@ function Navbar() {
           ☰
         </button>
 
-        {/* Nav Links */}
         <ul className={`nav-links ${menuOpen ? "open" : ""}`}>
+          {/* Nav Links */}
           <li>
             <NavLink to="/" end onClick={(e) => handleNavClick(e, "/")}>
               Home
             </NavLink>
           </li>
           <li>
-            <NavLink
-              to="/services"
-              onClick={(e) => handleNavClick(e, "/services")}
-            >
+            <NavLink to="/services" onClick={(e) => handleNavClick(e, "/services")}>
               Services
             </NavLink>
           </li>
           <li>
-            <NavLink
-              to="/doctors"
-              onClick={(e) => handleNavClick(e, "/doctors")}
-            >
+            <NavLink to="/doctors" onClick={(e) => handleNavClick(e, "/doctors")}>
               Doctors
             </NavLink>
           </li>
@@ -87,30 +77,20 @@ function Navbar() {
               Updates <IoMdArrowDropdown />
             </span>
             <div className="dropdown-content">
-              <NavLink
-                to="/announcements"
-                onClick={(e) => handleNavClick(e, "/announcements")}
-              >
+              <NavLink to="/announcements" onClick={(e) => handleNavClick(e, "/announcements")}>
                 Announcements
               </NavLink>
               <NavLink to="/news" onClick={(e) => handleNavClick(e, "/news")}>
                 Latest News
               </NavLink>
-              
-              <NavLink
-                to="/health"
-                onClick={(e) => handleNavClick(e, "/health")}
-              >
+              <NavLink to="/health" onClick={(e) => handleNavClick(e, "/health")}>
                 Health Tips
               </NavLink>
             </div>
           </li>
 
           <li>
-            <NavLink
-              to="/careers"
-              onClick={(e) => handleNavClick(e, "/careers")}
-            >
+            <NavLink to="/careers" onClick={(e) => handleNavClick(e, "/careers")}>
               Careers
             </NavLink>
           </li>
@@ -120,17 +100,20 @@ function Navbar() {
             </NavLink>
           </li>
           <li>
-            <NavLink
-              to="/contact"
-              onClick={(e) => handleNavClick(e, "/contact")}
-            >
+            <NavLink to="/contact" onClick={(e) => handleNavClick(e, "/contact")}>
               Contact
             </NavLink>
           </li>
         </ul>
 
-        <button className="book-btn">Book an Appointment</button>
+        {/* Book Appointment Button */}
+        <button className="book-btn" onClick={() => setModalOpen(true)}>
+          Book an Appointment
+        </button>
       </nav>
+
+      {/* Appointment Modal */}
+      <AppointmentModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
     </div>
   );
 }
