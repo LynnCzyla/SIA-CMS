@@ -1,3 +1,4 @@
+// frontend/admin/src/pages/News.jsx
 import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Quill from "quill";

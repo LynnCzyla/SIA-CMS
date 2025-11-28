@@ -1,4 +1,4 @@
-// frontend/src/components/Analytics.jsx
+// frontend/src/pages/Analytics.jsx
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import {

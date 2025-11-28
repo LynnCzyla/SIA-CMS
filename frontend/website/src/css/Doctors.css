@@ -1,3 +1,4 @@
+/* frontend/website/src/css/Doctors.css */
 .doctors-page {
   background-color: var(--bg-blue);
   padding-bottom: 80px;
@@ -241,6 +242,140 @@
   .doctor-img {
     height: 200px;
   }
+}
+
+/* Doctor Modal */
+.doctor-modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.doctor-modal-content {
+  background: linear-gradient(135deg, #e6f3ff, #f0f8ff);
+  border-radius: 20px;
+  width: 90%;
+  max-width: 900px;
+  position: relative;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+  overflow: hidden;
+}
+
+.modal-header {
+  background: #e6f3ff;
+  padding: 20px 30px;
+  position: relative;
+  text-align: right;
+}
+
+.heartbeat-line {
+  position: absolute;
+  top: 50%;
+  left: 30px;
+  width: 150px;
+  height: 4px;
+  background: linear-gradient(90deg, #4f9cf9, transparent);
+  border-radius: 2px;
+  transform: translateY(-50%);
+}
+
+.modal-logo {
+  font-family: 'Segoe UI', sans-serif;
+  font-weight: 700;
+  color: #1e40af;
+}
+
+.logo-text {
+  font-size: 28px;
+  display: block;
+}
+
+.logo-sub {
+  font-size: 12px;
+  color: #3b82f6;
+  letter-spacing: 1px;
+}
+
+.modal-body {
+  padding: 40px;
+}
+
+.doctor-photo-large img {
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 8px solid white;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.doctor-name {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1e40af;
+  margin: 0;
+}
+
+.doctor-specialization {
+  font-size: 20px;
+  color: #3b82f6;
+  margin: 8px 0 20px;
+  font-weight: 600;
+}
+
+.doctor-details {
+  margin-top: 20px;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 12px 0;
+  font-size: 16px;
+  color: #374151;
+}
+
+.detail-icon {
+  color: #3b82f6;
+  font-size: 18px;
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 15px;
+  right: 25px;
+  background: none;
+  border: none;
+  font-size: 36px;
+  color: #aaa;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+.modal-close-btn:hover {
+  background: rgba(0,0,0,0.1);
+  color: #333;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 /* Responsive for mobile */

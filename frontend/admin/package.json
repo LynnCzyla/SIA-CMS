@@ -14,6 +14,7 @@
     "axios": "^1.13.2",
     "bootstrap": "^5.3.8",
     "boxicons": "^2.1.4",
+    "lucide-react": "^0.554.0",
     "quill": "^2.0.3",
     "quilljs": "^0.18.1",
     "react": "^19.1.1",

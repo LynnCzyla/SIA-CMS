@@ -1,189 +1,286 @@
-:root {
-  --primary-color: #043873;
-  --primary-color2: #4f9cf9;
-  --bg-blue: #f3f7ff;
-  --white: #ffffff;
-  --text-dark: #1a1a1a;
-  --text-gray: #6b7280;
-}
+/* frontend/admin/src/css/doctors.css */
 
-/* ==============================
-   PAGE LAYOUT
-============================== */
+/* Page Container */
 .doctors-page {
-  padding: 20px;
-  background-color: var(--bg-blue);
-  font-family: "Inter", sans-serif;
-  color: var(--text-dark);
   min-height: 100vh;
+  background-color: #f3f7ff;
+  padding: 1.5rem;
+  font-family: "Inter", sans-serif;
 }
 
-/* ==============================
-   PAGE HEADER
-============================== */
-.doctors-header {
-  margin-bottom: 24px;
+/* Header */
+.header {
+  margin-bottom: 1.5rem;
 }
 
-.doctors-header-left h2.doctors-page-title {
-  font-size: 26px;
+.header-title {
+  font-size: 1.875rem;
   font-weight: 700;
-  color: var(--primary-color);
-  margin: 0;
-  font-family: "Inter", sans-serif;
+  color: #043873;
 }
 
-.doctors-breadcrumb {
-  font-size: 14px;
+.header-breadcrumb {
+  font-size: 0.875rem;
   color: #4f9cf9;
-  margin-top: 6px;
+  margin-top: 0.25rem;
 }
 
-/* ==============================
-   CARD STYLE
-============================== */
-.doctors-card {
-  background: var(--white);
-  border-radius: 12px;
-  padding: 20px 30px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 10px rgba(4, 56, 115, 0.08);
-  border: 1px solid #e2e8f0;
+/* Stats Card */
+.stats-card {
+  background-color: white;
+  border-radius: 0.75rem;
+  box-sizing: border-box;
+  padding: 2.5rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  border: 1px solid #f3f4f6;
+  margin-bottom: 1.5rem;
 }
 
-/* ==============================
-   TOOLBAR
-============================== */
-.doctors-toolbar {
+.stats-card-content {
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  padding: 0;
-  margin: 0;
+  gap: 5rem;
+  box-sizing: border-box;
 }
 
-.doctors-toolbar-left {
+@media (min-width: 1024px) {
+  .stats-card-content {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+/* Chart Section */
+.chart-section {
   display: flex;
   align-items: center;
+  gap: 4rem;
 }
 
-.add-new-text {
-  font-size: 1rem;
+/* ApexCharts Donut Chart Container */
+.apex-chart {
+  width: 250px;
+  height: 250px;
+}
+
+/* Legend */
+.legend{
+  box-sizing: border-box;
+  padding: rem;
+}
+
+.legend-title {
+  font-size: 0.875rem;
   font-weight: 600;
-  color: var(--primary-color);
-  font-family: "Inter", sans-serif;
+  color: #4f9cf9;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.75rem;
+}
+
+.legend-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem 2rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.legend-color {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 0.125rem;
+}
+
+.legend-text {
+  font-size: 0.875rem;
+  color: #1e3a8a;
+  font-weight: 500;
+}
+
+.legend-text.more {
+  color: #6b7280;
+  font-style: italic;
+}
+
+/* Stats Numbers */
+.stats-numbers {
+  display: flex;
+  gap: 4rem;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 50px;
+  font-weight: 700;
   margin: 0;
 }
 
-/* ==============================
-   BUTTONS
-============================== */
-.btn {
-  font-family: "Inter", sans-serif;
+.stat-value-primary {
+  color: #4f9cf9;
+}
+
+.stat-value-secondary {
+  color: #1e3a8a;
+}
+
+.stat-label {
   font-size: 0.875rem;
   font-weight: 500;
-  padding: 0.5rem 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 0.25rem;
+  color: inherit;
+}
+
+/* Filters Card */
+.filters-card {
+  background-color: white;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  border: 1px solid #f3f4f6;
+}
+
+.filter-label {
+  font-size: 0.875rem;
+  color: #4b5563;
+  margin-bottom: 1rem;
+}
+
+/* Filter Rows */
+.filter-row,
+.secondary-filter-row {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Dropdowns */
+.dropdown-select {
+  appearance: none;
+  background-color: white;
+  border: 1px solid #e5e7eb;
   border-radius: 0.5rem;
-  border: 1px solid transparent;
+  padding: 0.625rem 1rem;
+  font-size: 0.875rem;
+  color: #374151;
+  cursor: pointer;
+  min-width: 140px;
+}
+
+.dropdown-select:focus {
+  outline: none;
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+}
+
+/* Search Input */
+.search-input {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 0.625rem 1rem;
+  font-size: 0.875rem;
+  color: #374151;
+  min-width: 200px;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+}
+
+.search-input::placeholder {
+  color: #9ca3af;
+}
+
+/* Buttons */
+.btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  width: 110px;
-  justify-content: center;
+  border: none;
 }
 
-.publish-btn {
-  background: #1e3a8a;
-  color: var(--white);
+.btn-search {
+  background-color: #60a5fa;
+  color: white;
 }
 
-.publish-btn:hover {
-  background: #172554;
+.btn-search:hover {
+  background-color: #3b82f6;
 }
 
-.draft-btn {
-  background: var(--white);
-  color: #1e3a8a;
-  border: 1px solid #cbd5e1;
+.btn-clearFilter {
+  background-color: #1e3a8a;
+  color: white;
 }
 
-.draft-btn:hover {
-  background: #f1f5f9;
+.btn-clearFilter:hover {
+  background-color: #172554;
 }
 
-.search-btn {
-  background: #60a5fa;
-  color: var(--white);
+.btn-refresh {
+  background-color: #1e3a8a;
+  color: white;
 }
 
-.search-btn:hover {
-  background: #3b82f6;
+.btn-refresh:hover {
+  background-color: #172554;
 }
 
-/* ==============================
-   SEARCH SECTION
-============================== */
-.doctors-search-section {
-  margin-bottom: 20px;
-  padding: 0;
+.btn-show-all {
+  background-color: white;
+  color: #374151;
+  border: 1px solid #e5e7eb;
 }
 
-.search-wrapper {
-  display: flex;
-  gap: 8px;
-  align-items: center;
+.btn-show-all:hover {
+  background-color: #f9fafb;
 }
 
-.filter-input {
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid #cfd9e6;
-  background-color: #f9fbff;
-  outline: none;
-  transition: 0.2s;
-  font-size: 15px;
-  width: 200px;
-  font-family: "Inter", sans-serif;
-}
-
-.filter-input:focus {
-  border-color: var(--primary-color2);
-  background-color: var(--white);
-}
-
-/* ==============================
-   TABLE
-============================== */
-.doctors-table-container {
-  background: var(--white);
-  border-radius: 8px;
+/* Table */
+.table-container {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
   overflow: hidden;
-  border: 1px solid #e2e8f0;
-  margin: 10px;
 }
 
 .doctors-table {
   width: 100%;
   border-collapse: collapse;
-  font-family: "Inter", sans-serif;
 }
 
 .table-header-row {
-  background: #f9fbff;
-  border-bottom: 1px solid #e2e8f0;
+  background-color: #1e3a8a;
 }
 
-.table-header {
-  padding: 12px 16px;
+.table-header-cell {
+  padding: 0.875rem 1rem;
   text-align: left;
-  font-size: 13px;
+  font-size: 0.75rem;
   font-weight: 600;
-  color: var(--primary-color);
-  font-family: "Inter", sans-serif;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .table-row {
@@ -192,68 +289,179 @@
 }
 
 .table-row:hover {
-  background-color: #f9fbff;
+  background-color: #eff6ff;
 }
 
 .table-cell {
-  padding: 16px;
-  font-size: 14px;
-  color: var(--text-gray);
-  font-family: "Inter", sans-serif;
+  padding: 1rem;
+  font-size: 0.875rem;
+  color: #374151;
 }
 
-.edit-button {
-  background: transparent;
-  border: none;
+.doctor-photo {
+  width: 55px;
+  height: 55px;
+  border-radius: 5px;
+  object-fit: cover;
+  border: 2px solid #e0e6f0;
+}
+
+
+/* Status Badge */
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.status-badge.shown {
+  background: #ecfdf5;
+  color: #065f46;
+}
+
+.status-badge.hidden {
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+/* Toggle Switch - ON/OFF */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 64px;
+  height: 32px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
   cursor: pointer;
-  padding: 4px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #e5e7eb;
+  transition: 0.4s;
+  border-radius: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-gray);
-  transition: color 0.2s ease;
 }
 
-.edit-button:hover {
-  color: var(--primary-color);
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
 
-/* ==============================
-   RESPONSIVE
-============================== */
-@media (max-width: 768px) {
-  .doctors-toolbar {
+input:checked + .slider {
+  background-color: #10b981;
+}
+
+input:checked + .slider:before {
+  transform: translateX(30px);
+}
+
+.slider-text {
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  position: relative;
+  z-index: 1;
+}
+
+/* Add to doctors.css */
+.unsaved-indicator {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* Show All Active Button */
+.btn-active {
+  background-color: #1e3a8a !important;
+  color: white !important;
+}
+
+/* Bootstrap-style Pagination */
+.pagination {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.page-item {
+  list-style: none;
+}
+
+.page-link {
+  padding: 0.5rem 1rem;
+  border: 1px solid #e5e7eb;
+  background-color: white;
+  color: #374151;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+}
+
+.page-link:hover {
+  background-color: #f3f7ff;
+  border-color: #60a5fa;
+}
+
+.page-item.disabled .page-link {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.page-item.active .page-link {
+  background-color: #4f9cf9;
+  color: white;
+  border-color: #4f9cf9;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .chart-section {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 15px;
+    gap: 1.5rem;
   }
-
-  .doctors-card {
-    padding: 20px 15px;
-  }
-
-  .filter-input {
+  
+  .stats-numbers {
+    justify-content: space-around;
     width: 100%;
   }
-
-  .search-wrapper {
-    width: 100%;
+  
+  .filter-row {
     flex-direction: column;
+    align-items: stretch;
   }
-
-  .btn {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .doctors-table-container {
-    overflow-x: auto;
+  
+  .search-input,
+  .dropdown-select {
+    min-width: 100%;
   }
 }
 
-@media (max-width: 992px) {
-  .doctors-toolbar {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-}
+
