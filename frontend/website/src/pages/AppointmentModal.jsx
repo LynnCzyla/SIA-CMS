@@ -54,7 +54,11 @@ const AppointmentModal = ({ isOpen, onClose }) => {
   }, [isOpen]);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -176,12 +180,11 @@ const AppointmentModal = ({ isOpen, onClose }) => {
                 className="appointment-modal-select"
                 required
               >
-                <option value="">Choose Doctor</option>
-                {doctors.map((doc) => (
-                  <option key={doc.id} value={doc.id}>
-                    {doc.name}
-                  </option>
-                ))}
+                <option value="">Select a doctor</option>
+                <option value="dr-smith">Dr. Andrea Orel Valle</option>
+                <option value="dr-johnson">Dr. Eileen Liesl Cubillan</option>
+                <option value="dr-williams">Dr. Patricia Maningat</option>
+                <option value="dr-brown">Dr. Evelyn Paraan</option>
               </select>
             </div>
           </div>
@@ -228,28 +231,31 @@ const AppointmentModal = ({ isOpen, onClose }) => {
             </div>
           </div>
 
-          {/* Specify Other */}
-          {formData.appointmentType === "Other" && (
-            <div className="appointment-modal-row">
-              <div className="appointment-modal-form-group">
-                <label className="appointment-modal-label-blue">Specify Type *</label>
-                <input
-                  type="text"
-                  name="specifyType"
-                  value={formData.specifyType}
-                  onChange={handleChange}
-                  placeholder="e.g., Dental Cleaning, Vaccination"
-                  className="appointment-modal-input"
-                  required={formData.appointmentType === "Other"}
-                />
-              </div>
-            </div>
-          )}
-
-          {/* Notes */}
+          {/* Row 3: Specify Type and Notes */}
           <div className="appointment-modal-row">
+            <div className="appointment-modal-form-group">
+              <label htmlFor="specifyType" className="appointment-modal-label-blue">
+                Specify Appointment Type
+              </label>
+              <input
+                type="text"
+                id="specifyType"
+                name="specifyType"
+                value={formData.specifyType}
+                onChange={handleChange}
+                placeholder="Specify your appointment (e.g Dental Checkup)"
+                className="appointment-modal-input"
+                required={formData.appointmentType === "Other"}
+              />
+              <p className="appointment-modal-helper-text-blue">
+                Required when selecting "Other"
+              </p>
+            </div>
+
             <div className="appointment-modal-form-group appointment-modal-form-group-wide">
-              <label className="appointment-modal-label-blue">Notes (Optional)</label>
+              <label htmlFor="notes" className="appointment-modal-label-blue">
+                Notes
+              </label>
               <textarea
                 name="notes"
                 value={formData.notes}
