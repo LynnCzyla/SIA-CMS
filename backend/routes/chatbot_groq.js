@@ -1,120 +1,52 @@
-// src/components/Chatbot.jsx
-import { useState, useEffect, useRef } from "react";
-import { MdClose } from "react-icons/md";
-import { FaComments } from "react-icons/fa";
-import "../components/components-css/Chatbot.css";
+import express from "express";
+import Groq from "groq-sdk";
 
-function Chatbot() {
-  const [showChat, setShowChat] = useState(false);
-  const [messages, setMessages] = useState([
-    { sender: "bot", text: "👋 Hi! I'm Lunax — your Healthcare Companion." },
-  ]);
-  const [input, setInput] = useState("");
-  const messagesEndRef = useRef(null);
+const router = express.Router();
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
-  // Generate a unique userId per browser session
-  const [userId, setUserId] = useState("");
+// In-memory conversation memory (optional: can be per-user in DB)
+const conversationMemory = {};
 
-  useEffect(() => {
-    let id = sessionStorage.getItem("lunaxUserId");
-    if (!id) {
-      id = crypto.randomUUID(); // generate a random ID
-      sessionStorage.setItem("lunaxUserId", id);
-    }
-    setUserId(id);
-  }, []);
+router.post("/", async (req, res) => {
+  const { message, userId } = req.body;
 
-  // Scrolls to bottom on message update
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  if (!message) return res.status(400).json({ reply: "Message is required." });
+  if (!userId) return res.status(400).json({ reply: "User ID is required." });
 
-  const handleSend = async () => {
-    if (!input.trim()) return;
-  
-    const userText = input.trim();
-    const userMsg = { sender: "user", text: userText };
-    setMessages(prev => [...prev, userMsg]);
-    setInput("");
-  
-    try {
-      const response = await fetch("http://localhost:5000/api/chatbot-groq", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: userText, userId }),
-      });
-  
-      const data = await response.json();
-      setMessages(prev => [...prev, { sender: "bot", text: data.reply }]);
-  
-    } catch (error) {
-      setMessages(prev => [
-        ...prev,
-        { sender: "bot", text: "❌ Error: Unable to reach Lunax server." }
-      ]);
-    }
-  };  
+  try {
+    // Initialize memory for this user
+    if (!conversationMemory[userId]) conversationMemory[userId] = [];
 
-  return (
-    <div className="chatbot-container">
-      {/* --- Popup Window --- */}
-      {showChat && (
-        <div className="chatbot-popup">
-          <div className="chatbot-header">
-            <div className="chatbot-info">
-              <img
-                src="lunax.svg"
-                alt="Lunax"
-                className="chatbot-avatar"
-              />
-              <div>
-                <h5 className="mb-0">
-                  Hi! I'm <span className="text-highlight">Lunax</span>
-                </h5>
-                <p className="mb-0 small text-white">
-                  Your Healthcare Companion
-                </p>
-              </div>
-            </div>
-          </div>
+    // Add user message to memory
+    conversationMemory[userId].push({ sender: "user", text: message });
 
-          <div className="chatbot-messages">
-            {messages.map((msg, index) => (
-              <div
-                key={index}
-                className={`chat-message ${
-                  msg.sender === "user" ? "user-msg" : "bot-msg"
-                }`}
-              >
-                {msg.text}
-              </div>
-            ))}
-            <div ref={messagesEndRef} />
-          </div>
+    // Keep only last 5 messages to save tokens
+    const conversationHistory = conversationMemory[userId].slice(-5).map(msg => ({
+      role: msg.sender === "user" ? "user" : "assistant",
+      content: msg.text
+    }));
 
-          <div className="chatbot-input">
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Type a message..."
-              onKeyDown={(e) => e.key === "Enter" && handleSend()}
-            />
-            <button onClick={handleSend}>➤</button>
-          </div>
-        </div>
-      )}
+    // Request to Groq
+    const completion = await groq.chat.completions.create({
+      model: "llama-3.1-8b-instant",
+      messages: [
+        { role: "system", content: "You are Lunax, a friendly healthcare assistant. Keep replies concise." },
+        ...conversationHistory,
+      ],
+      temperature: 0.6,
+    });    
 
-      {/* --- Floating Button --- */}
-      <button
-        className="chatbot-btn"
-        onClick={() => setShowChat((prev) => !prev)}
-      >
-        {showChat ? <MdClose /> : <FaComments />}
-      </button>
-    </div>
-  );
-}
+    const reply = completion.choices?.[0]?.message?.content || "No response.";
 
-export default Chatbot;
+    // Save bot reply in memory
+    conversationMemory[userId].push({ sender: "bot", text: reply });
 
+    res.json({ reply });
+
+  } catch (error) {
+    console.error("Groq Error:", error);
+    res.status(500).json({ reply: "❌ Lunax server is unavailable." });
+  }
+});
+
+export default router;
