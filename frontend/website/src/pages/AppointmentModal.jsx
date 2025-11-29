@@ -22,7 +22,7 @@ const AppointmentModal = ({ isOpen, onClose }) => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
-  // Fetch doctors from PMS API
+  // Fetch doctors from API
   useEffect(() => {
     if (!isOpen) return;
 
@@ -32,15 +32,15 @@ const AppointmentModal = ({ isOpen, onClose }) => {
           "http://147.185.221.27:34249/Group-4-SIA-EMS/api/api.php?module=employee&filter_doctors=1"
         );
 
-        const doctorList = res.data.map((doc) => ({
-          id: Number(doc.employeeID),
-          name: `Dr. ${doc.firstName} ${doc.lastName}`,
-        }));
-
+        const doctorList = Array.isArray(res.data)
+          ? res.data.map((doc) => ({
+              id: Number(doc.employeeID),
+              name: `Dr. ${doc.firstName} ${doc.lastName}`,
+            }))
+          : [];
         setDoctors(doctorList);
       } catch (err) {
         console.error("Failed to fetch doctors:", err);
-        // Fallback doctors
         setDoctors([
           { id: 1, name: "Dr. Andrea Orel Valle" },
           { id: 2, name: "Dr. Eileen Liesl Cubillan" },
@@ -59,31 +59,29 @@ const AppointmentModal = ({ isOpen, onClose }) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle form submission
+  // Handle form submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
     setSuccess(false);
 
-    // Determine final appointment type
-    const finalType =
-      formData.appointmentType === "Other"
-        ? formData.specifyType.trim() || null
-        : formData.appointmentType;
-
     const doctorObj = doctors.find((d) => d.id === Number(formData.doctor));
 
+    // Construct payload to ensure full name is sent
     const payload = {
       action: "create_appointment",
-      patient_name: `${formData.firstName.trim()} ${formData.lastName.trim()}`,
       patient_first_name: formData.firstName.trim(),
       patient_last_name: formData.lastName.trim(),
-      doctor_id: Number(formData.doctor),
+      patient_name: `${formData.firstName.trim()} ${formData.lastName.trim()}`, // full name
+      doctor_id: doctorObj ? doctorObj.id : null,
       doctor_name: doctorObj ? doctorObj.name : "",
       appointment_date: formData.appointmentDate,
       appointment_time: formData.appointmentTime + ":00",
-      appointment_type: finalType,
+      appointment_type:
+        formData.appointmentType === "Other" ? "Other" : formData.appointmentType,
+      specify_appointment_type:
+        formData.appointmentType === "Other" ? formData.specifyType.trim() || null : null,
       notes: formData.notes.trim() || null,
       status: "Scheduled",
     };
@@ -91,7 +89,7 @@ const AppointmentModal = ({ isOpen, onClose }) => {
     try {
       const response = await axios.post(
         "http://26.22.170.205/PatientManagementSystem/api/api_schedule_appointment.php",
-        JSON.stringify(payload),
+        payload,
         {
           headers: {
             "Content-Type": "application/json",
@@ -100,20 +98,15 @@ const AppointmentModal = ({ isOpen, onClose }) => {
         }
       );
 
-      if (response.data && response.data.success) {
+      if (response.data?.success) {
         setSuccess(true);
         setTimeout(() => onClose(), 2000);
       } else {
-        setError(response.data?.message || "Failed to create appointment");
+        setError(response.data?.message || "Failed to schedule appointment");
       }
     } catch (err) {
-      console.error("Appointment submit error:", err);
-      setError(
-        err.response?.data?.message ||
-          err.response?.data?.error ||
-          err.message ||
-          "Server error. Ensure backend accepts JSON."
-      );
+      console.error("Submit error:", err);
+      setError(err.response?.data?.message || "Server error");
     } finally {
       setLoading(false);
     }
@@ -150,7 +143,7 @@ const AppointmentModal = ({ isOpen, onClose }) => {
         </div>
 
         <form onSubmit={handleSubmit} className="appointment-modal-form-wide">
-          {/* Row 1: Names and Doctor */}
+          {/* Row 1: Names & Doctor */}
           <div className="appointment-modal-row">
             <div className="appointment-modal-form-group">
               <label className="appointment-modal-label-blue">First Name *</label>
@@ -234,27 +227,24 @@ const AppointmentModal = ({ isOpen, onClose }) => {
             </div>
           </div>
 
-          {/* Row 3: Specify Type only if Other */}
+          {/* Row 3: Specify Type if Other */}
           {formData.appointmentType === "Other" && (
             <div className="appointment-modal-row">
               <div className="appointment-modal-form-group">
-                <label className="appointment-modal-label-blue">
-                  Specify Appointment Type *
-                </label>
+                <label className="appointment-modal-label-blue">Specify Appointment Type *</label>
                 <input
                   type="text"
                   name="specifyType"
                   value={formData.specifyType}
                   onChange={handleChange}
                   className="appointment-modal-input"
-                  placeholder="Specify appointment type"
                   required
                 />
               </div>
             </div>
           )}
 
-          {/* Notes */}
+          {/* Row 4: Notes */}
           <div className="appointment-modal-row">
             <div className="appointment-modal-form-group appointment-modal-form-group-wide">
               <label className="appointment-modal-label-blue">Notes</label>
@@ -264,17 +254,12 @@ const AppointmentModal = ({ isOpen, onClose }) => {
                 onChange={handleChange}
                 className="appointment-modal-textarea"
                 rows="3"
-                placeholder="Symptoms, allergies, special requests..."
               />
             </div>
           </div>
 
           {/* Messages */}
-          {success && (
-            <div className="appointment-modal-success">
-              Appointment booked successfully! Closing in 2s...
-            </div>
-          )}
+          {success && <div className="appointment-modal-success">Appointment booked successfully!</div>}
           {error && <div className="appointment-modal-error">{error}</div>}
 
           {/* Actions */}
@@ -289,8 +274,8 @@ const AppointmentModal = ({ isOpen, onClose }) => {
             </button>
             <button
               type="submit"
-              disabled={loading}
               className="appointment-modal-btn appointment-modal-btn-submit-blue"
+              disabled={loading}
             >
               {loading ? "Scheduling..." : "Schedule Appointment"}
             </button>
