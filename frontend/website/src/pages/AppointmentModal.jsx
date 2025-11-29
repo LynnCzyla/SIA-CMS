@@ -53,7 +53,7 @@ const AppointmentModal = ({ isOpen, onClose }) => {
     loadDoctors();
   }, [isOpen]);
 
-  // Handle field changes
+  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -66,6 +66,7 @@ const AppointmentModal = ({ isOpen, onClose }) => {
     setError("");
     setSuccess(false);
 
+    // Determine final appointment type
     const finalType =
       formData.appointmentType === "Other"
         ? formData.specifyType.trim() || null
@@ -149,7 +150,7 @@ const AppointmentModal = ({ isOpen, onClose }) => {
         </div>
 
         <form onSubmit={handleSubmit} className="appointment-modal-form-wide">
-          {/* Row 1 */}
+          {/* Row 1: Names and Doctor */}
           <div className="appointment-modal-row">
             <div className="appointment-modal-form-group">
               <label className="appointment-modal-label-blue">First Name *</label>
@@ -162,7 +163,6 @@ const AppointmentModal = ({ isOpen, onClose }) => {
                 required
               />
             </div>
-
             <div className="appointment-modal-form-group">
               <label className="appointment-modal-label-blue">Last Name *</label>
               <input
@@ -174,7 +174,6 @@ const AppointmentModal = ({ isOpen, onClose }) => {
                 required
               />
             </div>
-
             <div className="appointment-modal-form-group">
               <label className="appointment-modal-label-blue">Select Doctor *</label>
               <select
@@ -194,7 +193,7 @@ const AppointmentModal = ({ isOpen, onClose }) => {
             </div>
           </div>
 
-          {/* Row 2 */}
+          {/* Row 2: Date, Time, Type */}
           <div className="appointment-modal-row">
             <div className="appointment-modal-form-group">
               <label className="appointment-modal-label-blue">Date *</label>
@@ -207,7 +206,6 @@ const AppointmentModal = ({ isOpen, onClose }) => {
                 required
               />
             </div>
-
             <div className="appointment-modal-form-group">
               <label className="appointment-modal-label-blue">Time *</label>
               <input
@@ -219,14 +217,14 @@ const AppointmentModal = ({ isOpen, onClose }) => {
                 required
               />
             </div>
-
             <div className="appointment-modal-form-group">
-              <label className="appointment-modal-label-blue">Type</label>
+              <label className="appointment-modal-label-blue">Type *</label>
               <select
                 name="appointmentType"
                 value={formData.appointmentType}
                 onChange={handleChange}
                 className="appointment-modal-select"
+                required
               >
                 <option>Consultation</option>
                 <option>Follow-up</option>
@@ -240,7 +238,9 @@ const AppointmentModal = ({ isOpen, onClose }) => {
           {formData.appointmentType === "Other" && (
             <div className="appointment-modal-row">
               <div className="appointment-modal-form-group">
-                <label className="appointment-modal-label-blue">Specify Appointment Type *</label>
+                <label className="appointment-modal-label-blue">
+                  Specify Appointment Type *
+                </label>
                 <input
                   type="text"
                   name="specifyType"
@@ -270,7 +270,11 @@ const AppointmentModal = ({ isOpen, onClose }) => {
           </div>
 
           {/* Messages */}
-          {success && <div className="appointment-modal-success">Appointment booked successfully! Closing in 2s...</div>}
+          {success && (
+            <div className="appointment-modal-success">
+              Appointment booked successfully! Closing in 2s...
+            </div>
+          )}
           {error && <div className="appointment-modal-error">{error}</div>}
 
           {/* Actions */}
