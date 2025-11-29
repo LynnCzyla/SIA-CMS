@@ -22,7 +22,6 @@ const AppointmentModal = ({ isOpen, onClose }) => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
-  // Fetch doctors when modal opens
   useEffect(() => {
     if (!isOpen) return;
 
@@ -33,19 +32,18 @@ const AppointmentModal = ({ isOpen, onClose }) => {
         );
 
         const doctorList = res.data.map((doc) => ({
-          id: doc.employeeID,
-          name: `Dr. ${doc.firstName} ${doc.lastName}`.trim(),
+          id: Number(doc.employeeID),
+          name: `Dr. ${doc.firstName} ${doc.lastName}`,
         }));
 
         setDoctors(doctorList);
       } catch (err) {
-        console.error("Failed to load doctors", err);
-        // Fallback doctors
+        console.error("Failed to fetch doctors:", err);
         setDoctors([
-          { id: "1", name: "Dr. Andrea Orel Valle" },
-          { id: "2", name: "Dr. Eileen Liesl Cubillan" },
-          { id: "3", name: "Dr. Patricia Maningat" },
-          { id: "4", name: "Dr. Evelyn Paraan" },
+          { id: 1, name: "Dr. Andrea Orel Valle" },
+          { id: 2, name: "Dr. Eileen Liesl Cubillan" },
+          { id: 3, name: "Dr. Patricia Maningat" },
+          { id: 4, name: "Dr. Evelyn Paraan" },
         ]);
       }
     };
@@ -55,10 +53,7 @@ const AppointmentModal = ({ isOpen, onClose }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
@@ -67,54 +62,65 @@ const AppointmentModal = ({ isOpen, onClose }) => {
     setError("");
     setSuccess(false);
 
+    if (!formData.firstName.trim() || !formData.lastName.trim()) {
+      setError("First and last name are required");
+      setLoading(false);
+      return;
+    }
+
     const finalType =
-      formData.appointmentType === "Other" && formData.specifyType.trim()
-        ? formData.specifyType.trim()
+      formData.appointmentType === "Other"
+        ? formData.specifyType.trim() || null
         : formData.appointmentType;
 
-    // CLEAN MODERN JSON PAYLOAD
-    const payload = {
-      action: "create_appointment",
-      patient_first_name: formData.firstName.trim(),
-      patient_last_name: formData.lastName.trim(),
-      doctor_id: Number(formData.doctor),
-      appointment_date: formData.appointmentDate,
-      appointment_time: formData.appointmentTime + ":00",
-      appointment_type: finalType,
-      notes: formData.notes.trim() || null,
-      status: "Scheduled",
-    };
+    const doctorObj = doctors.find((d) => d.id === Number(formData.doctor));
+
+const payload = {
+  action: "create_appointment",
+  patientname: `${formData.firstName.trim()} ${formData.lastName.trim()}`, // <-- no underscore
+  patient_first_name: formData.firstName.trim(),
+  patient_last_name: formData.lastName.trim(),
+  doctor_id: Number(formData.doctor),
+  doctor_name: doctorObj ? doctorObj.name : "",
+  appointment_date: formData.appointmentDate,
+  appointment_time: formData.appointmentTime + ":00",
+  appointment_type: finalType,
+  notes: formData.notes.trim() || null,
+  status: "Scheduled",
+};
+
 
     try {
       const response = await axios.post(
-        "http://147.185.221.27:34249/Group-4-SIA-EMS/api/api.php?module=appointment",
-        payload,
+        "http://26.22.170.205/PatientManagementSystem/api/api_schedule_appointment.php",
+        JSON.stringify(payload),
         {
           headers: {
-            "Content-Type": "application/json", // Real JSON!
+            "Content-Type": "application/json",
+            Accept: "application/json",
           },
         }
       );
 
-      if (response.data.success) {
+      if (response.data && response.data.success) {
         setSuccess(true);
         setTimeout(() => onClose(), 2000);
       } else {
-        setError(response.data.message || "Failed to create appointment");
+        setError(response.data?.message || "Failed to create appointment");
       }
     } catch (err) {
       console.error("Appointment submit error:", err);
-      const msg =
+      setError(
         err.response?.data?.message ||
-        err.response?.data?.error ||
-        "Server error. Make sure the JSON fix is applied on api.php";
-      setError(msg);
+          err.response?.data?.error ||
+          err.message ||
+          "Server error. Ensure backend accepts JSON."
+      );
     } finally {
       setLoading(false);
     }
   };
 
-  // Reset form on close
   useEffect(() => {
     if (!isOpen) {
       setFormData({
@@ -145,7 +151,6 @@ const AppointmentModal = ({ isOpen, onClose }) => {
         </div>
 
         <form onSubmit={handleSubmit} className="appointment-modal-form-wide">
-          {/* Row 1 */}
           <div className="appointment-modal-row">
             <div className="appointment-modal-form-group">
               <label className="appointment-modal-label-blue">First Name *</label>
@@ -158,7 +163,6 @@ const AppointmentModal = ({ isOpen, onClose }) => {
                 required
               />
             </div>
-
             <div className="appointment-modal-form-group">
               <label className="appointment-modal-label-blue">Last Name *</label>
               <input
@@ -170,7 +174,6 @@ const AppointmentModal = ({ isOpen, onClose }) => {
                 required
               />
             </div>
-
             <div className="appointment-modal-form-group">
               <label className="appointment-modal-label-blue">Select Doctor *</label>
               <select
@@ -181,15 +184,15 @@ const AppointmentModal = ({ isOpen, onClose }) => {
                 required
               >
                 <option value="">Select a doctor</option>
-                <option value="dr-smith">Dr. Andrea Orel Valle</option>
-                <option value="dr-johnson">Dr. Eileen Liesl Cubillan</option>
-                <option value="dr-williams">Dr. Patricia Maningat</option>
-                <option value="dr-brown">Dr. Evelyn Paraan</option>
+                {doctors.map((doc) => (
+                  <option key={doc.id} value={doc.id}>
+                    {doc.name}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
 
-          {/* Row 2 */}
           <div className="appointment-modal-row">
             <div className="appointment-modal-form-group">
               <label className="appointment-modal-label-blue">Date *</label>
@@ -202,7 +205,6 @@ const AppointmentModal = ({ isOpen, onClose }) => {
                 required
               />
             </div>
-
             <div className="appointment-modal-form-group">
               <label className="appointment-modal-label-blue">Time *</label>
               <input
@@ -214,14 +216,14 @@ const AppointmentModal = ({ isOpen, onClose }) => {
                 required
               />
             </div>
-
             <div className="appointment-modal-form-group">
-              <label className="appointment-modal-label-blue">Type</label>
+              <label className="appointment-modal-label-blue">Type *</label>
               <select
                 name="appointmentType"
                 value={formData.appointmentType}
                 onChange={handleChange}
                 className="appointment-modal-select"
+                required
               >
                 <option>Consultation</option>
                 <option>Follow-up</option>
@@ -231,43 +233,39 @@ const AppointmentModal = ({ isOpen, onClose }) => {
             </div>
           </div>
 
-          {/* Row 3: Specify Type and Notes */}
-          <div className="appointment-modal-row">
-            <div className="appointment-modal-form-group">
-              <label htmlFor="specifyType" className="appointment-modal-label-blue">
-                Specify Appointment Type
-              </label>
-              <input
-                type="text"
-                id="specifyType"
-                name="specifyType"
-                value={formData.specifyType}
-                onChange={handleChange}
-                placeholder="Specify your appointment (e.g Dental Checkup)"
-                className="appointment-modal-input"
-                required={formData.appointmentType === "Other"}
-              />
-              <p className="appointment-modal-helper-text-blue">
-                Required when selecting "Other"
-              </p>
+          {formData.appointmentType === "Other" && (
+            <div className="appointment-modal-row">
+              <div className="appointment-modal-form-group">
+                <label className="appointment-modal-label-blue">
+                  Specify Appointment Type *
+                </label>
+                <input
+                  type="text"
+                  name="specifyType"
+                  value={formData.specifyType}
+                  onChange={handleChange}
+                  className="appointment-modal-input"
+                  placeholder="Specify appointment type"
+                  required
+                />
+              </div>
             </div>
+          )}
 
+          <div className="appointment-modal-row">
             <div className="appointment-modal-form-group appointment-modal-form-group-wide">
-              <label htmlFor="notes" className="appointment-modal-label-blue">
-                Notes
-              </label>
+              <label className="appointment-modal-label-blue">Notes</label>
               <textarea
                 name="notes"
                 value={formData.notes}
                 onChange={handleChange}
-                placeholder="Symptoms, allergies, special requests..."
-                rows="3"
                 className="appointment-modal-textarea"
+                rows="3"
+                placeholder="Symptoms, allergies, special requests..."
               />
             </div>
           </div>
 
-          {/* Messages */}
           {success && (
             <div className="appointment-modal-success">
               Appointment booked successfully! Closing in 2s...
@@ -275,7 +273,6 @@ const AppointmentModal = ({ isOpen, onClose }) => {
           )}
           {error && <div className="appointment-modal-error">{error}</div>}
 
-          {/* Buttons */}
           <div className="appointment-modal-actions">
             <button
               type="button"
