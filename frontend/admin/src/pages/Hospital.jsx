@@ -417,14 +417,18 @@ export default function Hospital() {
           {activeTab === "services" && (
             <>
               <div className="cms-form-row">
-                {["Short Title", "Full Title", "Topic Tags"].map((field) => (
-                  <div className="cms-form-group" key={field}>
-                    <label>{field.replace(/([A-Z])/g, " $1")}</label>
+                {[
+                  { key: "shortTitle", label: "Short Title" },
+                  { key: "fullTitle", label: "Full Title" },
+                  { key: "topicTags", label: "Topic Tags" },
+                ].map(({ key, label }) => (
+                  <div className="cms-form-group" key={key}>
+                    <label>{label}</label>
                     <input
                       type="text"
-                      value={servicesForm[field] || ""}
-                      placeholder={`Enter ${field.replace(/([A-Z])/g, " $1")}`}
-                      onChange={(e) => handleServicesFormChange(field, e.target.value)}
+                      value={servicesForm[key]}
+                      placeholder={`Enter ${label}`}
+                      onChange={(e) => handleServicesFormChange(key, e.target.value)}
                     />
                   </div>
                 ))}
@@ -455,7 +459,11 @@ export default function Hospital() {
                     <div className="file-preview-area">
                       {fileInfo ? (
                         fileInfo.isImage && fileInfo.preview ? (
-                          <img src={fileInfo.preview} alt="preview" className="file-preview-img" />
+                          <img
+                            src={fileInfo.preview}
+                            alt="preview"
+                            className="file-preview-img"
+                          />
                         ) : (
                           <p className="file-name">{fileInfo.name}</p>
                         )
@@ -468,6 +476,7 @@ export default function Hospital() {
               </div>
             </>
           )}
+
         </form>
       </div>
     </div>

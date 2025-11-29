@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../css/Services.css";
 
 const ArrowIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M5 12h14M12 5l7 7-7 7"/>
+    <path d="M5 12h14M12 5l7 7-7 7" />
   </svg>
 );
 
@@ -15,7 +15,8 @@ const SearchIcon = () => (
 );
 
 export default function Services() {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [services, setServices] = useState([]);
 
   const topServices = [
     { id: 1, icon: '/Psychiatry.png', name: 'Psychiatry' },
@@ -24,58 +25,47 @@ export default function Services() {
     { id: 4, icon: '/Cardiology.png', name: 'Cardiology' },
   ];
 
-  const serviceCards = [
-    {
-      id: 1,
-      icon: '/Psychiatry.png',
-      title: 'Psychiatry / Behavioral Health',
-      description: 'Offers compassionate mental and emotional health treatment, encompassing initial Medical and behavioral care for a wide range of conditions, from anxiety and depression to more severe mental illnesses.'
-    },
-    {
-      id: 4,
-      icon: '/Cardiology.png',
-      title: 'Cardiology',
-      description: 'Comprehensive heart care services including diagnosis, treatment, and prevention of cardiovascular diseases with state-of-the-art technology and experienced cardiologists.'
-    },
-    {
-      id: 2,
-      icon: '/Gynecology.png',
-      title: 'Gynecology',
-      description: 'Women\'s health services covering reproductive health, prenatal care, and treatment of gynecological conditions with compassionate and professional care.'
-    },
-    {
-      id: 3,
-      icon: '/GeneralMedicine.png',
-      title: 'General Medicine',
-      description: 'Primary healthcare services for adults, including diagnosis and treatment of common illnesses, health screenings, and ongoing management of chronic conditions.'
-    },
-  ];
+  // Fetch services from backend
+  useEffect(() => {
+    fetch("http://localhost:5000/api/services")
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Fetched services:", data);
+        setServices(data); // save to state
+      })
+      .catch((err) => console.error("Error fetching services:", err));
+  }, []);
+
+  // Filter services for search
+  const filteredServices = services.filter(
+    (s) =>
+      s.short_title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      s.full_title?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="services-page">
-      {/* Our Services Section */}
+      {/* Header / Top Services */}
       <div className="services-header-section">
         <h2 className="title-center mb-4 text-primary">
-            Our <span className="title-primary">Services</span>
-          </h2>
-        
-        <div className="top-services-grid">
-          {topServices.map((service) => (
-            <div key={service.id} className="service-icon-box">
-              <img 
-                src={service.icon} 
-                alt={service.name} 
-                style={{ width: '120px', height: '120px', objectFit: 'contain' }}
-              />
-            </div>
-          ))}
-        </div>
+          Our <span className="title-primary">Services</span>
+        </h2>
 
-        <div className="services-dots">
-          <span className="dot active"></span>
-          <span className="dot"></span>
-          <span className="dot"></span>
-          <span className="dot"></span>
+        {/* Top Services */}
+        <div className="top-services-section">
+          <h3>Top Services</h3>
+          <div className="top-services-grid">
+            {topServices.map((service) => (
+              <div key={service.id} className="top-service-card">
+                <img
+                  src={service.icon}
+                  alt={service.name}
+                  style={{ width: "100px", height: "100px", objectFit: "contain" }}
+                />
+                <h4>{service.name}</h4>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -84,7 +74,7 @@ export default function Services() {
         <div className="search-container">
           <input
             type="text"
-            placeholder="Search"
+            placeholder="Search services"
             className="search-input"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -98,22 +88,26 @@ export default function Services() {
 
       {/* Service Cards Grid */}
       <div className="service-cards-grid">
-        {serviceCards.map((card) => (
-          <div key={card.id} className="service-card">
-            <div className="service-card-icon">
-              <img 
-                src={card.icon} 
-                alt={card.title} 
-                style={{ width: '120px', height: '120px', objectFit: 'contain' }}
-              />
+        {filteredServices.length === 0 ? (
+          <p>No services found.</p>
+        ) : (
+          filteredServices.map((service) => (
+            <div key={service.id} className="service-card">
+              <div className="service-card-icon">
+                <img
+                  src={service.image_url || "/default.png"}
+                  alt={service.full_title}
+                  style={{ width: "120px", height: "120px", objectFit: "contain" }}
+                />
+              </div>
+              <h3 className="service-card-title">{service.full_title}</h3>
+              <p className="service-card-description">{service.description}</p>
+              <button className="read-more-btn">
+                Read More <ArrowIcon />
+              </button>
             </div>
-            <h3 className="service-card-title">{card.title}</h3>
-            <p className="service-card-description">{card.description}</p>
-            <button className="read-more-btn">
-              Read More <ArrowIcon />
-            </button>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </div>
   );
