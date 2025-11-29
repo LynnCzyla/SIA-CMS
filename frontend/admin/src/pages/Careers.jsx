@@ -1,3 +1,4 @@
+// frontend/admin/src/pages/Careers.jsx
 import { useEffect, useRef, useState } from "react";
 import Swal from "sweetalert2";
 import Quill from "quill";
