@@ -21,7 +21,7 @@ import serviceRoute from "../routes/services.js";
 import aboutRoute from "../routes/about.js";
 import contactRoute from "../routes/contact.js";
 import doctorsVisibilityRouter from "../routes/doctorsVisibility.js";
-import chatbotGeminiRoute from "../routes/chatbot_Gemini.js";
+import chatbotGroqRoute from "../routes/chatbot_groq.js";
 
 dotenv.config({ path: "../.env" });
 
@@ -53,6 +53,7 @@ app.use("/api/about", aboutRoute);
 app.use("/api/post-logs", postLogsRoute);
 app.use("/api/contact", contactRoute);
 app.use("/api/doctors", doctorsVisibilityRouter);
+app.use("/api/chatbot-groq", chatbotGroqRoute);
 
 
 // Test route
