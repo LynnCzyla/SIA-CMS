@@ -22,6 +22,7 @@ import ComponentNews from "./components/ComponentNews";
 import ComponentAnnouncement from "./components/ComponentAnnouncement";
 import ComponentHealth from "./components/ComponentHealth";
 import ComponentCareer from "./components/ComponentCareers";
+import ComponentServices from "./components/ComponentServices";
 import "./App.css";
 
 function App() {
@@ -48,6 +49,7 @@ function App() {
         <Route path="/news" element={<News />} />
         <Route path="/announcements/:slug" element={<ComponentAnnouncement />} />
         <Route path="/health/:slug" element={<ComponentHealth />} />
+        <Route path="/services/:slug" element={<ComponentServices />} />
       </Routes>
 
       <Footer />

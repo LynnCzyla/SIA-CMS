@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom"; 
 import "../css/Services.css";
 
 const ArrowIcon = () => (
@@ -25,13 +26,24 @@ export default function Services() {
     { id: 4, icon: '/Cardiology.png', name: 'Cardiology' },
   ];
 
+  // Helper function to get first 5-7 words
+  const getFirstWords = (text) => {
+    if (!text) return "";
+    // Strip HTML tags
+    const stripped = text.replace(/<[^>]*>/g, '');
+    // Split by spaces and take first 7 words
+    const words = stripped.trim().split(/\s+/);
+    const firstWords = words.slice(0, 7).join(' ');
+    return firstWords + (words.length > 7 ? '...' : '');
+  };
+
   // Fetch services from backend
   useEffect(() => {
     fetch("http://localhost:5000/api/services")
       .then((res) => res.json())
       .then((data) => {
         console.log("Fetched services:", data);
-        setServices(data); // save to state
+        setServices(data);
       })
       .catch((err) => console.error("Error fetching services:", err));
   }, []);
@@ -88,26 +100,40 @@ export default function Services() {
 
       {/* Service Cards Grid */}
       <div className="service-cards-grid">
-        {filteredServices.length === 0 ? (
-          <p>No services found.</p>
-        ) : (
-          filteredServices.map((service) => (
-            <div key={service.id} className="service-card">
-              <div className="service-card-icon">
+        {filteredServices.map((service) => (
+          <div key={service.id} className="service-card">
+            <div className="service-card-icon">
                 <img
                   src={service.image_url || "/default.png"}
                   alt={service.full_title}
-                  style={{ width: "120px", height: "120px", objectFit: "contain" }}
+                  style={{ width: "250px", height: "250px", objectFit: "contain", backgroundSize: "cover",
+                backgroundPosition: "center"}}
                 />
-              </div>
-              <h3 className="service-card-title">{service.full_title}</h3>
-              <p className="service-card-description">{service.description}</p>
-              <button className="read-more-btn">
-                Read More <ArrowIcon />
-              </button>
+              </div>            
+            
+            <div>
+              <p className="text-muted small mb-1 fw-semibold text-uppercase" style={{ fontSize: '0.85rem', letterSpacing: '0.5px' }}>
+                {service.short_title}
+              </p>
+            
+              <h5 className="card-title fw-bold text-primary mb-2">
+                {service.full_title}
+              </h5>
+              
+              <p className="text-muted small mb-3" style={{ fontSize: '0.8rem' }}>
+                {service.created_at ? new Date(service.created_at).toLocaleDateString() : ""}
+              </p>
+              
+              <span className="card-text text-secondary small">
+                {getFirstWords(service.description)}
+              </span>
             </div>
-          ))
-        )}
+            
+            <Link to={`/services/${service.slug}`} className="read-more-btn">
+              Read More <ArrowIcon />
+            </Link>
+          </div>
+        ))}
       </div>
     </div>
   );
