@@ -355,13 +355,13 @@ function Home() {
 
         {/* --- Services Section --- */}
         <div className="services-block">
-          <section className="services-section">
+          <section className="modern services-section">
             <div className="services-container">
               <div className="services-header">
                 <h2>
                   Provide our <span className="text-primary2">Best Services</span>
                 </h2>
-                <p className="he">
+                <p className="services-desc">
                   Comprehensive medical care with state-of-the-art facilities
                   and expert healthcare professionals dedicated to your well-being.
                 </p>
