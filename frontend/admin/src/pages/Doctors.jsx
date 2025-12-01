@@ -314,7 +314,7 @@ const [doctors, setDoctors] = useState([]);
         <p className="header-breadcrumb">Admin Dashboard / Doctors</p>
       </div>
 
-    <div className="stats-card">
+    <div className="stats-card1">
         <div className="stats-card-content">
           <div className="chart-section">
             <div ref={chartRef} className="apex-chart"></div>
