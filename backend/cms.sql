@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 01, 2025 at 05:50 PM
+-- Generation Time: Dec 01, 2025 at 06:51 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -304,7 +304,7 @@ INSERT INTO `page_views` (`page_name`, `view_date`, `visit_count`) VALUES
 ('/', '2025-11-27', 8),
 ('/', '2025-11-28', 4),
 ('/', '2025-12-01', 11),
-('/', '2025-12-02', 2),
+('/', '2025-12-02', 8),
 ('/about', '2025-11-22', 4),
 ('/about', '2025-11-27', 3),
 ('/about', '2025-12-02', 1),
@@ -314,7 +314,7 @@ INSERT INTO `page_views` (`page_name`, `view_date`, `visit_count`) VALUES
 ('/announcements', '2025-11-27', 5),
 ('/announcements', '2025-11-28', 4),
 ('/announcements', '2025-12-01', 1),
-('/announcements', '2025-12-02', 1),
+('/announcements', '2025-12-02', 7),
 ('/announcements/3ae25719-cb63-11f0-9e6e-c0185091f4ff', '2025-11-27', 1),
 ('/announcements/announcement', '2025-11-28', 4),
 ('/announcements/jame', '2025-11-24', 5),
@@ -335,7 +335,7 @@ INSERT INTO `page_views` (`page_name`, `view_date`, `visit_count`) VALUES
 ('/doctors', '2025-11-17', 7),
 ('/doctors', '2025-11-22', 3),
 ('/doctors', '2025-11-27', 3),
-('/doctors', '2025-12-02', 1),
+('/doctors', '2025-12-02', 3),
 ('/health', '2025-11-22', 4),
 ('/health', '2025-11-24', 2),
 ('/health', '2025-11-25', 2),
@@ -360,7 +360,12 @@ INSERT INTO `page_views` (`page_name`, `view_date`, `visit_count`) VALUES
 ('/services', '2025-11-22', 9),
 ('/services', '2025-11-27', 3),
 ('/services', '2025-11-28', 8),
-('/services', '2025-12-02', 21);
+('/services', '2025-12-02', 86),
+('/services/aaaaa', '2025-12-02', 2),
+('/services/aaaaab', '2025-12-02', 1),
+('/services/ampota', '2025-12-02', 1),
+('/services/null', '2025-12-02', 4),
+('/services/wdwadwad', '2025-12-02', 2);
 
 -- --------------------------------------------------------
 
@@ -396,6 +401,7 @@ CREATE TABLE `services` (
   `user_id` bigint(20) NOT NULL,
   `short_title` varchar(255) NOT NULL,
   `full_title` varchar(255) NOT NULL,
+  `slug` varchar(255) DEFAULT NULL,
   `topic_tags` text DEFAULT NULL,
   `description` text NOT NULL,
   `status` enum('published','draft','archived') DEFAULT 'published',
@@ -408,10 +414,9 @@ CREATE TABLE `services` (
 -- Dumping data for table `services`
 --
 
-INSERT INTO `services` (`id`, `user_id`, `short_title`, `full_title`, `topic_tags`, `description`, `status`, `image`, `created_at`, `updated_at`) VALUES
-('e534ee14-ceca-11f0-a10f-c018509200f9', 12, 'Ophthalmology', 'Comprehensive Ophthalmology Consultation and Eye Diagnostic Services', '#ophthalmology', '<p>Our Ophthalmology Department provides complete eye examinations, including vision testing, refraction, and screening for common eye conditions such as cataracts, glaucoma, and retinal disorders. Patients receive expert evaluation using advanced diagnostic tools for accurate treatment planning.</p>', 'published', 'b5a8fdb9-9cdf-4298-abcd-6583ba1886bd.jpg', '2025-12-01 23:31:42', '2025-12-01 23:31:42'),
-('fea1fd13-ceca-11f0-a10f-c018509200f9', 12, 'Cardiology', 'Heart Health Assessment and Cardiology Diagnostic Services', '#cardiology', '<p>The Cardiology Department offers comprehensive cardiac evaluation, including ECG, blood pressure monitoring, and risk assessment for heart disease. Our cardiologists diagnose and manage hypertension, arrhythmia, coronary artery disease, and other cardiovascular conditions.</p>', 'published', '365f3360-5295-43f1-89b9-7a18120f4006.jpg', '2025-12-01 23:32:24', '2025-12-01 23:32:24'),
-('140043f7-cecb-11f0-a10f-c018509200f9', 12, 'Pediatric', 'General Pediatric Consultation and Child Wellness Screening', '#pediatrics', '<p>Pediatrics Department provides routine check-ups, developmental assessment, vaccination, and management of common childhood illnesses. We ensure a child-friendly approach to promote healthy growth and early detection of pediatric health concerns.</p>', 'published', 'c39618ff-8b96-4e9a-acad-d8917974a5ae.jpg', '2025-12-01 23:33:00', '2025-12-01 23:33:00');
+INSERT INTO `services` (`id`, `user_id`, `short_title`, `full_title`, `slug`, `topic_tags`, `description`, `status`, `image`, `created_at`, `updated_at`) VALUES
+('d9494d67-cedc-11f0-b55f-c0185091f4ff', 12, 'AAAAA', 'AAAAA', 'aaaaa', 'AAAAA', '<p>AAAAA</p>', 'published', 'd0f7dd4e-9c7f-46c4-9e7c-adcd9c578f1a.png', '2025-12-02 01:40:38', '2025-12-02 01:40:38'),
+('a53c6d87-cedd-11f0-b55f-c0185091f4ff', 12, 'AAAAAB', 'AAAAAB', 'aaaaab', 'AAAAAAB', '<p>AAAAABBB</p>', 'published', '5b3e167d-a64e-4c72-b870-109ac1faaff1.webp', '2025-12-02 01:46:20', '2025-12-02 01:46:20');
 
 -- --------------------------------------------------------
 
@@ -438,7 +443,7 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `full_name`, `email`, `password`, `created_at`, `role`, `last_login`, `reset_code`, `code_expiry`) VALUES
 (8, 'Lynn', 'lynnzylameczdo@gmail.com', '$2b$10$ADe2OQ01nBT9Udz1/wJZaOc2XXdJ.OyPChMfN/PSD8x3Z2wzHkyOq', '2025-10-17 21:31:06', 'hr_administrator', '2025-11-08 02:03:38', '514594', '2025-10-25 10:41:31'),
 (11, 'Lynn Czyla Alpuerto', 'alpuerto_lynnczyla@plpasig.edu.ph', '$2b$10$ADe2OQ01nBT9Udz1/wJZaOc2XXdJ.OyPChMfN/PSD8x3Z2wzHkyOq', '2025-10-18 03:32:20', 'content_administrator', NULL, NULL, NULL),
-(12, 'James', 'flavierlaurence01@gmail.com', '$2b$10$ADe2OQ01nBT9Udz1/wJZaOc2XXdJ.OyPChMfN/PSD8x3Z2wzHkyOq', '2025-10-18 03:40:35', 'super_administrator', '2025-12-01 20:57:47', NULL, NULL),
+(12, 'James', 'flavierlaurence01@gmail.com', '$2b$10$ADe2OQ01nBT9Udz1/wJZaOc2XXdJ.OyPChMfN/PSD8x3Z2wzHkyOq', '2025-10-18 03:40:35', 'super_administrator', '2025-12-02 00:54:21', NULL, NULL),
 (26, 'Laurence HR', 'dumpblj@gmail.com', '$2b$10$Kx3YJuI3AzNiqMq/88FSUuuowi7bRwEJGU3AnyTzoEVT8QFwZ6VrK', '2025-11-09 11:04:50', 'hr_administrator', '2025-11-09 19:23:47', NULL, NULL);
 
 --
@@ -519,6 +524,7 @@ ALTER TABLE `post_logs`
 -- Indexes for table `services`
 --
 ALTER TABLE `services`
+  ADD UNIQUE KEY `slug` (`slug`),
   ADD KEY `fk_service_user` (`user_id`);
 
 --
