@@ -1,18 +1,26 @@
-<!--frontend/website/index.html-->
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/logo1.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MediSync - Your Health Our Priority</title>
-    <script>
-      const title = "hospitaled - Your Health Our Priority  ";
-    
-    </script>
+    <link id="favicon" rel="icon" type="image/svg+xml" href="/logo1.svg" />
   </head>
   <body>
     <div id="root"></div>
+    <script type="module">
+      // Load settings from localStorage
+      const settings = JSON.parse(localStorage.getItem("siteSettings"));
+      if (settings) {
+        if (settings.siteName && settings.tagline) {
+          document.title = `${settings.siteName} - ${settings.tagline}`;
+        }
+        if (settings.favicon) {
+          const faviconEl = document.getElementById("favicon");
+          faviconEl.href = settings.favicon;
+        }
+      }
+    </script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

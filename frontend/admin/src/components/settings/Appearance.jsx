@@ -1,6 +1,6 @@
-// FULLY FIXED VERSION — COMPLETE & WORKING
-// localhost:5000 = API
-// localhost:5174 = WEBSITE
+// FULLY FIXED & WORKING VERSION — DEC 2025
+// API: http://localhost:5000
+// WEBSITE (Frontend): http://localhost:5173  ← ALWAYS THIS
 
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -23,6 +23,8 @@ function Appearance() {
   const [fetchingLayout, setFetchingLayout] = useState(true);
   const [message, setMessage] = useState({ type: "", text: "" });
 
+  // Correct frontend URL — CHANGE ONLY IF YOUR FRONTEND IS ON ANOTHER PORT
+
   // -----------------------------
   // FETCH CURRENT LAYOUT
   // -----------------------------
@@ -44,7 +46,7 @@ function Appearance() {
     }
   };
 
-  // LIVE APPLY LAYOUT
+  // LIVE APPLY LAYOUT TO ADMIN PANEL (body class)
   useEffect(() => {
     document.body.classList.remove("classic", "modern", "compact");
     document.body.classList.add(selectedLayout);
@@ -60,6 +62,7 @@ function Appearance() {
   // SAVE APPEARANCE
   // -----------------------------
   const handleSave = async () => {
+    if (loading) return; // Prevent double click
     setLoading(true);
 
     try {
@@ -74,12 +77,14 @@ function Appearance() {
       if (res.data.success) {
         Swal.fire({
           title: "Appearance Saved!",
-          text: "Your website appearance has been updated.",
+          text: "Your website appearance has been updated successfully.",
           icon: "success",
-          confirmButtonText: "Preview Website",
+          confirmButtonText: "Layout Saved!",
           confirmButtonColor: "#2563eb",
-        }).then(() => {
-          window.open("http://localhost:5173/", "_blank");
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.open(WEBSITE_URL, "_blank");
+          }
         });
       }
     } catch (err) {
@@ -108,7 +113,7 @@ function Appearance() {
 
     Swal.fire({
       title: "Changes Reverted",
-      text: "Your appearance settings were restored.",
+      text: "All appearance settings have been restored.",
       icon: "info",
       confirmButtonColor: "#2563eb",
     });
@@ -136,7 +141,7 @@ function Appearance() {
   // LIVE FONT PREVIEW STYLE GENERATION
   // ----------------------------------------
   const previewStyle = {
-    fontFamily,
+    fontFamily: fontFamily,
     fontSize: fontSize === "Small" ? "14px" : fontSize === "Medium" ? "18px" : "22px",
     color: fontColor === "Header" ? "#000" : "#444",
     minHeight: "60px",
@@ -205,13 +210,10 @@ function Appearance() {
             onChange={(e) => setPreviewText(e.target.value)}
           />
 
-          <div className="mt-3" style={previewStyle}>
+          <div className="mt-3 border" style={previewStyle}>
             {previewText || "Your preview text will appear here..."}
           </div>
         </div>
-
-        {/* THEME COLORS */}
-        
 
         {/* LAYOUT CARDS */}
         <div className="col-md-12 mt-4">
@@ -220,28 +222,27 @@ function Appearance() {
             {["classic", "modern"].map((layout) => (
               <div key={layout} className="col-md-6">
                 <div
-                  className={`card h-100 ${selectedLayout === layout ? "border-primary border-3" : ""}`}
-                  style={{ cursor: "pointer" }}
+                  className={`card h-100 ${selectedLayout === layout ? "border-primary border-3 shadow-lg" : "border"}`}
+                  style={{ cursor: "pointer", transition: "all 0.2s" }}
                   onClick={() => setSelectedLayout(layout)}
                 >
                   {selectedLayout === layout && (
-                    <div className="position-absolute top-0 end-0 m-2 bg-success text-white px-3 py-1 rounded">
-                      <FaCheckCircle /> SELECTED
+                    <div className="position-absolute top-0 end-0 m-2 bg-success text-white px-3 py-1 rounded shadow">
+                      <FaCheckCircle className="me-1" /> SELECTED
                     </div>
                   )}
 
                   <div className="card-body">
                     <div
-                      className="rounded mb-3 text-white text-center"
+                      className="rounded mb-3 text-white text-center d-flex align-items-center justify-content-center"
                       style={{
                         height: "120px",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
                         background:
                           layout === "modern"
                             ? "linear-gradient(135deg, #4f9cf9, #2563eb)"
                             : "linear-gradient(135deg, #043873, #0a5a9e)",
+                        fontSize: "1.5rem",
+                        fontWeight: "bold",
                       }}
                     >
                       {layout.toUpperCase()}
@@ -250,9 +251,11 @@ function Appearance() {
                     <h6 className="fw-bold">{layoutInfo[layout].title}</h6>
                     <p className="text-muted small">{layoutInfo[layout].description}</p>
 
-                    <div className="p-2 bg-light rounded small mb-2">{layoutInfo[layout].preview}</div>
+                    <div className="p-2 bg-light rounded small mb-2 font-monospace">
+                      {layoutInfo[layout].preview}
+                    </div>
 
-                    <ul className="small text-muted">
+                    <ul className="small text-muted ps-4">
                       {layoutInfo[layout].features.map((f, i) => (
                         <li key={i}>{f}</li>
                       ))}
@@ -265,10 +268,20 @@ function Appearance() {
         </div>
 
         {/* ACTION BUTTONS */}
-        <div className="col-md-12 mt-4">
-          <div className="d-flex gap-3">
-            <button className="btn btn-primary px-4 py-2" onClick={handleSave} disabled={loading}>
-              {loading ? "Saving..." : <><FaCheckCircle className="me-2" /> Save Changes</>}
+        <div className="col-md-12 mt-5">
+          <div className="d-flex flex-wrap gap-3 align-items-center">
+            <button
+              className="btn btn-primary px-5 py-2 d-flex align-items-center justify-content-center text-center align-content-center"
+              onClick={handleSave}
+              disabled={loading}
+            >
+              {loading ? (
+                <>Saving...</>
+              ) : (
+                <>
+                Save Changes
+                </>
+              )}
             </button>
 
             <button className="btn btn-secondary px-4 py-2" onClick={handleCancel} disabled={loading}>
@@ -276,10 +289,10 @@ function Appearance() {
             </button>
 
             <button
-              className="btn btn-outline-info px-4 py-2 ms-auto"
-              onClick={() => window.open("http://localhost:5173/", "_blank")}
+              className="btn btn-outline-info px-5 py-2 ms-auto"
+              onClick={() => window.open(WEBSITE_URL, "_blank")}
             >
-              Preview Website
+              Preview Live Website
             </button>
           </div>
         </div>

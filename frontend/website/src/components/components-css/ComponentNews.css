@@ -133,7 +133,6 @@
   height: 300px;
   background: #d1d5db;
   border-radius: 6px;
-  margin: 20px 0 5px;
   background-size: cover;
   background-position: center;
 }
@@ -396,7 +395,6 @@
 
 .news-image {
   width: 100%;
-  margin: 20px 0;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);

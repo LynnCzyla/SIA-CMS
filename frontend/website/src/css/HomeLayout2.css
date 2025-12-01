@@ -28,7 +28,8 @@
 ============================================ */
 .modern .home-section {
   position: relative;
-  min-height: 600px;
+  min-height: 800px;
+  min-height: 100vh;
   padding: 0;
   overflow: hidden;
 }
@@ -36,7 +37,6 @@
 .modern .home-section .container {
   position: relative;
   z-index: 2;
-  padding: 80px 20px;
 }
 
 .modern .home-section .row {
@@ -57,23 +57,45 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 120vh;
   max-width: 100%;
   border-radius: 0;
 }
+/* Make the carousel image full size and keep aspect ratio */
+.home-right .carousel-image {
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+  display: block;
+}
 
-.modern .home-right .carousel-image {
-  width: 100%;       /* full viewport width */
-  height: 100vh;      /* full viewport height */
-  object-fit: cover;  /* keep aspect ratio while covering the container */
-  filter: brightness(0.85);
+/* Modern layout2 carousel overlay */
+.modern .home-right .carousel-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 1) 80%,
+    rgba(255, 255, 255, 1) 100%,
+        rgba(255, 255, 255, 1) 100%
+
+    
+  );
+  pointer-events: none;
   display: flex;
+  align-items: flex-end;
   justify-content: center;
+  z-index: 2;
+  color: #000;
 }
 
 
+
 .modern .home-right .carousel-overlay {
-  display: none; /* Hide overlay text on hero image */
 }
 
 .modern .home-right .carousel-dots {
@@ -90,26 +112,21 @@
 
 .modern .home-right .dot.active {
   background-color: white;
-}
+}/* Position the hero card on the right */
 .modern .home-left {
-  text-align: center;
+  position: absolute;
+  top: 50%;
+  right: 50px;
+  transform: translateY(-50%);
   z-index: 3;
-  max-width: 650px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  justify-content: center;
-  align-items: center;
-  padding: 40px 30px;
-  margin: 0 auto;
+  max-width: 750px;
+  padding: 90px 90px;
   border-radius: 20px;
-}
-
-.modern .home-left h1 {
-  text-align: center;
-}
-
-.modern .home-left p {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  text-align: right;
 }
 
 
@@ -121,19 +138,27 @@
   color: #043873;
   margin-bottom: 20px;
   line-height: 1.3;
-  text-align: right;
 }
 
 .modern .home-left p {
   font-size: 1.1rem;
-  color: #ffffff;
+  color: #000;
   line-height: 1.8;
+  font-weight: 600;
   margin-bottom: 35px;
-  text-align: right;
+  
+}
+/* Hero Buttons Container */
+.modern .hero-buttons {
+  display: flex;
+  gap: 16px;            /* spacing between buttons */
+  justify-content: flex-start; /* align to the left or center as needed */
+  flex-wrap: wrap;       /* wrap on small screens */
+  margin-top: 20px;
 }
 
-/* Hero Buttons */
-.modern .home-btn {
+/* Doctor Button */
+.modern .doc-btn {
   background: #043873;
   color: white;
   border: none;
@@ -144,19 +169,19 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-right: 12px;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(4, 56, 115, 0.3);
 }
 
-.modern .home-btn:hover {
+.modern .doc-btn:hover {
   background: #032a5a;
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(4, 56, 115, 0.4);
 }
 
-.modern .doc-btn {
-  background: white;
+/* Book Appointment Button */
+.modern .home-btn {
+  background: #ffffff;
   color: #043873;
   border: 2px solid #043873;
   padding: 14px 32px;
@@ -169,7 +194,7 @@
   transition: all 0.3s ease;
 }
 
-.modern .doc-btn:hover {
+.modern .home-btn:hover {
   background: #043873;
   color: white;
   transform: translateY(-2px);
@@ -180,7 +205,7 @@
 ============================================ */
 .modern .services-block {
   background: white;
-  padding: 100px 0;
+  padding: 0px 0;
 }
 
 .modern .services-header {
@@ -305,7 +330,6 @@
 
 
 .services-section {
-    background-color: white;
 }
 /* ============================================
    SECTION 3: LATEST UPDATES AND ANNOUNCEMENTS
@@ -780,14 +804,13 @@
   }
 
   .modern .contact-info {
-    argin-bottom: 30px;
+    margin-bottom: 30px;
   }
 }
 
 @media (max-width: 576px) {
   .modern .home-section {
-    min-heightpadding: 30px 20px;
-    m: 400px;
+    min-height: 400px;
   }
 
   .modern .services-header h2,
