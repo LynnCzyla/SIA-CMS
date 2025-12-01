@@ -2,15 +2,17 @@
 import React, { useEffect, useState } from "react";
 import { IoFilter } from "react-icons/io5";
 import { IoMdSearch } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
 
 import ViewModal from "../components/modal/ViewModal";
 import EditModal from "../components/modal/EditModal";
 import DeleteModal from "../components/modal/DeleteModal";
 
-import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
+import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/Posts.css";
 
 export default function Posts() {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("All");
   const [posts, setPosts] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
@@ -36,10 +38,15 @@ export default function Posts() {
   const [logsPage, setLogsPage] = useState(1);
   const logsPerPage = 10;
 
-  // Fetch posts and logs
+  // Pending Jobs (from /api/jobs/pending)
+  const [pendingJobs, setPendingJobs] = useState([]);
+  const [pendingPage, setPendingPage] = useState(1);
+  const pendingPerPage = 10;
+
   useEffect(() => {
     fetchPosts();
     fetchLogs();
+    fetchPendingJobs();
   }, []);
 
   const fetchPosts = async () => {
@@ -66,6 +73,28 @@ export default function Posts() {
     } catch (err) {
       console.error("Failed to fetch logs", err);
     }
+  };
+
+  const fetchPendingJobs = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/api/jobs/pending");
+      const data = await res.json();
+      if (data.success) {
+        setPendingJobs(data.jobs || []);
+      }
+    } catch (err) {
+      console.error("Failed to fetch pending jobs", err);
+    }
+  };
+
+  // Handle Review - Navigate to Careers page
+  const handleReviewInCareers = (jobId) => {
+    navigate('/careers', {
+      state: {
+        pendingJobId: jobId,
+        scrollToPending: true
+      }
+    });
   };
 
   // Filter posts
@@ -139,6 +168,45 @@ export default function Posts() {
   const logsPages = Math.max(1, Math.ceil(logsTotal / logsPerPage));
   const logsPageItems = logs.slice((logsPage - 1) * logsPerPage, logsPage * logsPerPage);
 
+  const pendingTotal = pendingJobs.length;
+  const pendingPages = Math.max(1, Math.ceil(pendingTotal / pendingPerPage));
+  const pendingPageItems = pendingJobs.slice((pendingPage - 1) * pendingPerPage, pendingPage * pendingPerPage);
+
+  // Urgency badge styling
+  const getUrgencyBadge = (urgency) => {
+    const styles = {
+      urgent: { bg: "#dc2626", color: "#fff", label: "URGENT" },
+      medium: { bg: "#fbbf24", color: "#000", label: "Medium" },
+      low: { bg: "#10b981", color: "#fff", label: "Low" },
+    };
+    const style = styles[urgency] || styles.medium;
+    return (
+      <span
+        style={{
+          background: style.bg,
+          color: style.color,
+          padding: "4px 10px",
+          borderRadius: "6px",
+          fontSize: "12px",
+          fontWeight: "600",
+        }}
+      >
+        {style.label}
+      </span>
+    );
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    return new Date(dateString).toLocaleDateString("en-US", { 
+      year: "numeric", 
+      month: "short", 
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+  };
+
   return (
     <div className="cms-announcement-page">
       <h2 className="title">Posts</h2>
@@ -150,18 +218,118 @@ export default function Posts() {
       </ul>
 
       <div className="tab-row">
-        {["All", "Published", "Drafts", "Trash", "Edit Logs"].map((label) => (
+        {["All", "Published", "Drafts", "Trash", "Pending Request", "Edit Logs"].map((label) => (
           <span
             key={label}
             className={`tab-item ${activeTab === label ? "active" : ""}`}
             onClick={() => setActiveTab(label)}
           >
             {label}
+            {label === "Pending Request" && pendingJobs.length > 0 && (
+              <span className="tab-badge">{pendingJobs.length}</span>
+            )}
           </span>
         ))}
       </div>
 
-      {activeTab !== "Edit Logs" ? (
+      {activeTab === "Pending Request" ? (
+        <>
+          {/* Pending Jobs Table */}
+          <div className="pending-jobs-info">
+            <p className="info-text">
+              📋 Job posting requests submitted from EMS awaiting review and approval
+            </p>
+          </div>
+
+          <div className="table-container">
+            <table className="posts-table">
+              <thead>
+                <tr>
+                  <th>No.</th>
+                  <th>Job Title</th>
+                  <th>Department</th>
+                  <th>Job Type</th>
+                  <th>Urgency</th>
+                  <th>Has Notes</th>
+                  <th>Submitted By</th>
+                  <th>Submitted Date</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {pendingPageItems.length ? pendingPageItems.map((job, idx) => (
+                  <tr key={job.id} className="pending-job-row">
+                    <td>{(pendingPage - 1) * pendingPerPage + idx + 1}</td>
+                    <td className="job-title-cell">
+                      <strong>{job.job_title}</strong>
+                      {job.short_title && (
+                        <div className="short-title">{job.short_title}</div>
+                      )}
+                    </td>
+                    <td>
+                      <span className="department-badge">{job.department}</span>
+                    </td>
+                    <td>{job.job_type}</td>
+                    <td>{getUrgencyBadge(job.urgency_level)}</td>
+                    <td className="text-center">
+                      {job.ems_notes ? (
+                        <span className="has-notes-badge">✓ Yes</span>
+                      ) : (
+                        <span className="no-notes-badge">—</span>
+                      )}
+                    </td>
+                    <td>
+                      <div className="submitter-info">
+                        <strong>{job.ems_user_name}</strong>
+                        <div className="submitter-source">EMS</div>
+                      </div>
+                    </td>
+                    <td>{formatDate(job.created_at)}</td>
+                    <td className="actions">
+                      <button 
+                        className="actions-btn review" 
+                        onClick={() => handleReviewInCareers(job.id)}
+                        title="Review in Careers page"
+                      >
+                        Review
+                      </button>
+                    </td>
+                  </tr>
+                )) : (
+                  <tr>
+                    <td colSpan="9" className="no-posts">
+                      <div className="no-pending-illustration">
+                        <span className="no-pending-icon">✓</span>
+                        <p>No pending job requests at this time</p>
+                        <small>All submissions have been processed</small>
+                      </div>
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Pending Jobs Pagination */}
+          {pendingPages > 1 && (
+            <nav aria-label="Pending jobs pagination">
+              <ul className="pagination justify-content-center mt-3">
+                <li className={`page-item ${pendingPage === 1 ? "disabled" : ""}`}>
+                  <button className="page-link" onClick={() => setPendingPage(pendingPage - 1)}>Previous</button>
+                </li>
+                {Array.from({ length: pendingPages }).map((_, i) => (
+                  <li key={i} className={`page-item ${pendingPage === i + 1 ? "active" : ""}`}>
+                    <button className="page-link" onClick={() => setPendingPage(i + 1)}>{i + 1}</button>
+                  </li>
+                ))}
+                <li className={`page-item ${pendingPage === pendingPages ? "disabled" : ""}`}>
+                  <button className="page-link" onClick={() => setPendingPage(pendingPage + 1)}>Next</button>
+                </li>
+              </ul>
+            </nav>
+          )}
+        </>
+      ) : activeTab !== "Edit Logs" ? (
         <>
           {/* Filters */}
           <div className="filter-bar">
@@ -202,11 +370,11 @@ export default function Posts() {
                 {pageItems.length ? pageItems.map((post, idx) => (
                   <tr key={post.id}>
                     <td>{(page - 1) * pageSize + idx + 1}</td>
-                    <td>{post.title}</td>
+                    <td>{post.title || post.full_title || post.short_title}</td>
                     <td>{post.author}</td>
                     <td>{post.category}</td>
                     <td>{post.normalizedStatus.charAt(0).toUpperCase() + post.normalizedStatus.slice(1)}</td>
-                    <td>{post.date ? new Date(post.date).toLocaleString() : "—"}</td>
+                    <td>{post.date ? formatDate(post.date) : "—"}</td>
                     <td className="actions">
                       <button className="actions-btn edit" onClick={() => openEdit(post)}>Edit</button>
                       <button className="actions-btn view" onClick={() => openView(post)}>View</button>
@@ -262,7 +430,7 @@ export default function Posts() {
                     <td>{l.action}</td>
                     <td>{l.editor}</td>
                     <td style={{ maxWidth: 400, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{l.message}</td>
-                    <td>{new Date(l.created_at).toLocaleString()}</td>
+                    <td>{formatDate(l.created_at)}</td>
                   </tr>
                 )) : <tr><td colSpan="7" className="no-posts">No logs found.</td></tr>}
               </tbody>

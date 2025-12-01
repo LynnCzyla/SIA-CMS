@@ -1,9 +1,11 @@
+// backend/src/server.js
 import express from "express";
 import path from "path";
 import cors from "cors";
 import dotenv from "dotenv";
-// in your server index file where routes are registered
-import postLogsRoute from "../routes/postLogs.js"; // adjust path
+import multer from "multer";
+
+
 
 // 📦 Route Imports
 import loginRoute from "../routes/login.js";
@@ -21,6 +23,8 @@ import serviceRoute from "../routes/services.js";
 import aboutRoute from "../routes/about.js";
 import contactRoute from "../routes/contact.js";
 import doctorsVisibilityRouter from "../routes/doctorsVisibility.js";
+import notificationsRoute from "../routes/notifications.js"; 
+import postLogsRoute from "../routes/postLogs.js"; // adjust path
 import chatbotGroqRoute from "../routes/chatbot_groq.js";
 
 dotenv.config({ path: "../.env" });
@@ -29,9 +33,13 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 
 // Serve uploads globally
+app.use("/uploads", express.static("uploads"));
 app.use("/uploads", express.static(path.join(path.resolve(), "uploads")));
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 app.use("/uploads/announcements", express.static(path.join(process.cwd(), "uploads/announcements")));
 app.use("/uploads/news", express.static(path.join(process.cwd(), "uploads/news")));
 app.use("/uploads/health_tips", express.static(path.join(process.cwd(), "uploads/health_tips")));
@@ -53,7 +61,6 @@ app.use("/api/about", aboutRoute);
 app.use("/api/post-logs", postLogsRoute);
 app.use("/api/contact", contactRoute);
 app.use("/api/doctors", doctorsVisibilityRouter);
-app.use("/api/chatbot-groq", chatbotGroqRoute);
 
 
 // Test route
