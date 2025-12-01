@@ -7,114 +7,124 @@ import "../components/components-css/Chatbot.css";
 function Chatbot() {
   const [showChat, setShowChat] = useState(false);
   const [messages, setMessages] = useState([
-    { sender: "bot", text: "👋 Hi! I'm Lunax — your Healthcare Companion." },
+    {
+      sender: "bot",
+      text: "Hi! I'm <strong>Lunax</strong> — your Healthcare Companion. How can I help you today?",
+    },
   ]);
   const [input, setInput] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
 
-  // Generate a unique userId per browser session
-  const [userId, setUserId] = useState("");
-
+  // Assign unique user ID
   useEffect(() => {
-    let id = sessionStorage.getItem("lunaxUserId");
-    if (!id) {
-      id = crypto.randomUUID(); // generate a random ID
-      sessionStorage.setItem("lunaxUserId", id);
+    if (!sessionStorage.getItem("lunaxUserId")) {
+      sessionStorage.setItem("lunaxUserId", crypto.randomUUID());
     }
-    setUserId(id);
   }, []);
 
-  // Scrolls to bottom on message update
+  // Auto scroll
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [messages, isTyping]);
 
   const handleSend = async () => {
     if (!input.trim()) return;
-  
+
     const userText = input.trim();
-    const userMsg = { sender: "user", text: userText };
-    setMessages(prev => [...prev, userMsg]);
+    setMessages((prev) => [...prev, { sender: "user", text: userText }]);
     setInput("");
-  
+    setIsTyping(true);
+
     try {
-      const response = await fetch("http://localhost:5000/api/chatbot-groq", {
+      const res = await fetch("http://localhost:5000/api/chatbot-groq", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: userText, userId }),
+        body: JSON.stringify({
+          message: userText,
+          userId: sessionStorage.getItem("lunaxUserId"),
+        }),
       });
-  
-      const data = await response.json();
-      setMessages(prev => [...prev, { sender: "bot", text: data.reply }]);
-  
-    } catch (error) {
-      setMessages(prev => [
+
+      const data = await res.json();
+      setIsTyping(false);
+
+      setMessages((prev) => [
         ...prev,
-        { sender: "bot", text: "❌ Error: Unable to reach Lunax server." }
+        { sender: "bot", text: data.reply || "I'm here to help!" },
+      ]);
+    } catch (err) {
+      setIsTyping(false);
+      setMessages((prev) => [
+        ...prev,
+        { sender: "bot", text: "Sorry, connection error. Try again." },
       ]);
     }
-  };  
+  };
 
   return (
-    <div className="chatbot-container">
-      {/* --- Popup Window --- */}
+    <div className="chatbot-wrapper">
+
+      {/* CHAT WINDOW */}
       {showChat && (
-        <div className="chatbot-popup">
+        <div className="chatbot-window">
           <div className="chatbot-header">
-            <div className="chatbot-info">
-              <img
-                src="lunax.svg"
-                alt="Lunax"
-                className="chatbot-avatar"
-              />
+            <div className="chatbot-header-info">
+              <img src="/lunax.svg" alt="Lunax" className="chatbot-avatar" />
               <div>
-                <h5 className="mb-0">
-                  Hi! I'm <span className="text-highlight">Lunax</span>
-                </h5>
-                <p className="mb-0 small text-white">
-                  Your Healthcare Companion
-                </p>
+                <h3>Lunax</h3>
+                <p>Your Healthcare Companion</p>
               </div>
             </div>
           </div>
 
           <div className="chatbot-messages">
-            {messages.map((msg, index) => (
-              <div
-                key={index}
-                className={`chat-message ${
-                  msg.sender === "user" ? "user-msg" : "bot-msg"
-                }`}
-              >
-                {msg.text}
+            {messages.map((msg, i) => (
+              <div key={i} className={`message ${msg.sender === "user" ? "user" : "bot"}`}>
+                <div className="bubble" dangerouslySetInnerHTML={{ __html: msg.text }} />
               </div>
             ))}
+
+            {isTyping && (
+              <div className="message bot">
+                <div className="bubble typing">
+                  <span></span><span></span><span></span>
+                </div>
+              </div>
+            )}
+
             <div ref={messagesEndRef} />
           </div>
 
-          <div className="chatbot-input">
+          <div className="chatbot-input-bar">
             <input
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Type a message..."
-              onKeyDown={(e) => e.key === "Enter" && handleSend()}
+              onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSend()}
+              placeholder="Type your message..."
             />
-            <button onClick={handleSend}>➤</button>
+            <button onClick={handleSend} disabled={!input.trim()}>
+              Send
+            </button>
           </div>
         </div>
       )}
 
-      {/* --- Floating Button --- */}
+      {/* FAB BUTTON */}
       <button
-        className="chatbot-btn"
-        onClick={() => setShowChat((prev) => !prev)}
+        className="chatbot-fab"
+        onClick={() => setShowChat(!showChat)}
+        aria-label={showChat ? "Close chat" : "Open chat"}
       >
-        {showChat ? <MdClose /> : <FaComments />}
+        {showChat ? (
+          <MdClose className="icon" />
+        ) : (
+          <FaComments className="icon pulse-icon" />
+        )}
       </button>
     </div>
   );
 }
 
 export default Chatbot;
-
