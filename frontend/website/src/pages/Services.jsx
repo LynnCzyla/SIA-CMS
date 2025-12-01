@@ -14,9 +14,32 @@ const SearchIcon = () => (
   </svg>
 );
 
+// Function to remove HTML tags and limit text
+const cleanDescription = (html, maxLength = 100) => {
+  if (!html) return "No description available";
+  
+  // Remove HTML tags
+  const text = html.replace(/<[^>]*>/g, '');
+  
+  // Limit length and add ellipsis if needed
+  if (text.length > maxLength) {
+    return text.substring(0, maxLength) + '...';
+  }
+  
+  return text;
+};
+
+// Function to get placeholder image
+const getPlaceholderImage = (serviceName) => {
+  const colors = ['#4f9cf9', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
+  const colorIndex = serviceName.length % colors.length;
+  return `https://via.placeholder.com/400x200/${colors[colorIndex].replace('#', '')}/ffffff?text=${encodeURIComponent(serviceName)}`;
+};
+
 export default function Services() {
   const [searchTerm, setSearchTerm] = useState("");
   const [services, setServices] = useState([]);
+  const [imageErrors, setImageErrors] = useState({});
 
   const topServices = [
     { id: 1, icon: '/Psychiatry.png', name: 'Psychiatry' },
@@ -31,7 +54,7 @@ export default function Services() {
       .then((res) => res.json())
       .then((data) => {
         console.log("Fetched services:", data);
-        setServices(data); // save to state
+        setServices(data);
       })
       .catch((err) => console.error("Error fetching services:", err));
   }, []);
@@ -42,6 +65,12 @@ export default function Services() {
       s.short_title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       s.full_title?.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  // Handle image loading errors
+  const handleImageError = (serviceId) => {
+    console.log(`Image failed to load for service ${serviceId}`);
+    setImageErrors(prev => ({ ...prev, [serviceId]: true }));
+  };
 
   return (
     <div className="services-page">
@@ -91,22 +120,50 @@ export default function Services() {
         {filteredServices.length === 0 ? (
           <p>No services found.</p>
         ) : (
-          filteredServices.map((service) => (
-            <div key={service.id} className="service-card">
-              <div className="service-card-icon">
-                <img
-                  src={service.image_url || "/default.png"}
-                  alt={service.full_title}
-                  style={{ width: "120px", height: "120px", objectFit: "contain" }}
-                />
+          filteredServices.map((service) => {
+            const imageUrl = service.image_url || 
+              (service.image ? `http://localhost:5000/uploads/services/${service.image}` : null);
+            
+            console.log(`Service ${service.id} image URL:`, imageUrl);
+            
+            return (
+              <div key={service.id} className="service-card">
+                {/* Image container */}
+                <div
+                  className="service-image-container"
+                  style={{
+                    backgroundImage: imageUrl && !imageErrors[service.id] 
+                      ? `url("${imageUrl}")`
+                      : `url("${getPlaceholderImage(service.full_title || 'Service')}")`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    height: "200px",
+                    borderRadius: "8px 8px 0 0"
+                  }}
+                  onError={() => handleImageError(service.id)}
+                >
+                  {/* Optional: Add a loading indicator or fallback text */}
+                  {imageErrors[service.id] && (
+                    <div className="image-error-fallback">
+                      Image not available
+                    </div>
+                  )}
+                </div>
+                
+                <div className="service-card-content">
+                  <h3 className="service-card-title">{service.full_title}</h3>
+                  <p className="service-card-description">
+                    {cleanDescription(service.description)}
+                  </p>
+                  <div className="read-more-container">
+                    <button className="read-more-btn">
+                      Read More <ArrowIcon />
+                    </button>
+                  </div>
+                </div>
               </div>
-              <h3 className="service-card-title">{service.full_title}</h3>
-              <p className="service-card-description">{service.description}</p>
-              <button className="read-more-btn">
-                Read More <ArrowIcon />
-              </button>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
     </div>
