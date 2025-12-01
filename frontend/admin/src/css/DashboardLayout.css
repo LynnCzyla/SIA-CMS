@@ -1,3 +1,5 @@
+/* frontend/admin/src/css/DashboardLayout.css */
+
 /* ===== Dashboard Layout Wrapper ===== */
 .dashboard-layout {
   display: flex;
@@ -63,26 +65,169 @@
   color: var(--primary-color2, #007bff);
 }
 
-/* Navbar right (Profile) */
+.title-name {
+  margin-bottom: 0px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #333;
+}
+
+/* ===== Navbar Right (Notifications + Profile) ===== */
 .navbar-right {
   display: flex;
   align-items: center;
+  gap: 10px;
+}
+
+/* ===== User Profile Container ===== */
+.user-profile-container {
+  position: relative;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
   cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.user-profile:hover {
+  background: #f8f9fa;
 }
 
 .profile-icon {
-  font-size: 1.8rem;
-  color: var(--primary-color);
-  transition: color 0.3s ease;
-  margin-right: 15px;
+  font-size: 2.2rem;
+  color: var(--primary-color, #007bff);
 }
 
-.title-name{
-  margin-bottom: 0px;
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
-.profile-icon:hover {
-  color: var(--primary-color2, #007bff);
+.user-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #333;
+  line-height: 1.2;
+}
+
+.user-email {
+  font-size: 0.75rem;
+  color: #6c757d;
+  line-height: 1.2;
+}
+
+.dropdown-icon {
+  font-size: 0.9rem;
+  color: #6c757d;
+  transition: transform 0.3s ease;
+}
+
+.user-profile:hover .dropdown-icon {
+  transform: rotate(180deg);
+}
+
+/* ===== Profile Dropdown Menu ===== */
+.profile-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 280px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  animation: slideDown 0.3s ease;
+  margin-right: 23px;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.profile-dropdown-header {
+  display: flex;
+  gap: 12px;
+  padding: 20px;
+  align-items: center;
+  background: linear-gradient(135deg, var(--primary-color2, #667eea) 0%, var(--primary-color) 100%);
+  border-radius: 12px 12px 0 0;
+  color: white;
+}
+
+.profile-icon-large {
+  font-size: 3rem;
+  color: white;
+}
+
+.dropdown-name {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+}
+
+.dropdown-email {
+  font-size: 0.8rem;
+  opacity: 0.9;
+  margin: 0 0 8px 0;
+}
+
+.role-badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.profile-dropdown-divider {
+  height: 1px;
+  background: #e9ecef;
+  margin: 0;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px 20px;
+  margin: 5px;
+  background: transparent;
+  border: none;
+  text-align: left;
+  font-size: 0.95rem;
+  color: #333;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background: #f8f9fa;
+}
+
+.dropdown-item:last-child {
+  border-radius: 0 0 12px 12px;
+  color: #dc3545;
+}
+
+.dropdown-item:last-child:hover {
+  background: #ffe5e8;
 }
 
 /* ===== Main Content ===== */
@@ -106,6 +251,7 @@
   margin-left: 70px;
 }
 
+/* ===== Responsive Design ===== */
 @media (max-width: 768px) {
   .dashboard-layout {
     position: relative;
@@ -129,5 +275,21 @@
 
   #content {
     margin-left: 0 !important;
+  }
+
+  .title-name {
+    display: none;
+  }
+
+  .user-info {
+    display: none;
+  }
+
+  .dropdown-icon {
+    display: none;
+  }
+
+  .profile-dropdown {
+    right: -20px;
   }
 }

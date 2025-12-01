@@ -52,9 +52,14 @@ router.post("/", async (req, res) => {
         }
       });
 
-      // ✅ Create JWT token
+      // ✅ Create JWT token with full_name included
       const token = jwt.sign(
-        { id: user.id, role: user.role, email: user.email },
+        { 
+          id: user.id, 
+          role: user.role, 
+          email: user.email,
+          full_name: user.full_name // ✅ Add full_name to JWT payload
+        },
         JWT_SECRET,
         { expiresIn: "1h" }
       );
@@ -70,7 +75,7 @@ router.post("/", async (req, res) => {
           full_name: user.full_name,
           email: user.email,
           role: user.role,
-          last_login: new Date().toISOString(), // optional for immediate frontend use
+          last_login: new Date().toISOString(),
         },
       });
     } catch (error) {
