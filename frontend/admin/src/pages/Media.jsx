@@ -112,7 +112,6 @@ export default function Media() {
           <select id="assignSelect" style="width:100%; padding:10px; border:1px solid #4f9cf9; border-radius:8px;">
             <option value="">-- Unassigned --</option>
             <option value="home-carousel">Home Carousel</option>
-            <option value="hero-image">Hero Image</option>
           </select>
         </div>
       `,

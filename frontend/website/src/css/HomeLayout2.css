@@ -23,58 +23,7 @@
   color: #333;
 }
 
-/* ============================================
-   SECTION 1: HERO - "Your Health Our Priority"
-============================================ */
-.modern .home-section {
-  position: relative;
-  min-height: 600px;
-  padding: 0;
-  overflow: hidden;
-}
-
-.modern .home-section .container {
-  position: relative;
-  z-index: 2;
-  padding: 80px 20px;
-}
-
-.modern .home-section .row {
-  position: relative;
-  z-index: 2;
-}
-.modern .home-section {
-  min-height: 100vh; /* instead of 600px */
-}
-
-.modern .home-right {
-  height: 100vh; /* force parent to match the image */
-}
-
-
-.modern .home-right .carousel-slide {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  max-width: 100%;
-  border-radius: 0;
-}
-
-.modern .home-right .carousel-image {
-  width: 100%;       /* full viewport width */
-  height: 100vh;      /* full viewport height */
-  object-fit: cover;  /* keep aspect ratio while covering the container */
-  filter: brightness(0.85);
-  display: flex;
-  justify-content: center;
-}
-
-
-.modern .home-right .carousel-overlay {
-  display: none; /* Hide overlay text on hero image */
-}
+.modern .home-section { position: relative; min-height: 800px; min-height: 100vh; padding: 0; overflow: hidden; } .modern .home-section .container { position: relative; z-index: 2; } .modern .home-section .row { position: relative; z-index: 2; } .modern .home-section { min-height: 100vh; /* instead of 600px */ } .modern .home-right { height: 100vh; /* force parent to match the image */ } .modern .home-right .carousel-slide { position: absolute; top: 0; left: 0; width: 100%; height: 120vh; max-width: 100%; border-radius: 0; } /* Make the carousel image full size and keep aspect ratio */ .home-right .carousel-image { width: 100%; height: 100vh; object-fit: cover; display: block; } /* Modern layout2 carousel overlay */ .modern .home-right .carousel-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient( to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 80%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100% ); pointer-events: none; display: flex; align-items: flex-end; justify-content: center; z-index: 2; color: #000; }
 
 .modern .home-right .carousel-dots {
   position: absolute;
@@ -91,27 +40,25 @@
 .modern .home-right .dot.active {
   background-color: white;
 }
+
+
+
+/* Position the hero card on the right */
 .modern .home-left {
-  text-align: center;
+  position: absolute;
+  top: 50%;
+  right: 50px;
+  transform: translateY(-50%);
   z-index: 3;
-  max-width: 650px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  justify-content: center;
-  align-items: center;
-  padding: 40px 30px;
-  margin: 0 auto;
+  max-width: 750px;
+  padding: 90px;
   border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  text-align: right;
 }
-
-.modern .home-left h1 {
-  text-align: center;
-}
-
-.modern .home-left p {
-  text-align: center;
-}
-
 
 .modern .home-left h1 {
   font-family: 'EB Garamond', serif;
@@ -121,19 +68,26 @@
   color: #043873;
   margin-bottom: 20px;
   line-height: 1.3;
-  text-align: right;
 }
 
 .modern .home-left p {
   font-size: 1.1rem;
-  color: #ffffff;
+  color: #000;
   line-height: 1.8;
+  font-weight: 600;
   margin-bottom: 35px;
-  text-align: right;
 }
 
-/* Hero Buttons */
-.modern .home-btn {
+/* Hero Buttons Container */
+.modern .hero-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.modern .doc-btn {
   background: #043873;
   color: white;
   border: none;
@@ -144,19 +98,18 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-right: 12px;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(4, 56, 115, 0.3);
 }
 
-.modern .home-btn:hover {
+.modern .doc-btn:hover {
   background: #032a5a;
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(4, 56, 115, 0.4);
 }
 
-.modern .doc-btn {
-  background: white;
+.modern .home-btn {
+  background: #ffffff;
   color: #043873;
   border: 2px solid #043873;
   padding: 14px 32px;
@@ -169,22 +122,27 @@
   transition: all 0.3s ease;
 }
 
-.modern .doc-btn:hover {
+.modern .home-btn:hover {
   background: #043873;
   color: white;
   transform: translateY(-2px);
 }
 
 /* ============================================
-   SECTION 2: SERVICES - "Provide Our Best Services"
+   SECTION 2: SERVICES
 ============================================ */
 .modern .services-block {
   background: white;
-  padding: 100px 0;
+  padding: 0;
 }
 
+
+.services-desc{
+  color: #000;
+}
 .modern .services-header {
   margin-bottom: 60px;
+  text-align: center;
 }
 
 .modern .services-header h2 {
@@ -193,13 +151,8 @@
   font-weight: 700;
   color: #043873;
   margin-bottom: 20px;
-  position: relative;
   display: inline-block;
-}
-
-.modern .services-header h2 .text-primary2 {
   position: relative;
-  color: #043873;
 }
 
 .modern .services-header h2 .text-primary2::after {
@@ -254,16 +207,11 @@
   border-color: #043873;
 }
 
-.modern .service-icon {
-  display: none;
-}
-
 .modern .service-title {
   font-size: 1.6rem;
   font-weight: 700;
   color: #043873;
   margin-bottom: 18px;
-  position: relative;
   z-index: 1;
 }
 
@@ -272,7 +220,6 @@
   color: #555;
   line-height: 1.6;
   margin-bottom: 25px;
-  position: relative;
   z-index: 1;
 }
 
@@ -280,9 +227,8 @@
   color: #043873;
   font-weight: 700;
   font-size: 1rem;
-  position: relative;
-  z-index: 1;
   display: block;
+  z-index: 1;
 }
 
 .modern .services-btn {
@@ -303,12 +249,8 @@
   box-shadow: 0 6px 20px rgba(79, 156, 249, 0.4);
 }
 
-
-.services-section {
-    background-color: white;
-}
 /* ============================================
-   SECTION 3: LATEST UPDATES AND ANNOUNCEMENTS
+   SECTION 3: ANNOUNCEMENTS
 ============================================ */
 .modern .announcements-block {
   background: white;
@@ -338,12 +280,9 @@
   font-size: 2.8rem;
   font-weight: 700;
   margin-bottom: 50px;
-  position: relative;
   display: inline-block;
-}
-
-.modern .news-title1 .highlight {
-  color: #043873 !important;
+  position: relative;
+  text-align: center;
 }
 
 .modern .news-title1::after {
@@ -357,6 +296,8 @@
 }
 
 .modern .news-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 20px;
 }
 
@@ -393,10 +334,10 @@
   border-radius: 8px;
   box-shadow: 0 4px 15px rgba(79, 156, 249, 0.3);
   border: none;
-  transition: all 0.3s ease;
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  transition: all 0.3s ease;
 }
 
 .modern .news-btn:hover {
@@ -405,54 +346,17 @@
   box-shadow: 0 8px 20px rgba(79, 156, 249, 0.4);
 }
 
-.modern .carousel-nav-btn {
-  background: white;
-  color: #043873;
-  border: 2px solid #e3e8ef;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.modern .carousel-nav-btn:hover {
-  background: #f8f9fa;
-  border-color: #4f9cf9;
-}
-
-.modern .carousel-nav-btn svg {
-  color: #043873;
-}
-
 /* ============================================
-   SECTION 4: WELCOME TO MEDISYNC
+   SECTION 4: WELCOME
 ============================================ */
 .modern .welcome-block {
   position: relative;
   background: #f0f4f8;
   overflow: hidden;
-  padding: 100px 0;
 }
 
-/* Medical Cross Pattern - Scattered Throughout */
-.modern .welcome-block::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: 
-    url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><g opacity="0.15"><path d="M20,10 L20,24 L34,24 L34,36 L20,36 L20,50 L8,50 L8,36 L-6,36 L-6,24 L8,24 L8,10 Z" fill="%23B8C5D0"/></g></svg>'),
-    url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><g opacity="0.12"><path d="M15,8 L15,18 L25,18 L25,28 L15,28 L15,38 L5,38 L5,28 L-5,28 L-5,18 L5,18 L5,8 Z" fill="%23D0D8E0"/></g></svg>'),
-    url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><g opacity="0.18"><path d="M25,12 L25,28 L41,28 L41,44 L25,44 L25,60 L9,60 L9,44 L-7,44 L-7,28 L9,28 L9,12 Z" fill="%23A8B8C8"/></g></svg>');
-  background-position: 
-    10% 15%,
-    85% 20%,
-    15% 75%;
-  background-repeat: no-repeat;
-  background-size: 80px 80px, 60px 60px, 100px 100px;
-  z-index: 0;
-}
-
-/* Additional cross decorations */
+/* SVG Patterns */
+.modern .welcome-block::before,
 .modern .welcome-block::after {
   content: "";
   position: absolute;
@@ -460,35 +364,10 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: 
-    url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><g opacity="0.1"><path d="M18,10 L18,22 L30,22 L30,34 L18,34 L18,46 L6,46 L6,34 L-6,34 L-6,22 L6,22 L6,10 Z" fill="%23C0CCD8"/></g></svg>'),
-    url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><g opacity="0.14"><path d="M22,14 L22,26 L34,26 L34,38 L22,38 L22,50 L10,50 L10,38 L-2,38 L-2,26 L10,26 L10,14 Z" fill="%23B0BCC8"/></g></svg>'),
-    url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><g opacity="0.16"><path d="M16,6 L16,20 L30,20 L30,34 L16,34 L16,48 L2,48 L2,34 L-12,34 L-12,20 L2,20 L2,6 Z" fill="%23D8E0E8"/></g></svg>');
-  background-position: 
-    90% 80%,
-    75% 40%,
-    25% 30%;
-  background-repeat: no-repeat;
-  background-size: 70px 70px, 90px 90px, 75px 75px;
   z-index: 0;
 }
 
-.modern .welcome-block .top {
-  height: 0;
-  display: none;
-}
-
-.modern .welcome-block .bottom {
-  background: transparent;
-  clip-path: none;
-  margin-top: 0;
-  padding: 0;
-  min-height: auto;
-  position: relative;
-  z-index: 1;
-}
-
-.modern .hero-section {
+.modern .welcome-block .hero-section {
   text-align: center;
   max-width: 900px;
   margin: 0 auto;
@@ -501,19 +380,12 @@
   width: 120px;
   height: 120px;
   margin: 0 auto 30px;
-  position: relative;
-  z-index: 2;
-  filter: none;
-}
-
-/* Logo with ECG line - using CSS */
-.modern .bottom-logo {
   background: #043873;
   border-radius: 8px;
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 
 .modern .bottom-logo::after {
@@ -555,8 +427,6 @@
   line-height: 1.2;
   margin: 20px 0 30px;
   color: #043873;
-  position: relative;
-  z-index: 2;
 }
 
 .modern .hero-desc {
@@ -566,8 +436,6 @@
   color: #666;
   line-height: 1.6;
   text-align: center;
-  position: relative;
-  z-index: 2;
 }
 
 .modern .hero-btn {
@@ -580,26 +448,14 @@
   font-size: 1.1rem;
   box-shadow: 0 10px 30px rgba(79, 156, 249, 0.3);
   transition: all 0.3s ease;
-  position: relative;
-  z-index: 2;
-}
-
-.modern .hero-btn:hover {
-  background: #3a7dd9;
-  transform: translateY(-5px);
-  box-shadow: 0 20px 40px rgba(79, 156, 249, 0.4);
 }
 
 /* ============================================
-   SECTION 5: CONNECT WITH US / CONTACT
+   SECTION 5: CONTACT
 ============================================ */
 .modern .contact-block {
   background: white;
   padding: 100px 0;
-}
-
-.modern .contact-section {
-  background: transparent;
 }
 
 .modern .contact-section h2 {
@@ -608,45 +464,17 @@
   color: #043873;
   margin-bottom: 60px;
   text-align: center;
-  position: relative;
-  display: inline-block;
-  width: 100%;
-}
-
-.modern .contact-section h2 .text-primary2 {
-  color: #043873;
-  position: relative;
-}
-
-.modern .contact-section h2::after {
-  content: "";
-  display: block;
-  width: 200px;
-  height: 4px;
-  background: #ffe492;
-  margin: 15px auto 0;
-  border-radius: 2px;
 }
 
 .modern .contact-info {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  background: transparent;
-  border-radius: 0;
-  box-shadow: none;
-  padding: 0;
-}
-
-.modern .contact-info h2 {
-  display: none;
 }
 
 .modern .info-item {
   background: #e8eef3;
-  margin-bottom: 0;
   padding: 25px 30px;
-  border-bottom: none;
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -663,7 +491,6 @@
   color: #043873;
   font-weight: 700;
   font-size: 1.15rem;
-  margin-bottom: 0;
   flex: 0 0 auto;
   min-width: 100px;
 }
@@ -671,7 +498,6 @@
 .modern .info-item p {
   color: #333;
   font-size: 1rem;
-  margin: 0;
   flex: 1;
 }
 
@@ -679,7 +505,6 @@
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 8px 25px rgba(0,0,0,0.12);
-  height: 100%;
   min-height: 450px;
   border: 2px solid #e3e8ef;
 }
@@ -693,115 +518,172 @@
 /* ============================================
    RESPONSIVE DESIGN
 ============================================ */
+@media (max-width: 1200px) {
+  .modern .home-left {
+    right: 30px;
+    padding: 60px;
+  }
+}
+
 @media (max-width: 992px) {
   .modern .home-left {
     text-align: center;
-    padding-right: 0;
-    margin: 0 auto;
+    right: 0;
+    transform: translateY(-50%);
+    padding: 40px 20px;
     max-width: 100%;
-  }
-
-  .modern .home-left h1 {
-    text-align: center;
-    font-size: 2.5rem;
-  }
-
-  .modern .home-left p {
-    text-align: center;
+    align-items: center;
   }
 
   .modern .home-right {
-    position: relative;
     height: 400px;
-    margin-top: 30px;
   }
 
-  .modern .hero-title {
-    font-size: 2.5rem;
-  }
-
-  .modern .news-title1 {
-    font-size: 2.2rem;
-  }
-
-  .modern .services-header h2 {
-    font-size: 2.2rem;
-  }
-
-  .modern .contact-section h2 {
-    font-size: 2.2rem;
-  }
+  .modern .hero-title { font-size: 2.5rem; }
+  .modern .news-title1 { font-size: 2.2rem; }
+  .modern .services-header h2 { font-size: 2.2rem; }
+  .modern .contact-section h2 { font-size: 2.2rem; }
 }
 
 @media (max-width: 768px) {
-  .modern .home-section {
-    min-height: 500px;
-  }
-
-  .modern .home-section .container {
-    padding: 40px 15px;
-  }
-
-  .modern .home-left h1 {
-    font-size: 2rem;
-  }
-
-  .modern .home-left p {
-    font-size: 1rem;
-  }
-
+  .modern .home-section { min-height: 500px; }
+  .modern .home-left h1 { font-size: 2rem; }
+  .modern .home-left p { font-size: 1rem; }
   .modern .home-btn,
-  .modern .doc-btn {
-    width: 100%;
-    margin: 8px 0;
-    justify-content: center;
-  }
-
-  .modern .hero-title {
-    font-size: 2rem;
-  }
-
-  .modern .hero-desc {
-    font-size: 1rem;
-  }
-
-  .modern .services-block,
-  .modern .announcements-block,
-  .modern .contact-block {
-    padding: 60px 0;
-  }
-
-  .modern .welcome-block .bottom {
-    padding: 80px 15px;
-  }
-
-  .modern .service-card {
-    padding: 30px 20px;
-  }
-
-  .modern .contact-info {
-    argin-bottom: 30px;
-  }
+  .modern .doc-btn { width: 100%; margin: 8px 0; justify-content: center; }
+  .modern .hero-title { font-size: 2rem; }
+  .modern .hero-desc { font-size: 1rem; }
+ 
 }
 
-@media (max-width: 576px) {
-  .modern .home-section {
-    min-heightpadding: 30px 20px;
-    m: 400px;
-  }
+.modern .announcements-block {
+  padding: 60px 20px;
+  background-color: #f5f7fa;
+}
 
-  .modern .services-header h2,
-  .modern .news-title1,
-  .modern .contact-section h2 {
-    font-size: 1.8rem;
-  }
+.modern .announcements-header h2 {
+  font-family: 'Inter', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 40px;
+  color: #043873;
+}
 
-  .modern .hero-title {
-    font-size: 1.75rem;
-  }
+.modern .announcements-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
 
-  .modern .welcome-text {
-    font-size: 0.85rem;
-    letter-spacing: 2px;
-  }
+.modern .news-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+  transition: transform 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.modern .news-card.featured {
+  grid-column: span 2;
+}
+
+.modern .news-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+}
+
+.modern .news-image img {
+  width: 100%;
+  border-radius: 15px;
+  object-fit: cover;
+}
+
+.modern .news-heading {
+  font-weight: 700;
+  font-size: 1.2rem;
+  margin: 12px 0;
+  color: #043873;
+}
+
+.modern .news-date {
+  font-size: 0.85rem;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.modern .news-desc {
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.5;
+  flex-grow: 1;
+}
+
+.modern .news-btn, .modern .all-news-btn {
+  background-color: #4f9cf9;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.modern .news-btn:hover, .modern .all-news-btn:hover {
+  background-color: #3a7dd9;
+}
+
+/* --- Hero Section --- */
+.modern .welcome-block {
+  background-color: #e8f0fb;
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.modern .bottom-logo {
+  width: 90px;
+  margin-bottom: 20px;
+}
+
+.modern .welcome-text {
+  color: #043873;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+}
+
+.modern .hero-title {
+  font-family: "EB Garamond", serif;
+  font-size: 2.5rem;
+  font-style: italic;
+  color: #043873;
+  margin-bottom: 20px;
+}
+
+.modern .hero-desc {
+  font-size: 1rem;
+  max-width: 700px;
+  margin: 0 auto 30px;
+  line-height: 1.6;
+  color: #555;
+}
+
+.modern .hero-btn {
+  background-color: #4f9cf9;
+  color: #fff;
+  padding: 12px 30px;
+  border-radius: 50px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.modern .hero-btn:hover {
+  background-color: #3a7dd9;
 }

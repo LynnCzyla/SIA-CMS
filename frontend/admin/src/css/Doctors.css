@@ -218,6 +218,8 @@
   cursor: pointer;
   transition: all 0.2s ease;
   border: none;
+  justify-content: center;
+  width: 200px;
 }
 
 .btn-search {
