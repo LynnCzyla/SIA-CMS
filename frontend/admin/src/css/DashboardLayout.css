@@ -69,7 +69,7 @@
   margin-bottom: 0px;
   font-size: 1.3rem;
   font-weight: 600;
-  color: #333;
+  color: #fff;
 }
 
 /* ===== Navbar Right (Notifications + Profile) ===== */
@@ -162,8 +162,7 @@
   gap: 12px;
   padding: 20px;
   align-items: center;
-  background: linear-gradient(135deg, var(--primary-color2, #667eea) 0%, var(--primary-color) 100%);
-  border-radius: 12px 12px 0 0;
+background-color: var(--primary-color);  border-radius: 12px 12px 0 0;
   color: white;
 }
 
@@ -176,12 +175,14 @@
   font-size: 1rem;
   font-weight: 600;
   margin: 0 0 4px 0;
+  color: #fff;
 }
 
 .dropdown-email {
   font-size: 0.8rem;
   opacity: 0.9;
   margin: 0 0 8px 0;
+  color: #fff;
 }
 
 .role-badge {
@@ -207,7 +208,7 @@
   gap: 10px;
   width: 100%;
   padding: 14px 20px;
-  margin: 5px;
+  margin: 10px;
   background: transparent;
   border: none;
   text-align: left;
@@ -215,6 +216,7 @@
   color: #333;
   cursor: pointer;
   transition: background 0.2s ease;
+  margin-left: 20px;
 }
 
 .dropdown-item:hover {
@@ -292,4 +294,65 @@
   .profile-dropdown {
     right: -20px;
   }
+}
+
+/* ========== PROFILE DROPDOWN UPDATED STYLING ========== */
+
+.profile-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 280px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  animation: slideDown 0.3s ease;
+  margin-right: 23px;
+}
+
+.profile-dropdown-header {
+  display: flex;
+  gap: 12px;
+  padding: 20px;
+  align-items: center;
+background-color: var(--primary-color);
+  border-radius: 12px 12px 0 0;
+  color: white;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 20px;
+  margin: 5px 0;
+  background: transparent;
+  border: none;
+  text-align: left;
+  font-size: 0.95rem;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+.dropdown-item:hover {
+  background: #f0f4ff;
+  color: #0056d6;
+}
+
+.dropdown-icon-left {
+  font-size: 1.1rem;
+  color: #007bff;
+  margin: 20px;
+}
+
+.logout-btn {
+  color: #d62828;
+}
+
+.logout-btn:hover {
+  background: #ffe8e8;
+  color: #b41f1f;
 }

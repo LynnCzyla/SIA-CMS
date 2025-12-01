@@ -1,5 +1,5 @@
 // frontend/src/pages/Analytics.jsx
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
 import axios from "axios";
 import {
   FaGlobe,
@@ -18,7 +18,7 @@ import "../css/Analytics.css";
 
 const Analytics = () => {
   const [chartType, setChartType] = useState("line");
-  const [period, setPeriod] = useState("weekly"); // default to weekly
+  const [period, setPeriod] = useState("weekly");
   const [weeklyData, setWeeklyData] = useState({ categories: [], series: [] });
   const [monthlyData, setMonthlyData] = useState({ categories: [], series: [] });
   const chartRef = useRef(null);
@@ -29,43 +29,43 @@ const Analytics = () => {
   const [dateStart, setDateStart] = useState("");
   const [dateEnd, setDateEnd] = useState("");
 
-  const [websiteVisits] = useState();
-  const [homePageClicks] = useState();
-  
-
   const [visitLogs, setVisitLogs] = useState([]);
+
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   useEffect(() => {
     const fetchWeekly = async () => {
       try {
         const res = await axios.get("http://localhost:5000/api/track/weekly");
-  
+
         const categoriesSet = new Set();
         const pageMap = {};
-  
+
         res.data.forEach(item => {
           const date = item.date;
           const page = item.page_name;
           const total = Number(item.total);
-  
+
           categoriesSet.add(date);
           if (!pageMap[page]) pageMap[page] = {};
           pageMap[page][date] = total;
         });
-  
+
         const categories = Array.from(categoriesSet).sort();
         const series = Object.entries(pageMap).map(([page, data]) => ({
           name: page,
           data: categories.map(date => data[date] || 0)
         }));
-  
+
         setWeeklyData({ categories, series });
       } catch (err) {
         console.error("Error fetching weekly data:", err);
         setWeeklyData({ categories: [], series: [] });
       }
     };
-  
+
     fetchWeekly();
   }, []);
 
@@ -73,47 +73,46 @@ const Analytics = () => {
     const fetchMonthly = async () => {
       try {
         const res = await axios.get("http://localhost:5000/api/track/monthly");
-  
+
         const categoriesSet = new Set();
         const pageMap = {};
-  
+
         res.data.forEach(item => {
           const date = item.date;
           const page = item.page_name;
           const total = Number(item.total);
-  
+
           categoriesSet.add(date);
           if (!pageMap[page]) pageMap[page] = {};
           pageMap[page][date] = total;
         });
-  
+
         const categories = Array.from(categoriesSet).sort();
         const series = Object.entries(pageMap).map(([page, data]) => ({
           name: page,
           data: categories.map(date => data[date] || 0)
         }));
-  
+
         setMonthlyData({ categories, series });
       } catch (err) {
         console.error("Error fetching monthly data:", err);
         setMonthlyData({ categories: [], series: [] });
       }
     };
-  
+
     fetchMonthly();
   }, []);
-  
 
   useEffect(() => {
     const fetchPageViews = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/track"); // match backend
+        const res = await axios.get("http://localhost:5000/api/track");
         const logsFromDB = res.data.map((row, index) => ({
           id: index + 1,
           page: row.page_name,
-          clicks: Number(row.visit_count), // ensure numeric
+          clicks: Number(row.visit_count),
           datetime: row.view_date,
-        }));        
+        }));
         setVisitLogs(logsFromDB);
       } catch (err) {
         console.error("Error fetching page views:", err);
@@ -122,22 +121,19 @@ const Analytics = () => {
     };
     fetchPageViews();
   }, []);
-  
-  
 
-  // ===========================
-  // FIXED: Page counts for stat cards
-  // ===========================
-  const pageCounts = visitLogs.reduce((acc, log) => {
-    acc[log.page] = (acc[log.page] || 0) + log.clicks;
-    return acc;
-  }, {});
+  // Compute page counts for stat cards
+  const pageCounts = useMemo(() => {
+    return visitLogs.reduce((acc, log) => {
+      acc[log.page] = (acc[log.page] || 0) + log.clicks;
+      return acc;
+    }, {});
+  }, [visitLogs]);
 
-  // ===========================
-  // FIXED: statsCards (dynamic from pageCounts)
-  // ===========================
+  const totalVisits = visitLogs.reduce((sum, log) => sum + log.clicks, 0);
+
   const statsCards = [
-    { Icon: FaGlobe, count: visitLogs.reduce((t, l) => t + l.clicks, 0), label: "Total Website Clicks" },
+    { Icon: FaGlobe, count: totalVisits, label: "Total Website Clicks" },
     { Icon: FaHome, count: pageCounts["/"] || 0, label: "Home Page Clicks" },
     { Icon: FaSmile, count: pageCounts["/services"] || 0, label: "Services Page Clicks" },
     { Icon: FaUserMd, count: pageCounts["/doctors"] || 0, label: "Doctors Page Clicks" },
@@ -149,61 +145,43 @@ const Analytics = () => {
     { Icon: FaPhone, count: pageCounts["/contact"] || 0, label: "Contact Page Clicks" },
   ];
 
-
   const getMainChartData = () => {
     if (period === "weekly") {
-      // Aggregate by weekday
-      const weekdays = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+      const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
       const weeklyCounts = Array(7).fill(0);
-  
+
       visitLogs.forEach(log => {
         const d = new Date(log.datetime);
-        const dayIndex = d.getDay(); // 0=Sun ... 6=Sat
+        const dayIndex = d.getDay();
         weeklyCounts[dayIndex] += log.clicks;
       });
-  
-      return {
-        categories: weekdays,
-        series: [{ name: "Website Visits", data: weeklyCounts }],
-      };
+
+      return { categories: weekdays, series: [{ name: "Website Visits", data: weeklyCounts }] };
     } else {
-      // Aggregate by month
-      const months = [
-        "January","February","March","April","May","June",
-        "July","August","September","October","November","December"
-      ];
+      const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
       const monthlyCounts = Array(12).fill(0);
-  
+
       visitLogs.forEach(log => {
         const d = new Date(log.datetime);
-        const monthIndex = d.getMonth(); // 0=Jan ... 11=Dec
+        const monthIndex = d.getMonth();
         monthlyCounts[monthIndex] += log.clicks;
       });
-  
-      return {
-        categories: months,
-        series: [{ name: "Website Visits", data: monthlyCounts }],
-      };
+
+      return { categories: months, series: [{ name: "Website Visits", data: monthlyCounts }] };
     }
   };
-  
-  
-  
-  
 
-  // ===========================
-  // MAIN CHART RENDER
-  // ===========================
+  // Main Chart Rendering
   useEffect(() => {
     if (chartInstanceRef.current) {
       try { chartInstanceRef.current.destroy(); } catch {}
       chartInstanceRef.current = null;
     }
-  
+
     const mainData = getMainChartData();
-  
+
     let options = {};
-  
+
     if (chartType === "pie") {
       options = {
         chart: { type: "pie", height: 420, background: "transparent" },
@@ -212,9 +190,7 @@ const Analytics = () => {
         colors: ["#4f9cf9", "#60a5fa", "#7dd3fc", "#93c5fd", "#bae6fd", "#bfdbfe"],
         tooltip: { theme: "light" },
         legend: { position: "bottom" },
-        responsive: [
-          { breakpoint: 480, options: { chart: { height: 300 }, legend: { position: "bottom" } } }
-        ]
+        responsive: [{ breakpoint: 480, options: { chart: { height: 300 }, legend: { position: "bottom" } } }]
       };
     } else {
       options = {
@@ -230,24 +206,22 @@ const Analytics = () => {
         grid: { borderColor: "#eef2ff", strokeDashArray: 4 }
       };
     }
-  
+
     const el = document.querySelector("#main-analytics-chart");
-    chartInstanceRef.current = new ApexCharts(el, options);
-    chartInstanceRef.current.render();
-  
+    if (el) {
+      chartInstanceRef.current = new ApexCharts(el, options);
+      chartInstanceRef.current.render();
+    }
+
     return () => {
       if (chartInstanceRef.current) {
         try { chartInstanceRef.current.destroy(); } catch {}
         chartInstanceRef.current = null;
       }
     };
-  }, [chartType, period, visitLogs]);  
-  
-  
+  }, [chartType, period, visitLogs]);
 
-  // ===========================
-  // Mini sparklines
-  // ===========================
+  // Mini Sparklines
   useEffect(() => {
     if (chartRef.current) {
       chartRef.current.forEach((c) => {
@@ -271,23 +245,36 @@ const Analytics = () => {
     });
   }, [visitLogs]);
 
-  // ===========================
-  // Tables & Filters
-  // ===========================
-  const filteredLogs = visitLogs
-    .filter((log) => (selectedPage === "all" ? true : log.page === selectedPage))
-    .filter((log) => {
-      if (!dateStart && !dateEnd) return true;
-      if (dateStart && !dateEnd) return log.datetime >= dateStart;
-      if (!dateStart && dateEnd) return log.datetime <= dateEnd;
-      return log.datetime >= dateStart && log.datetime <= dateEnd;
-    })
-    .sort((a, b) => (sortOrder === "asc" ? a.clicks - b.clicks : b.clicks - a.clicks));
+  // Filtered + Sorted + Paginated Logs
+  const filteredAndSortedLogs = useMemo(() => {
+    let filtered = visitLogs
+      .filter((log) => (selectedPage === "all" ? true : log.page === selectedPage))
+      .filter((log) => {
+        if (!dateStart && !dateEnd) return true;
+        if (dateStart && !dateEnd) return log.datetime >= dateStart;
+        if (!dateStart && dateEnd) return log.datetime <= dateEnd;
+        return log.datetime >= dateStart && log.datetime <= dateEnd;
+      })
+      .sort((a, b) => (sortOrder === "asc" ? a.clicks - b.clicks : b.clicks - a.clicks));
+
+    return filtered;
+  }, [visitLogs, selectedPage, dateStart, dateEnd, sortOrder]);
+
+  const totalItems = filteredAndSortedLogs.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const paginatedLogs = filteredAndSortedLogs.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   const prettifyNumber = (n) => {
     if (n >= 1000000) return (n / 1000000).toFixed(1) + "M";
     if (n >= 1000) return (n / 1000).toFixed(1) + "K";
     return n;
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   return (
@@ -332,7 +319,6 @@ const Analytics = () => {
 
               <div className="sparkline-row">
                 <div className="stat-sparkline" />
-                {card.link && <a className="view-link" href={card.link} target="_blank">View</a>}
               </div>
             </div>
           );
@@ -349,11 +335,11 @@ const Analytics = () => {
           <div className="chart-controls">
             <div className="chart-stats-inline">
               <div className="mini-stat">
-                <span className="mini-value">{prettifyNumber(websiteVisits)}</span>
+                <span className="mini-value">{prettifyNumber(totalVisits)}</span>
                 <small>visits</small>
               </div>
               <div className="mini-stat">
-                <span className="mini-value">{prettifyNumber(homePageClicks)}</span>
+                <span className="mini-value">{prettifyNumber(pageCounts["/"] || 0)}</span>
                 <small>home clicks</small>
               </div>
             </div>
@@ -366,7 +352,7 @@ const Analytics = () => {
           <h4>Recent Visit Logs</h4>
 
           <div className="logs-toolbar">
-            <select value={selectedPage} onChange={(e) => setSelectedPage(e.target.value)}>
+            <select value={selectedPage} onChange={(e) => { setSelectedPage(e.target.value); setCurrentPage(1); }}>
               <option value="all">All Pages</option>
               <option value="/">Home</option>
               <option value="/services">Services</option>
@@ -379,12 +365,12 @@ const Analytics = () => {
               <option value="/contact">Contact</option>
             </select>
 
-            <input type="date" value={dateStart} onChange={(e) => setDateStart(e.target.value)} />
-            <input type="date" value={dateEnd} onChange={(e) => setDateEnd(e.target.value)} />
+            <input type="date" value={dateStart} onChange={(e) => { setDateStart(e.target.value); setCurrentPage(1); }} />
+            <input type="date" value={dateEnd} onChange={(e) => { setDateEnd(e.target.value); setCurrentPage(1); }} />
 
             <div className="toolbar-right">
-              <button onClick={() => setSortOrder("desc")} className={sortOrder === "desc" ? "active" : ""}>Sort ↓</button>
-              <button onClick={() => setSortOrder("asc")} className={sortOrder === "asc" ? "active" : ""}>Sort ↑</button>
+              <button onClick={() => setSortOrder("desc")} className={sortOrder === "desc" ? "active" : ""}>Sort Down</button>
+              <button onClick={() => setSortOrder("asc")} className={sortOrder === "asc" ? "active" : ""}>Sort Up</button>
             </div>
           </div>
 
@@ -398,22 +384,55 @@ const Analytics = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredLogs.length ? (
-                filteredLogs.map((log) => (
+              {paginatedLogs.length ? (
+                paginatedLogs.map((log, index) => (
                   <tr key={log.id}>
-                    <td>{log.id}</td>
+                    <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>
                     <td>{log.page}</td>
                     <td>{log.clicks}</td>
-                    <td>{log.datetime}</td>
+                    <td>{new Date(log.datetime).toLocaleDateString()}</td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan="4" style={{ textAlign: "center" }}>No logs found for selected filters.</td>
+                  <td colSpan="4" style={{ textAlign: "center", padding: "20px" }}>
+                    No logs found for selected filters.
+                  </td>
                 </tr>
               )}
             </tbody>
           </table>
+
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="pagination-controls">
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
+                Previous
+              </button>
+
+              <div className="page-numbers">
+                {[...Array(totalPages)].map((_, i) => (
+                  <button
+                    key={i + 1}
+                    onClick={() => handlePageChange(i + 1)}
+                    className={currentPage === i + 1 ? "active" : ""}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+              </div>
+
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+              >
+                Next
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

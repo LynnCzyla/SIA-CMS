@@ -15,9 +15,32 @@ const SearchIcon = () => (
   </svg>
 );
 
+// Function to remove HTML tags and limit text
+const cleanDescription = (html, maxLength = 100) => {
+  if (!html) return "No description available";
+  
+  // Remove HTML tags
+  const text = html.replace(/<[^>]*>/g, '');
+  
+  // Limit length and add ellipsis if needed
+  if (text.length > maxLength) {
+    return text.substring(0, maxLength) + '...';
+  }
+  
+  return text;
+};
+
+// Function to get placeholder image
+const getPlaceholderImage = (serviceName) => {
+  const colors = ['#4f9cf9', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
+  const colorIndex = serviceName.length % colors.length;
+  return `https://via.placeholder.com/400x200/${colors[colorIndex].replace('#', '')}/ffffff?text=${encodeURIComponent(serviceName)}`;
+};
+
 export default function Services() {
   const [searchTerm, setSearchTerm] = useState("");
   const [services, setServices] = useState([]);
+  const [imageErrors, setImageErrors] = useState({});
 
   const topServices = [
     { id: 1, icon: '/Psychiatry.png', name: 'Psychiatry' },
@@ -54,6 +77,12 @@ export default function Services() {
       s.short_title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       s.full_title?.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  // Handle image loading errors
+  const handleImageError = (serviceId) => {
+    console.log(`Image failed to load for service ${serviceId}`);
+    setImageErrors(prev => ({ ...prev, [serviceId]: true }));
+  };
 
   return (
     <div className="services-page">

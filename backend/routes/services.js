@@ -74,18 +74,24 @@ router.post("/", upload.single("image"), (req, res) => {
 // -----------------------------
 // GET ALL PUBLISHED SERVICES
 // -----------------------------
+// GET ALL PUBLISHED SERVICES
+// -----------------------------
 router.get("/", (req, res) => {
   const sql = "SELECT * FROM services WHERE status='published' ORDER BY created_at DESC";
 
   db.query(sql, (err, results) => {
     if (err) return res.status(500).json({ success: false, message: err.sqlMessage });
 
-    res.json(
-      results.map((r) => ({
-        ...r,
-        image_url: r.image ? `http://localhost:5000/uploads/services/${r.image}` : null,
-      }))
-    );
+    // Add full URL for images
+    const servicesWithUrls = results.map((r) => ({
+      ...r,
+      image_url: r.image ? `http://localhost:5000/uploads/services/${r.image}` : null,
+    }));
+    
+    console.log("Returning services:", servicesWithUrls.length);
+    console.log("First service image_url:", servicesWithUrls[0]?.image_url);
+    
+    res.json(servicesWithUrls);
   });
 });
 
