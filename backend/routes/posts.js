@@ -1,4 +1,4 @@
-// routes/posts.js
+// backend/routes/posts.js
 import express from "express";
 import db from "../src/db.js";
 import multer from "multer";
@@ -35,7 +35,7 @@ const getUpload = (category) => {
 };
 
 /* --------------------------------------------------
-   ⚠️ LOGS ROUTE MUST COME FIRST
+  ⚠️ LOGS ROUTE MUST COME FIRST
 -------------------------------------------------- */
 router.get("/logs/all", (req, res) => {
   const sql = `SELECT * FROM post_logs ORDER BY created_at DESC`;
@@ -46,7 +46,7 @@ router.get("/logs/all", (req, res) => {
 });
 
 /* --------------------------------------------------
-   GET ALL POSTS (UNION)
+  GET ALL POSTS (UNION)
 -------------------------------------------------- */
 router.get("/", (req, res) => {
   const sql = `
@@ -68,7 +68,7 @@ router.get("/", (req, res) => {
 });
 
 /* --------------------------------------------------
-   GET SINGLE POST
+  GET SINGLE POST
 -------------------------------------------------- */
 router.get("/:category/:id", (req, res) => {
   const { category, id } = req.params;
@@ -83,7 +83,7 @@ router.get("/:category/:id", (req, res) => {
 });
 
 /* --------------------------------------------------
-   CREATE POST
+  CREATE POST
 -------------------------------------------------- */
 router.post("/:category", (req, res) => {
   const { category } = req.params;
