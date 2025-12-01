@@ -32,10 +32,11 @@ export default function Dashboard() {
     fetch("http://localhost:5000/api/posts")
       .then(res => res.json())
       .then(data => {
-        setPublishedCount(data.filter(p => p.status === "published").length);
-        setDraftCount(data.filter(p => p.status === "draft").length);
-      });
-  }, []);
+       const normalize = (s) => (s || "").toLowerCase().trim();
+
+       setPublishedCount(data.filter(p =>["published", "posted"].includes(normalize(p.status))).length);
+
+        setDraftCount(data.filter(p => normalize(p.status) === "draft").length);});}, []);
 
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date()), 1000);
@@ -67,7 +68,8 @@ export default function Dashboard() {
 
         const home = data
           .filter(i => i.page_name === "/")
-          .reduce((a, b) => a + b.visit_count, 0);
+          .reduce((a, b) => a + Number(b.visit_count), 0);
+
 
         setHomeVisits(home);
       });
@@ -83,7 +85,8 @@ export default function Dashboard() {
         xaxis: { categories: chartCategories },
         series: chartSeries,
         colors: chartColors,
-        stroke: { curve: "smooth", width: 3 }
+        stroke: { curve: "smooth", width: 3 },
+        legend: { show: false }
       }
     );
 

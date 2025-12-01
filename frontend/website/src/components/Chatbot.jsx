@@ -12,41 +12,48 @@ function Chatbot() {
   const [input, setInput] = useState("");
   const messagesEndRef = useRef(null);
 
+  // Generate a unique userId per browser session
+  const [userId, setUserId] = useState("");
+
+  useEffect(() => {
+    let id = sessionStorage.getItem("lunaxUserId");
+    if (!id) {
+      id = crypto.randomUUID(); // generate a random ID
+      sessionStorage.setItem("lunaxUserId", id);
+    }
+    setUserId(id);
+  }, []);
+
   // Scrolls to bottom on message update
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   const handleSend = async () => {
-  if (!input.trim()) return;
-
-  const userText = input.trim();
-  const userMsg = { sender: "user", text: userText };
-  setMessages(prev => [...prev, userMsg]);
-
-  setInput("");
-
-  try {
-    const response = await fetch("http://localhost:5000/api/chatbot-gemini", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message: userText }),
-  });
-
-    const data = await response.json();
-
-    setMessages(prev => [
-      ...prev,
-      { sender: "bot", text: data.reply }
-    ]);
-  } catch (error) {
-    setMessages(prev => [
-      ...prev,
-      { sender: "bot", text: "❌ Error: Unable to reach Lunax server." }
-    ]);
-  }
-};
-
+    if (!input.trim()) return;
+  
+    const userText = input.trim();
+    const userMsg = { sender: "user", text: userText };
+    setMessages(prev => [...prev, userMsg]);
+    setInput("");
+  
+    try {
+      const response = await fetch("http://localhost:5000/api/chatbot-groq", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: userText, userId }),
+      });
+  
+      const data = await response.json();
+      setMessages(prev => [...prev, { sender: "bot", text: data.reply }]);
+  
+    } catch (error) {
+      setMessages(prev => [
+        ...prev,
+        { sender: "bot", text: "❌ Error: Unable to reach Lunax server." }
+      ]);
+    }
+  };  
 
   return (
     <div className="chatbot-container">
