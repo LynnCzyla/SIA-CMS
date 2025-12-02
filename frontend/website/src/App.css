@@ -92,7 +92,7 @@ html {
 }
 
 body {
-  padding-top: 110px; /* Prevents content hiding behind fixed header */
+  padding-top: 100px; /* Prevents content hiding behind fixed header */
 }
 
 

@@ -180,7 +180,7 @@ const AppointmentModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="appointment-modal-overlay">
+<div className={`appointment-modal-overlay ${isOpen ? "show" : ""}`}>
       <div className="appointment-modal-container-wide">
         <div className="appointment-modal-header-blue">
           <h2 className="appointment-modal-title-white">Schedule Appointment</h2>

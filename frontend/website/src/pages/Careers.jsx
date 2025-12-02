@@ -220,7 +220,6 @@ const Careers = () => {
         )}
       </div>
 
-      <Chatbot />
     </div>
     </div>
   );

@@ -106,15 +106,19 @@ function Navbar() {
           </li>
         </ul>
 
-        {/* Book Appointment Button */}
-        <button className="book-btn" onClick={() => setModalOpen(true)}>
-          Book an Appointment
-        </button>
-      </nav>
+{/* Book Appointment Button */}
+<button className="book-btn" onClick={() => setModalOpen(true)}>
+  Book an Appointment
+</button>
 
-      {/* Appointment Modal */}
-      <AppointmentModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
-    </div>
+</nav>
+
+{/* Appointment Modal */}
+<AppointmentModal
+  isOpen={modalOpen}
+  onClose={() => setModalOpen(false)}
+/>
+</div>
   );
 }
 

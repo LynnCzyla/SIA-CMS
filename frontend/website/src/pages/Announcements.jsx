@@ -114,7 +114,6 @@ const Announcements = () => {
             ))}
       </div>
 
-      <Chatbot />
     </div>
     </div>
   );
