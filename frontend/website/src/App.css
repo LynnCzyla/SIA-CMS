@@ -26,6 +26,63 @@
   --text-color: #1a1a1a;
 }
 
+/* ================================
+   GLOBAL PAGE TRANSITION WRAPPER
+   ================================ */
+.page-transition {
+  opacity: 0;
+  transform: translateY(10px) scale(0.98);
+  animation: pageFadeIn 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: opacity, transform;
+}
+
+/* Main fade + motion */
+@keyframes pageFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(14px) scale(0.97);
+    filter: blur(4px);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(0px) scale(1);
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px) scale(1);
+  }
+}
+
+/* ================================
+   CHILD ELEMENT STAGGER
+   ================================ */
+.page-transition > * {
+  opacity: 0;
+  animation: childFadeUp 0.55s ease forwards;
+  animation-delay: 0.15s;
+  will-change: opacity, transform;
+}
+
+@keyframes childFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ================================
+   OPTIONAL — ELEMENTS ENTER STAGGER
+   ================================ */
+.page-transition > *:nth-child(1) { animation-delay: 0.15s; }
+.page-transition > *:nth-child(2) { animation-delay: 0.22s; }
+.page-transition > *:nth-child(3) { animation-delay: 0.29s; }
+.page-transiti
+
 body {
   transition: all 0.3s ease-in-out;
 }

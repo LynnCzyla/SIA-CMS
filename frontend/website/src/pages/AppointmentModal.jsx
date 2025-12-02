@@ -1,4 +1,4 @@
-// src/components/PatientRegistrationModal.jsx
+// src/components/AppointmentModal.jsx
 
 import { useState, useEffect } from "react";
 import { MdClose } from "react-icons/md";
@@ -9,17 +9,49 @@ const AppointmentModal = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
-    age: "",
-    gender: "",
-    phoneNumber: "",
-    emailAddress: "",
-    address: "",
-    password: "",
+    doctor: "",
+    appointmentDate: "",
+    appointmentTime: "",
+    appointmentType: "Consultation",
+    specifyType: "",
+    notes: "",
   });
 
+  const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+
+  // Load doctors when modal opens
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const loadDoctors = async () => {
+      try {
+        const res = await axios.get(
+          "http://147.185.221.27:34249/Group-4-SIA-EMS/api/api.php?module=employee&filter_doctors=1"
+        );
+
+        const doctorList = res.data.map((doc) => ({
+          id: Number(doc.employeeID),
+          name: `Dr. ${doc.firstName} ${doc.lastName}`,
+        }));
+
+        setDoctors(doctorList);
+      } catch (err) {
+        console.error("Failed to load doctors:", err);
+        // Fallback doctors
+        setDoctors([
+          { id: 1, name: "Dr. Andrea Orel Valle" },
+          { id: 2, name: "Dr. Eileen Liesl Cubillan" },
+          { id: 3, name: "Dr. Patricia Maningat" },
+          { id: 4, name: "Dr. Evelyn Paraan" },
+        ]);
+      }
+    };
+
+    loadDoctors();
+  }, [isOpen]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -32,21 +64,29 @@ const AppointmentModal = ({ isOpen, onClose }) => {
     setError("");
     setSuccess(false);
 
+    const finalType =
+      formData.appointmentType === "Other" && formData.specifyType.trim()
+        ? formData.specifyType.trim()
+        : formData.appointmentType;
+
+    const doctorObj = doctors.find((d) => d.id === Number(formData.doctor));
+
     const payload = {
-      action: "register_patient",
-      first_name: formData.firstName.trim(),
-      last_name: formData.lastName.trim(),
-      age: Number(formData.age),
-      gender: formData.gender,
-      phone_number: formData.phoneNumber.trim(),
-      email_address: formData.emailAddress.trim(),
-      address: formData.address.trim(),
-      password: formData.password,
+      action: "create_appointment",
+      patient_first_name: formData.firstName.trim(),
+      patient_last_name: formData.lastName.trim(),
+      doctor_id: Number(formData.doctor),
+      doctor_name: doctorObj ? doctorObj.name : "",
+      appointment_date: formData.appointmentDate,
+      appointment_time: formData.appointmentTime + ":00",
+      appointment_type: finalType,
+      notes: formData.notes.trim() || null,
+      status: "Scheduled",
     };
 
     try {
       const response = await axios.post(
-        "http://26.22.170.205/PatientManagementSystem/api/api_register_patient.php",
+        "http://26.22.170.205/PatientManagementSystem/api/api_schedule_appointment.php",
         JSON.stringify(payload),
         {
           headers: {
@@ -62,15 +102,15 @@ const AppointmentModal = ({ isOpen, onClose }) => {
         setSuccess(true);
         setTimeout(() => onClose(), 2000);
       } else {
-        setError(response.data?.message || "Failed to register patient");
+        setError(response.data?.message || "Failed to create appointment");
       }
     } catch (err) {
-      console.error("Registration submit error:", err);
+      console.error("Appointment submit error:", err);
       setError(
         err.response?.data?.message ||
           err.response?.data?.error ||
           err.message ||
-          "Server error. Please try again."
+          "Server error. Ensure backend accepts JSON."
       );
     } finally {
       setLoading(false);
@@ -82,12 +122,12 @@ const AppointmentModal = ({ isOpen, onClose }) => {
       setFormData({
         firstName: "",
         lastName: "",
-        age: "",
-        gender: "",
-        phoneNumber: "",
-        emailAddress: "",
-        address: "",
-        password: "",
+        doctor: "",
+        appointmentDate: "",
+        appointmentTime: "",
+        appointmentType: "Consultation",
+        specifyType: "",
+        notes: "",
       });
       setError("");
       setSuccess(false);
@@ -100,126 +140,138 @@ const AppointmentModal = ({ isOpen, onClose }) => {
     <div className="appointment-modal-overlay">
       <div className="appointment-modal-container-wide">
         <div className="appointment-modal-header-blue">
-          <div>
-            <h2 className="appointment-modal-title-white">Appointment Booking</h2>
-            <p className="appointment-modal-subtitle">Personal Information</p>
-          </div>
+          <h2 className="appointment-modal-title-white">Schedule Appointment</h2>
           <button onClick={onClose} className="appointment-modal-close-btn-white">
             <MdClose size={28} />
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="appointment-modal-form-wide">
-          {/* Row 1 - 3 columns: First Name, Last Name, Age */}
+          {/* Row 1 */}
           <div className="appointment-modal-row">
             <div className="appointment-modal-form-group">
-              <label className="appointment-modal-label-blue">FIRST NAME</label>
+              <label className="appointment-modal-label-blue">First Name *</label>
               <input
                 type="text"
                 name="firstName"
                 value={formData.firstName}
                 onChange={handleChange}
                 className="appointment-modal-input"
-                placeholder="Enter First Name"
                 required
+                placeholder="Enter First Name"
               />
             </div>
 
             <div className="appointment-modal-form-group">
-              <label className="appointment-modal-label-blue">LAST NAME</label>
+              <label className="appointment-modal-label-blue">Last Name *</label>
               <input
                 type="text"
                 name="lastName"
                 value={formData.lastName}
                 onChange={handleChange}
                 className="appointment-modal-input"
-                placeholder="Enter Last Name"
                 required
+                                  placeholder="Enter Last Name"
+
               />
             </div>
 
             <div className="appointment-modal-form-group">
-              <label className="appointment-modal-label-blue">AGE</label>
-              <input
-                type="number"
-                name="age"
-                value={formData.age}
-                onChange={handleChange}
-                className="appointment-modal-input"
-                placeholder="Enter Age"
-                required
-              />
-            </div>
-          </div>
-
-          {/* Row 2 - 3 columns: Gender, Phone Number, Email Address */}
-          <div className="appointment-modal-row">
-            <div className="appointment-modal-form-group">
-              <label className="appointment-modal-label-blue">GENDER</label>
+              <label className="appointment-modal-label-blue">Select Doctor *</label>
               <select
-                name="gender"
-                value={formData.gender}
+                name="doctor"
+                value={formData.doctor}
                 onChange={handleChange}
                 className="appointment-modal-select"
                 required
               >
-                <option value="">Select Gender</option>
-                <option>Male</option>
-                <option>Female</option>
+                <option value="">Select a doctor</option>
+                {doctors.map((doc) => (
+                  <option key={doc.id} value={doc.id}>
+                    {doc.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Row 2 */}
+          <div className="appointment-modal-row">
+            <div className="appointment-modal-form-group">
+              <label className="appointment-modal-label-blue">Date *</label>
+              <input
+                type="date"
+                name="appointmentDate"
+                value={formData.appointmentDate}
+                onChange={handleChange}
+                className="appointment-modal-input"
+                required
+              />
+            </div>
+
+            <div className="appointment-modal-form-group">
+              <label className="appointment-modal-label-blue">Time *</label>
+              <input
+                type="time"
+                name="appointmentTime"
+                value={formData.appointmentTime}
+                onChange={handleChange}
+                className="appointment-modal-input"
+                required
+              />
+            </div>
+
+            <div className="appointment-modal-form-group">
+              <label className="appointment-modal-label-blue">Type</label>
+              <select
+                name="appointmentType"
+                value={formData.appointmentType}
+                onChange={handleChange}
+                className="appointment-modal-select"
+              >
+                <option>Consultation</option>
+                <option>Follow-up</option>
+                <option>Check-up</option>
                 <option>Other</option>
               </select>
             </div>
-
-            <div className="appointment-modal-form-group">
-              <label className="appointment-modal-label-blue">PHONE NUMBER</label>
-              <input
-                type="tel"
-                name="phoneNumber"
-                value={formData.phoneNumber}
-                onChange={handleChange}
-                className="appointment-modal-input"
-                placeholder="Enter Phone Number e.g. (+63) 9123456789"
-                required
-              />
-            </div>
-
-            <div className="appointment-modal-form-group">
-              <label className="appointment-modal-label-blue">EMAIL ADDRESS</label>
-              <input
-                type="email"
-                name="emailAddress"
-                value={formData.emailAddress}
-                onChange={handleChange}
-                className="appointment-modal-input"
-                placeholder="Enter Email Address"
-                required
-              />
-            </div>
           </div>
 
-          {/* Row 3 - Full width: Address */}
+          {/* Row 3 */}
+          {formData.appointmentType === "Other" && (
+            <div className="appointment-modal-row">
+              <div className="appointment-modal-form-group">
+                <label className="appointment-modal-label-blue">Specify Appointment Type</label>
+                <input
+                  type="text"
+                  name="specifyType"
+                  value={formData.specifyType}
+                  onChange={handleChange}
+                  className="appointment-modal-input"
+                  placeholder="Specify appointment type"
+                  required
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Notes */}
           <div className="appointment-modal-row">
             <div className="appointment-modal-form-group appointment-modal-form-group-wide">
-              <label className="appointment-modal-label-blue">ADDRESS</label>
+              <label className="appointment-modal-label-blue">Notes</label>
               <textarea
-                name="address"
-                value={formData.address}
+                name="notes"
+                value={formData.notes}
                 onChange={handleChange}
                 className="appointment-modal-textarea"
                 rows="3"
-                placeholder="Enter full address"
-                required
+                placeholder="Symptoms, allergies, special requests..."
               />
             </div>
           </div>
 
-
           {/* Messages */}
-          {success && (
-            <div className="appointment-modal-success">
-              Patient registered successfully! Closing in 2s...
-            </div>
-          )}
+          {success && <div className="appointment-modal-success">Appointment booked successfully! Closing in 2s...</div>}
           {error && <div className="appointment-modal-error">{error}</div>}
 
           {/* Actions */}
@@ -237,7 +289,7 @@ const AppointmentModal = ({ isOpen, onClose }) => {
               disabled={loading}
               className="appointment-modal-btn appointment-modal-btn-submit-blue"
             >
-                {loading ? "Booking..." : "Confirm Appointment"}
+              {loading ? "Scheduling..." : "Schedule Appointment"}
             </button>
           </div>
         </form>

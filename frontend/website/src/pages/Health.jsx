@@ -31,6 +31,7 @@ const Health = () => {
   };
 
   return (
+    <div className="page-transition">
     <div className="news-section1 container py-5">
       {loading ? (
         <div className="text-center mb-5">
@@ -97,6 +98,7 @@ const Health = () => {
               </div>
             ))}
       </div>
+    </div>
     </div>
   );
 };

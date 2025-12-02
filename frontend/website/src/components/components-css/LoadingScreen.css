@@ -1,0 +1,65 @@
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+
+  /* Smooth fade-out */
+  opacity: 1;
+  transition: opacity 0.8s ease-out;
+}
+
+.loading-overlay.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.loading-content {
+  text-align: center;
+  animation: fadeSlideIn 0.7s ease-out forwards;
+}
+
+/* Simple fade + slight lift */
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Clean centered GIF */
+.loading-gif {
+  width: 240px;
+  max-width: 55vw;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Subtle text */
+.loading-text {
+  margin-top: 1rem;
+  color: #333;
+  font-size: 1.15rem;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  opacity: 0.85;
+}
+
+/* MOBILE */
+@media (max-width: 480px) {
+  .loading-gif {
+    width: 160px;
+  }
+
+  .loading-text {
+    font-size: 1rem;
+  }
+}
