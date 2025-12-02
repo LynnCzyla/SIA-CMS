@@ -79,6 +79,15 @@ export default function DashboardLayout() {
     return <div>Loading...</div>;
   }
 
+  // Add this function inside DashboardLayout, before return
+const getInitials = (name) => {
+  if (!name) return "AU"; // default Admin User
+  const names = name.trim().split(" ");
+  if (names.length === 1) return names[0][0].toUpperCase();
+  return (names[0][0] + names[1][0]).toUpperCase();
+};
+
+
   return (
     <div
       className={`dashboard-layout ${isSidebarOpen ? "sidebar-open" : "sidebar-closed"}`}
@@ -106,7 +115,7 @@ export default function DashboardLayout() {
                 className="user-profile"
                 onClick={() => setShowProfileMenu(!showProfileMenu)}
               >
-                <FaUserCircle className="profile-icon" />
+<div className="profile-initials">{getInitials(user.full_name)}</div>
                 <div className="user-info">
                   <span className="user-name">{user.full_name}</span>
                   <span className="user-email">{user.email}</span>
@@ -117,7 +126,7 @@ export default function DashboardLayout() {
               {showProfileMenu && (
                 <div className="profile-dropdown">
                   <div className="profile-dropdown-header">
-                    <FaUserCircle className="profile-icon-large" />
+<div className="profile-initials-large">{getInitials(user.full_name)}</div>
                     <div>
                       <p className="dropdown-name">{user.full_name}</p>
                       <p className="dropdown-email">{user.email}</p>
