@@ -1,4 +1,3 @@
-// src/components/Chatbot.jsx
 import { useState, useEffect, useRef } from "react";
 import { MdClose } from "react-icons/md";
 import { FaComments } from "react-icons/fa";
@@ -16,14 +15,16 @@ function Chatbot() {
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
 
-  // Assign unique user ID
+  // Assign unique user ID per session
   useEffect(() => {
-    if (!sessionStorage.getItem("lunaxUserId")) {
-      sessionStorage.setItem("lunaxUserId", crypto.randomUUID());
+    let userId = sessionStorage.getItem("lunaxUserId");
+    if (!userId) {
+      userId = crypto.randomUUID();
+      sessionStorage.setItem("lunaxUserId", userId);
     }
   }, []);
 
-  // Auto scroll
+  // Auto-scroll on new messages
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isTyping]);
@@ -57,38 +58,47 @@ function Chatbot() {
       setIsTyping(false);
       setMessages((prev) => [
         ...prev,
-        { sender: "bot", text: "Sorry, connection error. Try again." },
+        { sender: "bot", text: "❌ Sorry, connection error. Try again." },
       ]);
     }
   };
 
   return (
     <div className="chatbot-wrapper">
-
-      {/* CHAT WINDOW */}
+      {/* Chat Window */}
       {showChat && (
         <div className="chatbot-window">
+          {/* Header */}
           <div className="chatbot-header">
             <div className="chatbot-header-info">
               <img src="/lunax.svg" alt="Lunax" className="chatbot-avatar" />
-              <div>
+              <div className="chatbot-header-text">
                 <h3>Lunax</h3>
                 <p>Your Healthcare Companion</p>
               </div>
             </div>
           </div>
 
+          {/* Messages */}
           <div className="chatbot-messages">
-            {messages.map((msg, i) => (
-              <div key={i} className={`message ${msg.sender === "user" ? "user" : "bot"}`}>
-                <div className="bubble" dangerouslySetInnerHTML={{ __html: msg.text }} />
+            {messages.map((msg, index) => (
+              <div
+                key={index}
+                className={`message ${msg.sender === "user" ? "user" : "bot"}`}
+              >
+                <div
+                  className="bubble"
+                  dangerouslySetInnerHTML={{ __html: msg.text }}
+                />
               </div>
             ))}
 
             {isTyping && (
               <div className="message bot">
                 <div className="bubble typing">
-                  <span></span><span></span><span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
                 </div>
               </div>
             )}
@@ -96,6 +106,7 @@ function Chatbot() {
             <div ref={messagesEndRef} />
           </div>
 
+          {/* Input Bar */}
           <div className="chatbot-input-bar">
             <input
               type="text"
@@ -111,16 +122,16 @@ function Chatbot() {
         </div>
       )}
 
-      {/* FAB BUTTON */}
+      {/* Floating Button */}
       <button
         className="chatbot-fab"
         onClick={() => setShowChat(!showChat)}
         aria-label={showChat ? "Close chat" : "Open chat"}
       >
         {showChat ? (
-          <MdClose className="icon" />
+          <MdClose size={24} color="#fff" />
         ) : (
-          <FaComments className="icon pulse-icon" />
+          <FaComments className="pulse-icon" size={24} color="#fff" />
         )}
       </button>
     </div>
