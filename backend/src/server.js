@@ -6,7 +6,6 @@ import dotenv from "dotenv";
 import multer from "multer";
 
 
-
 // 📦 Route Imports
 import loginRoute from "../routes/login.js";
 import newsRoute from "../routes/news.js";
@@ -27,11 +26,16 @@ import notificationsRoute from "../routes/notifications.js";
 import postLogsRoute from "../routes/postLogs.js"; // adjust path
 import chatbotGroqRoute from "../routes/chatbot_groq.js";
 
-dotenv.config({ path: "../.env" });
+dotenv.config({ path: ".env" });
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -61,31 +65,30 @@ app.use("/api/about", aboutRoute);
 app.use("/api/post-logs", postLogsRoute);
 app.use("/api/contact", contactRoute);
 app.use("/api/doctors", doctorsVisibilityRouter);
+app.use("/api/notifications", notificationsRoute);
 
 
-// Test route
+// Test Endpoint
 app.get("/api/test", (req, res) => {
-  res.json({ message: "✅ Backend working perfectly!" });
+  res.json({ message: "Backend working perfectly!" });
 });
 
-// Start server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Layout Logic
+let currentLayout = "modern";
 
-let currentLayout = 'modern'; // Change this line
-
-app.get('/api/layout', (req, res) => {
-  res.json({ layout: currentLayout });
-});
-
-// Add POST endpoint to switch layouts
-app.post('/api/layout', (req, res) => {
+app.post("/api/layout", (req, res) => {
   const { layout } = req.body;
-  if (layout === 'classic' || layout === 'modern') {
+  
+  if (layout === "classic" || layout === "modern") {
     currentLayout = layout;
-    res.json({ success: true, layout: currentLayout });
-  } else {
-    res.status(400).json({ error: 'Invalid layout' });
+    return res.json({ success: true, layout: currentLayout });
   }
+
+  res.status(400).json({ error: "Invalid layout" });
 });
 
+// Start Server — placed LAST ✔
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server running on port ${PORT}`);
+});

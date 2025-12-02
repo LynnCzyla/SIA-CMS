@@ -4,7 +4,6 @@ import Swal from "sweetalert2";
 import Quill from "quill";
 import "../css/Careers.css";
 import "quill/dist/quill.snow.css";
-import { IoMdCreate } from "react-icons/io";
 
 export default function Careers() {
   const quillRef = useRef(null);
@@ -36,7 +35,7 @@ export default function Careers() {
             [{ header: [1, 2, false] }],
             ["bold", "italic", "underline", "strike"],
             [{ list: "ordered" }, { list: "bullet" }],
-            ["link", "", "code-block"],
+            ["link", "code-block"],
             ["clean"],
           ],
         },
@@ -140,12 +139,11 @@ export default function Careers() {
 
   const getUrgencyBadge = (urgency) => {
     const badges = {
-      urgent: { label: "URGENT", class: "urgency-urgent" },
+      urgent: { label: "Urgent", class: "urgency-urgent" },
       medium: { label: "Medium Priority", class: "urgency-medium" },
       low: { label: "Low Priority", class: "urgency-low" },
     };
     return badges[urgency] || badges.medium;
-  badges.medium;
   };
 
   const formatDate = (dateString) => {
@@ -153,13 +151,82 @@ export default function Careers() {
     return new Date(dateString).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
   };
 
+  const showJobDetails = (job) => {
+    const imageUrl = job.image ? `http://localhost:5000/uploads/jobs/${job.image}` : null;
+    
+    Swal.fire({
+      html: `
+        <div class="job-details-modal">
+          <div class="modal-header-section">
+            <h2 class="modal-job-title">${job.job_title}</h2>
+            <div class="modal-badges">
+              <span class="modal-badge submitted-badge">Submitted by: ${job.ems_user_name} (Pilot Tester) (EMS)</span>
+              <span class="modal-badge date-badge">Date: ${formatDate(job.created_at)}</span>
+            </div>
+          </div>
+
+          <div class="modal-content-wrapper">
+            ${imageUrl ? `
+              <div class="modal-image-section">
+                <img src="${imageUrl}" alt="${job.job_title}" class="modal-job-image" />
+              </div>
+            ` : ''}
+            
+            <div class="modal-info-grid">
+            <div class="modal-info-row">
+              <span class="modal-label">Job Title:</span>
+              <span class="modal-value">${job.job_title || 'N/A'}</span>
+            </div>
+            <div class="modal-info-row">
+              <span class="modal-label">Department:</span>
+              <span class="modal-value">${job.department || 'N/A'}</span>
+            </div>
+            <div class="modal-info-row">
+              <span class="modal-label">Short Title:</span>
+              <span class="modal-value">${job.short_title || 'N/A'}</span>
+            </div>
+            <div class="modal-info-row">
+              <span class="modal-label">Location:</span>
+              <span class="modal-value">${job.location || 'N/A'}</span>
+            </div>
+            <div class="modal-info-row">
+              <span class="modal-label">Job Type:</span>
+              <span class="modal-value">${job.job_type || 'N/A'}</span>
+            </div>
+            <div class="modal-info-row">
+              <span class="modal-label">Application Deadline:</span>
+              <span class="modal-value">${formatDate(job.application_deadline)}</span>
+            </div>
+            <div class="modal-info-row full-width">
+              <span class="modal-label">Qualification:</span>
+              <span class="modal-value">${job.qualifications || 'N/A'}</span>
+            </div>
+            </div>
+          </div>
+
+          <div class="modal-description-section">
+            <h3 class="modal-section-title">Description:</h3>
+            <div class="modal-description-content">${job.description || 'No description provided.'}</div>
+          </div>
+        </div>
+      `,
+      width: '80%',
+      showConfirmButton: false,
+      showCloseButton: true,
+      customClass: {
+        popup: 'job-details-modal-popup',
+        closeButton: 'job-details-close-btn'
+      }
+    });
+  };
+
   return (
     <div className="cms-announcement-page">
       <h2 className="title">Careers</h2>
       <ul className="breadcrumbs">
-        <li>HR and Careers</li>
+        <li>Content Creation</li>
         <li className="divider">/</li>
-        <li>Admin Panel</li>
+        <li>Careers</li>
       </ul>
 
       {/* Pending Approvals Section */}
@@ -168,36 +235,53 @@ export default function Careers() {
           {isLoadingPending ? (
             <div className="cms-card pending-loading">Loading pending jobs...</div>
           ) : pendingJobs.length > 0 ? (
-            <div className="pending-approvals-card">
+            <div className="pending-approvals-section">
               <div className="pending-header">
-                <h3 className="pending-title">Pending Job Approvals ({pendingJobs.length})</h3>
+                <h3 className="pending-title">Pending Request</h3>
                 <button className="refresh-btn" onClick={fetchPendingJobs}>Refresh</button>
               </div>
-              <div className="pending-list">
-                {pendingJobs.map((job, index) => {
+              
+              <div className="pending-cards-container">
+                {pendingJobs.map((job) => {
                   const badge = getUrgencyBadge(job.urgency_level);
                   return (
-                    <div key={job.id} className="job-approval-item">
-                      <span className={`urgency-badge ${badge.class}`}>{badge.label}</span>
-                      <h4 className="job-title">{job.job_title}</h4>
-                      <div className="job-details-grid">
-                        <div><strong>Department:</strong> {job.department}</div>
-                        <div><strong>Job Type:</strong> {job.job_type}</div>
-                        <div><strong>Location:</strong> {job.location}</div>
-                        <div><strong>Deadline:</strong> {formatDate(job.application_deadline)}</div>
+                    <div key={job.id} className="pending-job-card">
+                      <div className="card-header">
+                        <h4 className="card-job-title">{job.job_title}</h4>
+                        <span className={`card-urgency-badge ${badge.class}`}>{badge.label}</span>
                       </div>
-                      <div className="submission-info">
-                        <strong>Submitted by:</strong> {job.ems_user_name} (EMS) • <strong>Date:</strong> {formatDate(job.created_at)}
+                      
+                      <div className="card-meta">
+                        <span className="meta-badge">Submitted by: {job.ems_user_name} (Pilot Tester) (EMS)</span>
+                        <span className="meta-badge">Date: {formatDate(job.created_at)}</span>
                       </div>
+
+                      <div className="card-details">
+                        <div className="detail-item">
+                          <strong>Department:</strong> {job.department}
+                        </div>
+                        <div className="detail-item">
+                          <strong>Job Type:</strong> {job.job_type}
+                        </div>
+                        <div className="detail-item">
+                          <strong>Location:</strong> {job.location}
+                        </div>
+                        <div className="detail-item">
+                          <strong>Application Deadline:</strong> {formatDate(job.application_deadline)}
+                        </div>
+                      </div>
+
                       {job.ems_notes && (
-                        <div className="ems-notes">
-                          <div className="ems-notes-header">
-                            <strong>Notes from EMS:</strong>
-                          </div>
+                        <div className="card-notes">
+                          <strong>Notes from EMS:</strong>
                           <p>{job.ems_notes}</p>
                         </div>
                       )}
-                      <div className="action-buttons">
+
+                      <div className="card-actions">
+                        <button className="btn-view" onClick={() => showJobDetails(job)}>
+                          View Full Details
+                        </button>
                         <button className="btn-approve" onClick={() => {
                           Swal.fire({
                             title: "Approve Job Posting?",
@@ -208,8 +292,9 @@ export default function Careers() {
                             cancelButtonColor: "#6b7280",
                             confirmButtonText: "Yes, Approve",
                           }).then((result) => result.isConfirmed && handleApproval(job.id, "approve"));
-                        }}>Approve & Publish</button>
-
+                        }}>
+                          Approve & Published
+                        </button>
                         <button className="btn-reject" onClick={async () => {
                           const { value: reason } = await Swal.fire({
                             title: "Reject Job Posting",
@@ -220,14 +305,9 @@ export default function Careers() {
                             inputValidator: (value) => !value && "Reason is required!",
                           });
                           if (reason) handleApproval(job.id, "reject", reason);
-                        }}>Reject</button>
-
-                        <button className="btn-view" onClick={() => Swal.fire({
-                          title: job.job_title,
-                          html: `...your long html here...`,
-                          width: '800px',
-                          confirmButtonText: 'Close',
-                        })}>View Full Details</button>
+                        }}>
+                          Reject
+                        </button>
                       </div>
                     </div>
                   );

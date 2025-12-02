@@ -147,7 +147,7 @@ router.post("/ems/submit", upload.single("image"), validateEMSApiKey, (req, res)
       db.query(
         `INSERT INTO notifications (user_id, type, title, description, metadata, created_at)
          SELECT id, 'job_approval', ?, ?, ?, NOW()
-         FROM users WHERE role IN ('hr_administrator', 'super_administrator')`,
+         FROM users WHERE role IN ('super_administrator')`,
         [
           `New ${finalUrgency.toUpperCase()} job posting from EMS: "${job_title}"`,
           `${ems_user_name} submitted a ${job_type} position for ${department}${ems_notes ? ' (with notes)' : ''}`,
@@ -244,7 +244,8 @@ router.get("/ems/all", validateEMSApiKey, (req, res) => {
     SELECT 
       id, job_title, short_title, department, job_type, 
       location, status, urgency_level, ems_notes,
-      created_at, reviewed_at, ems_user_name
+      created_at, reviewed_at, ems_user_name,
+      rejection_reason
     FROM jobs 
     WHERE submitted_by_ems = 1
   `;

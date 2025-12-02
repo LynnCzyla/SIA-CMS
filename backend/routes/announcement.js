@@ -64,17 +64,26 @@ router.post("/", upload.single("image"), (req, res) => {
 ============================================================ */
 router.get("/", (req, res) => {
   const sql = "SELECT * FROM announcement ORDER BY created_at DESC";
+
+  const stripHtml = (html) => html.replace(/<[^>]*>/g, "");
+
   db.query(sql, (err, results) => {
     if (err) return res.status(500).json({ message: "DB error", error: err });
 
     const announcements = results.map((row) => ({
       ...row,
-      image: row.image ? `http://localhost:5000/uploads/announcements/${row.image}` : null,
+      image: row.image
+        ? `http://localhost:5000/uploads/announcements/${row.image}`
+        : null,
+      short_description: row.description
+        ? stripHtml(row.description).split(" ").slice(0, 5).join(" ") + "..."
+        : "",
     }));
 
     res.json(announcements);
   });
 });
+
 
 /* ==================Nnew DATABASE
 pl============================================================ */

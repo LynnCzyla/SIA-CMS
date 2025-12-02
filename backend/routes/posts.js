@@ -166,4 +166,98 @@ router.put("/trash/:category/:id", (req, res) => {
   });
 });
 
+/* --------------------------------------------------
+  VALIDATION ADMIN ONLY
+-------------------------------------------------- */
+
+const requireSuperAdmin = (req, res, next) => {
+  const userId = req.headers["x-user-id"];
+
+  if (!userId) {
+    return res.status(401).json({ success: false, message: "Missing user ID" });
+  }
+
+  const sql = "SELECT role FROM users WHERE id = ? LIMIT 1";
+  db.query(sql, [userId], (err, rows) => {
+    if (err) {
+      console.error("❌ Role lookup failed:", err);
+      return res.status(500).json({ success: false, message: "Database error" });
+    }
+
+    if (!rows.length) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    if (rows[0].role !== "super_administrator") {
+      return res.status(403).json({
+        success: false,
+        message: "Access denied. Only Super Admin can approve or reject requests.",
+      });
+    }
+
+    next();
+  });
+};
+
+
+/* --------------------------------------------------
+  PENDING APPROVE
+-------------------------------------------------- */
+
+router.put("/pending/approve/:id", requireSuperAdmin, (req, res) => {
+  const { id } = req.params;
+  const editor = req.headers["x-user-name"] || "Super Admin";
+
+  const sql = `UPDATE jobs 
+              SET status = 'published', updated_at = NOW() 
+              WHERE id = ?`;
+
+  db.query(sql, [id], (err) => {
+    if (err) {
+      return res.status(500).json({ success: false, message: "Database error" });
+    }
+
+    // Log approval
+    const logSQL = `
+      INSERT INTO post_logs (post_id, category, action, editor, message)
+      VALUES (?, 'Jobs', 'approve', ?, 'EMS job request approved')
+    `;
+    db.query(logSQL, [id, editor]);
+
+    res.json({ success: true, message: "Job approved successfully" });
+  });
+});
+
+
+/* --------------------------------------------------
+  PENDING REJECT
+-------------------------------------------------- */
+
+router.put("/pending/reject/:id", requireSuperAdmin, (req, res) => {
+  const { id } = req.params;
+  const { reason } = req.body;
+  const editor = req.headers["x-user-name"] || "Super Admin";
+
+  const sql = `UPDATE jobs 
+              SET status = 'rejected', updated_at = NOW() 
+              WHERE id = ?`;
+
+  db.query(sql, [id], (err) => {
+    if (err) {
+      return res.status(500).json({ success: false, message: "Database error" });
+    }
+
+    // Log rejection
+    const logSQL = `
+      INSERT INTO post_logs (post_id, category, action, editor, message)
+      VALUES (?, 'Jobs', 'reject', ?, ?)
+    `;
+    db.query(logSQL, [id, editor, reason || "Job request rejected"]);
+
+    res.json({ success: true, message: "Job rejected" });
+  });
+});
+
+
+
 export default router;
