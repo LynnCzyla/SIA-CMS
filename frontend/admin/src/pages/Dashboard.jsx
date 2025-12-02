@@ -108,19 +108,19 @@ export default function Dashboard() {
       </div>
 
       <div className="adminStats">
-        <div className="stats-card">
+        <div className="stats-card1">
           <div className="stats-iconCircle"><FaGlobe /></div>
           <h2>{homeVisits}</h2>
           <p>Website Visits (Home)</p>
         </div>
 
-        <div className="stats-card">
+        <div className="stats-card1">
           <div className="stats-iconCircle"><FaPenFancy /></div>
           <h2>{publishedCount}</h2>
           <p>Published Content</p>
         </div>
 
-        <div className="stats-card">
+        <div className="stats-card1">
           <div className="stats-iconCircle"><FaFileAlt /></div>
           <h2>{draftCount}</h2>
           <p>Draft Content</p>
@@ -132,7 +132,7 @@ export default function Dashboard() {
         <div className="adminChartCard">
           <div className="adminChart-header">
             <h3 className="adminChart-title">Website Visits</h3>
-            <MdFullscreen className="adminChart-fullscreen" />
+            <MdFullscreen className="adminChart-fullscreen"/>
           </div>
 
           <div id="dashboard-chart"></div>

@@ -114,7 +114,7 @@
   margin-bottom: 20px; /* allow wrapping on smaller screens */
 }
 
-.stats-card {
+.stats-card1 {
   flex: 0 0 200px;
   min-width: 380px;
   max-width: 100%;
@@ -125,13 +125,13 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
+  gap: 5px;
   box-shadow: 0 6px 18px rgba(15,23,42,0.04);
   transition: transform 0.25s, box-shadow 0.25s;
   text-align: center;
 }
 
-.stats-card:hover {
+.stats-card1:hover {
   transform: translateY(-4px);
   box-shadow: 0 10px 28px rgba(15,23,42,0.08);
 }

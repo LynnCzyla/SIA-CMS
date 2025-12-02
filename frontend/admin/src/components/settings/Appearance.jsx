@@ -1,29 +1,52 @@
-// FULLY FIXED & WORKING VERSION — DEC 2025
-// API: http://localhost:5000
-// WEBSITE (Frontend): http://localhost:5173  ← ALWAYS THIS
-
+// frontend/website/src/pages/Appearance.jsx
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { FaCheckCircle, FaInfoCircle } from "react-icons/fa";
 
+// Set your live website URL for preview
+const WEBSITE_URL = "";
+
+// List of Google Fonts
+const GOOGLE_FONTS = [
+  "Poppins",
+  "Roboto",
+  "Inter",
+  "Arial",
+  "Lato",
+  "Montserrat",
+  "Open Sans",
+  "Raleway",
+  "Ubuntu",
+  "Nunito",
+];
+
 function Appearance() {
   const [selectedLayout, setSelectedLayout] = useState("classic");
-
-  // FONT SYSTEM
   const [fontFamily, setFontFamily] = useState("Poppins");
   const [fontSize, setFontSize] = useState("Medium");
   const [fontColor, setFontColor] = useState("Header");
   const [previewText, setPreviewText] = useState("");
-
-  // THEME COLOR
   const [themeColor, setThemeColor] = useState("bg-primary");
-
   const [loading, setLoading] = useState(false);
   const [fetchingLayout, setFetchingLayout] = useState(true);
   const [message, setMessage] = useState({ type: "", text: "" });
 
-  // Correct frontend URL — CHANGE ONLY IF YOUR FRONTEND IS ON ANOTHER PORT
+  // -----------------------------
+  // DYNAMIC GOOGLE FONT LOADING
+  // -----------------------------
+  useEffect(() => {
+    if (!fontFamily) return;
+    const linkId = "google-font-link";
+    let link = document.getElementById(linkId);
+    if (!link) {
+      link = document.createElement("link");
+      link.id = linkId;
+      link.rel = "stylesheet";
+      document.head.appendChild(link);
+    }
+    link.href = `https://fonts.googleapis.com/css2?family=${fontFamily.replace(" ", "+")}:wght@400;500;700&display=swap`;
+  }, [fontFamily]);
 
   // -----------------------------
   // FETCH CURRENT LAYOUT
@@ -34,9 +57,13 @@ function Appearance() {
 
   const fetchCurrentLayout = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/layout");
+      const res = await axios.get("/api/layout");
       if (res.data.layout) {
         setSelectedLayout(res.data.layout);
+        setFontFamily(res.data.fontFamily || "Poppins");
+        setFontSize(res.data.fontSize || "Medium");
+        setFontColor(res.data.fontColor || "Header");
+        setThemeColor(res.data.themeColor || "bg-primary");
       }
     } catch (err) {
       console.error("Failed to fetch layout:", err);
@@ -46,13 +73,17 @@ function Appearance() {
     }
   };
 
-  // LIVE APPLY LAYOUT TO ADMIN PANEL (body class)
+  // -----------------------------
+  // LIVE APPLY LAYOUT TO ADMIN PANEL
+  // -----------------------------
   useEffect(() => {
     document.body.classList.remove("classic", "modern", "compact");
     document.body.classList.add(selectedLayout);
   }, [selectedLayout]);
 
+  // -----------------------------
   // SHOW ALERT MESSAGE
+  // -----------------------------
   const showMessage = (type, text) => {
     setMessage({ type, text });
     setTimeout(() => setMessage({ type: "", text: "" }), 5000);
@@ -62,11 +93,11 @@ function Appearance() {
   // SAVE APPEARANCE
   // -----------------------------
   const handleSave = async () => {
-    if (loading) return; // Prevent double click
+    if (loading) return;
     setLoading(true);
 
     try {
-      const res = await axios.post("http://localhost:5000/api/layout", {
+      const res = await axios.post("/api/layout", {
         layout: selectedLayout,
         fontFamily,
         fontSize,
@@ -104,13 +135,7 @@ function Appearance() {
   // -----------------------------
   const handleCancel = () => {
     fetchCurrentLayout();
-
-    setFontFamily("Poppins");
-    setFontSize("Medium");
-    setFontColor("Header");
     setPreviewText("");
-    setThemeColor("bg-primary");
-
     Swal.fire({
       title: "Changes Reverted",
       text: "All appearance settings have been restored.",
@@ -118,6 +143,26 @@ function Appearance() {
       confirmButtonColor: "#2563eb",
     });
   };
+
+  // Apply the font globally to the website
+useEffect(() => {
+  if (!fontFamily) return;
+
+  // 1. Load Google Font dynamically
+  const linkId = "google-font-link";
+  let link = document.getElementById(linkId);
+  if (!link) {
+    link = document.createElement("link");
+    link.id = linkId;
+    link.rel = "stylesheet";
+    document.head.appendChild(link);
+  }
+  link.href = `https://fonts.googleapis.com/css2?family=${fontFamily.replace(" ", "+")}:wght@400;500;700&display=swap`;
+
+  // 2. Apply font globally to body
+  document.body.style.fontFamily = fontFamily;
+}, [fontFamily]);
+
 
   // -----------------------------
   // LAYOUT INFO
@@ -137,9 +182,9 @@ function Appearance() {
     },
   };
 
-  // ----------------------------------------
-  // LIVE FONT PREVIEW STYLE GENERATION
-  // ----------------------------------------
+  // -----------------------------
+  // LIVE FONT PREVIEW STYLE
+  // -----------------------------
   const previewStyle = {
     fontFamily: fontFamily,
     fontSize: fontSize === "Small" ? "14px" : fontSize === "Medium" ? "18px" : "22px",
@@ -162,7 +207,6 @@ function Appearance() {
         {fetchingLayout && <span className="badge bg-secondary">Loading current settings...</span>}
       </div>
 
-      {/* INFO MESSAGE */}
       {message.text && (
         <div className={`alert alert-${message.type === "error" ? "danger" : "info"} d-flex align-items-center`}>
           <FaInfoCircle className="me-2" /> {message.text}
@@ -174,10 +218,9 @@ function Appearance() {
         <div className="col-md-4 mb-3">
           <label className="form-label fw-semibold">Font Family</label>
           <select className="form-select" value={fontFamily} onChange={(e) => setFontFamily(e.target.value)}>
-            <option>Poppins</option>
-            <option>Roboto</option>
-            <option>Inter</option>
-            <option>Arial</option>
+            {GOOGLE_FONTS.map((font) => (
+              <option key={font} value={font}>{font}</option>
+            ))}
           </select>
         </div>
 
@@ -209,7 +252,6 @@ function Appearance() {
             value={previewText}
             onChange={(e) => setPreviewText(e.target.value)}
           />
-
           <div className="mt-3 border" style={previewStyle}>
             {previewText || "Your preview text will appear here..."}
           </div>
@@ -231,7 +273,6 @@ function Appearance() {
                       <FaCheckCircle className="me-1" /> SELECTED
                     </div>
                   )}
-
                   <div className="card-body">
                     <div
                       className="rounded mb-3 text-white text-center d-flex align-items-center justify-content-center"
@@ -247,14 +288,11 @@ function Appearance() {
                     >
                       {layout.toUpperCase()}
                     </div>
-
                     <h6 className="fw-bold">{layoutInfo[layout].title}</h6>
                     <p className="text-muted small">{layoutInfo[layout].description}</p>
-
                     <div className="p-2 bg-light rounded small mb-2 font-monospace">
                       {layoutInfo[layout].preview}
                     </div>
-
                     <ul className="small text-muted ps-4">
                       {layoutInfo[layout].features.map((f, i) => (
                         <li key={i}>{f}</li>
@@ -270,29 +308,16 @@ function Appearance() {
         {/* ACTION BUTTONS */}
         <div className="col-md-12 mt-5">
           <div className="d-flex flex-wrap gap-3 align-items-center">
-            <button
-              className="btn btn-primary px-5 py-2 d-flex align-items-center justify-content-center text-center align-content-center"
-              onClick={handleSave}
-              disabled={loading}
-            >
-              {loading ? (
-                <>Saving...</>
-              ) : (
-                <>
-                Save Changes
-                </>
-              )}
+            <button className="btn btn-primary px-5 py-2" onClick={handleSave} disabled={loading}>
+              {loading ? "Saving..." : "Save Changes"}
             </button>
-
             <button className="btn btn-secondary px-4 py-2" onClick={handleCancel} disabled={loading}>
               Cancel
             </button>
-
             <button
               className="btn btn-outline-info px-5 py-2 ms-auto"
-              onClick={() => window.open(WEBSITE_URL, "_blank")}
             >
-              Preview Live Website
+              Done Changing Website Layout
             </button>
           </div>
         </div>

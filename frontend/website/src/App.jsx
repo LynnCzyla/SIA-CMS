@@ -2,6 +2,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import axios from "axios";
+import { useEffect } from "react";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -41,7 +42,29 @@ axios.interceptors.response.use(
   }
 );
 
+
 function App() {
+
+  
+useEffect(() => {
+    const fetchFont = async () => {
+      try {
+        const res = await axios.get("/api/layout");
+        if (res.data.fontFamily) {
+          const font = res.data.fontFamily;
+          const link = document.createElement("link");
+          link.rel = "stylesheet";
+          link.href = `https://fonts.googleapis.com/css2?family=${font.replace(" ", "+")}:wght@400;500;700&display=swap`;
+          document.head.appendChild(link);
+          document.body.style.fontFamily = font;
+        }
+      } catch (err) {
+        console.error("Failed to fetch global font", err);
+      }
+    };
+    fetchFont();
+  }, []);
+
   return (
     <Router>
       <UsePageTracker />
