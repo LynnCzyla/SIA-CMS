@@ -110,14 +110,15 @@
   display: flex;
   justify-content: center; /* CENTER the cards */
   gap: 20px;
-  flex-wrap: wrap; /* allow wrapping on smaller screens */
+  flex-wrap: wrap;
+  margin-bottom: 20px; /* allow wrapping on smaller screens */
 }
 
 .stats-card {
-  flex: 0 0 300px;
+  flex: 0 0 200px;
   min-width: 380px;
   max-width: 100%;
-  height: 200px;
+  height: 170px;
   background: var(--white);
   border-radius: var(--card-radius);
   display: flex;
@@ -146,6 +147,7 @@
   color: #fff;
   flex-shrink: 0;
   background: linear-gradient(135deg, #4f9cf9, #3f86dc);
+  margin-top: 20px;
 }
 
 .stats-card h2 {
@@ -159,6 +161,7 @@
   margin: 0;
   font-size: 14px;
   color: var(--muted);
+  margin-bottom: 20px;
 }
 
 /* ===========================
@@ -224,7 +227,18 @@
   border-radius: 12px;
   padding: 16px;
   box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+  justify-content: center;
+  align-items: center;
+
 }
+
+.adminCalendar p, h3{
+   justify-content: center;
+  align-items: center;
+  display: flex;
+
+}
+
 
 /* ===========================
    HOTLINE
