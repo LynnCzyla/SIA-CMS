@@ -1,255 +1,307 @@
 .about-wrapper {
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", -apple-system, BlinkMacSystemFont, sans-serif;
   color: #0c224b;
   background-color: #FFF;
   line-height: 1.6;
+  overflow-x: hidden;
 }
 
-/* --- Header Image --- */
+/* Header Section */
 .about-header {
   position: relative;
-  width: 100%;
-  background: linear-gradient(to bottom, #e8f4ff, #4a90e2);
-  padding-bottom: 60px;
-}
-
-.about-title1{
+  background: linear-gradient(180deg, #e8f4ff 0%, #ffffff 100%);
+  padding: 60px 20px 40px;
   text-align: center;
-  padding: 40px 20px 10px 20px;
-  font-size: 1.5rem;
-  font-weight: 700;
-    color: var(--primary-color);
-
+  overflow: hidden;
 }
 
-.title-primary1{
-  text-align: center;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--primary-color2);
-}
-
-
-
-
-.about-header img {
+.cross-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  max-width: 600px;
-  height: auto;
-  display: block;
-  margin: 0 auto;
+  height: 100%;
+  pointer-events: none;
+}
+
+.cross {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  opacity: 0.15;
+}
+
+.cross::before,
+.cross::after {
+  content: '';
+  position: absolute;
+  background: #4a90e2;
+}
+
+.cross::before {
+  width: 100%;
+  height: 20%;
+  top: 40%;
+  left: 0;
+}
+
+.cross::after {
+  width: 20%;
+  height: 100%;
+  left: 40%;
+  top: 0;
+}
+
+.cross-1 { top: 80px; left: 5%; width: 50px; height: 50px; }
+.cross-2 { top: 120px; left: 15%; width: 35px; height: 35px; }
+.cross-3 { top: 100px; right: 8%; width: 45px; height: 45px; }
+.cross-4 { top: 140px; right: 18%; width: 38px; height: 38px; }
+.cross-5 { top: 200px; left: 10%; width: 42px; height: 42px; }
+.cross-6 { top: 180px; right: 12%; width: 48px; height: 48px; }
+
+.about-page-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #002c7c;
+  margin-bottom: 30px;
+  position: relative;
+  z-index: 1;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  margin: 30px 0 20px 0;
+  position: relative;
+  z-index: 1;
+}
+
+
+
+.logo-img {
+  width: 100%;
+  height: 100%;
   object-fit: contain;
 }
 
-/* --- About Section --- */
-.about-intro {
-  padding: 30px 10%;
-  background: #FFF;
-}
-
-.about-container {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 40px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.about-intro h1 {
-  color: #002c7c;
+.brand-name {
   font-size: 2.5rem;
-  margin-bottom: 25px;
-  font-weight: 600;
-}
-
-.about-text {
-  flex: 1;
-  min-width: 300px;
-  text-align: left;
-}
-
-.about-text p {
-  margin-bottom: 20px;
-  color: #333;
-  font-size: 0.95rem;
-  text-align: justify;
-  line-height: 1.7;
-}
-
-.about-image {
-  flex: 1;
-  min-width: 300px;
+  font-weight: 700;
+  color: #002c7c;
+  margin-top: 20px;
+  position: relative;
+  z-index: 1;
   text-align: center;
 }
 
-.about-image img {
-  width: 100%;
-  max-width: 450px;
-  border-radius: 10px;
+.brand-primary {
+  color: #4a90e2;
 }
 
+/* About Description */
+.about-intro {
+  padding: 50px 10%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
 
+.about-description {
+  text-align: justify;
+  color: #333;
+  font-size: 0.95rem;
+  line-height: 1.8;
+  margin-bottom: 20px;
+  white-space: pre-line;
+}
 
-/* --- Trio Section --- */
-.about-trio {
+/* Info Cards Section */
+.cards-section {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 30px;
-  padding: 60px 10%;
-  
+  gap: 25px;
+  padding: 50px 10%;
   max-width: 1400px;
   margin: 0 auto;
 }
 
-.trio-card {
+.info-card {
   flex: 1;
   min-width: 280px;
-  max-width: 350px;
-  
-  padding: 30px 25px;
-  border-radius: 8px;
- 
-  text-align: left;
-}
-
-.trio-card h2 {
-  color: #002c7c;
-  margin-bottom: 20px;
-  font-size: 1.8rem;
-  font-weight: 600;
-}
-
-.trio-card p {
-  color: #333;
-  font-size: 0.95rem;
-  line-height: 1.7;
-  text-align: justify;
-}
-
-/* --- Core Values --- */
-.about-core {
-  padding: 60px 10%;
+  max-width: 380px;
+  background: #fff;
+  border: 2px solid #002c7c;
+  border-radius: 12px;
+  padding: 35px 30px;
+  box-shadow: 0 4px 15px rgba(0, 44, 124, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
 }
 
-.about-core h2 {
+.info-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 44, 124, 0.15);
+}
+
+.info-card h3 {
   color: #002c7c;
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.info-card p {
+  color: #333;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  text-align: center;
+}
+
+/* Core Values Section */
+.core-values-section {
+  position: relative;
+  background-image: url('../public/about.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  padding: 80px 10%;
+  margin: 60px 0;
+}
+
+.core-values-overlay {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 50px 30px;
+  border-radius: 15px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.section-title {
+  text-align: center;
+  color: #002c7c;
+  font-size: 2.2rem;
+  font-weight: 700;
   margin-bottom: 40px;
-  font-size: 2.2rem;
-  font-weight: 600;
 }
 
-.core-content {
+.core-values-cards {
   display: flex;
   flex-wrap: wrap;
-  gap: 30px;
   justify-content: center;
-  max-width: 1400px;
-  margin: 0 auto;
+  gap: 25px;
 }
 
-.core-card {
+.value-card {
   flex: 1;
   min-width: 280px;
-  max-width: 350px;
- 
-  border-radius: 8px;
+  max-width: 400px;
+  background: #f8f9fa;
+  border-radius: 10px;
   padding: 30px 25px;
- 
-  text-align: left;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
 }
 
-.core-card p {
+.value-card p {
   color: #333;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   line-height: 1.7;
   text-align: justify;
 }
 
-/* --- History Section --- */
-.about-history {
+/* History Section */
+.history-section {
   padding: 60px 10%;
-  
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-.about-history h2 {
-  text-align: center;
-  color: #002c7c;
-  margin-bottom: 30px;
-  font-size: 2.2rem;
-  font-weight: 600;
-}
-
-.about-history p {
-  text-align: justify;
-  color: #333;
-  line-height: 1.7;
-  font-size: 0.95rem;
-  max-width: 1200px;
-  margin: 0 auto 20px auto;
-}
-
-.about-history p:last-child {
-  margin-bottom: 0;
-}
-
-/* --- Privacy Policy --- */
-.about-privacy {
-  padding: 60px 10%;
- 
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-.about-privacy h2 {
-  text-align: center;
-  color: #002c7c;
-  margin-bottom: 30px;
-  font-size: 2.2rem;
-  font-weight: 600;
-}
-
-.about-privacy p {
-  text-align: justify;
-  color: #333;
-  line-height: 1.7;
-  font-size: 0.95rem;
   max-width: 1200px;
   margin: 0 auto;
+  background: #fff;
 }
 
-/* --- Responsive Design --- */
+.section-title-blue {
+  text-align: center;
+  color: #4a90e2;
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 35px;
+}
+
+.history-text {
+  text-align: justify;
+  color: #333;
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+/* Privacy Section */
+.privacy-section {
+  padding: 60px 10%;
+  max-width: 1200px;
+  margin: 0 auto 60px;
+  background: #fff;
+}
+
+.privacy-text {
+  text-align: justify;
+  color: #333;
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
-  .about-intro h1 {
+  .about-page-title,
+  .brand-name {
     font-size: 2rem;
   }
   
-  .trio-card h2,
-  .about-core h2,
-  .about-privacy h2 {
-    font-size: 1.8rem;
+  .logo-box {
+    width: 150px;
+    height: 150px;
   }
   
-  .history-content {
-    flex-direction: column;
+  .info-card h3,
+  .section-title,
+  .section-title-blue {
+    font-size: 1.6rem;
   }
   
-  .about-container {
-    flex-direction: column;
-  }
-  
-  .about-trio {
+  .cards-section,
+  .core-values-cards {
     flex-direction: column;
     align-items: center;
   }
   
-  .core-content {
-    flex-direction: column;
-    align-items: center;
+  .cross {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .core-values-section {
+    background-attachment: scroll;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-intro,
+  .cards-section,
+  .history-section,
+  .privacy-section {
+    padding: 40px 5%;
+  }
+  
+  .core-values-section {
+    padding: 60px 5%;
+  }
+  
+  .core-values-overlay {
+    padding: 30px 20px;
+  }
+  
+  .logo-box {
+    width: 120px;
+    height: 120px;
   }
 }
