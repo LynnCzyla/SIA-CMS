@@ -96,8 +96,6 @@ const AppointmentModal = ({ isOpen, onClose }) => {
         }
       );
 
-      console.log("API response:", response.data);
-
       if (response.data && response.data.success) {
         setSuccess(true);
         setTimeout(() => onClose(), 2000);
@@ -117,6 +115,7 @@ const AppointmentModal = ({ isOpen, onClose }) => {
     }
   };
 
+  // Reset form when modal closes
   useEffect(() => {
     if (!isOpen) {
       setFormData({
@@ -171,8 +170,7 @@ const AppointmentModal = ({ isOpen, onClose }) => {
                 onChange={handleChange}
                 className="appointment-modal-input"
                 required
-                                  placeholder="Enter Last Name"
-
+                placeholder="Enter Last Name"
               />
             </div>
 

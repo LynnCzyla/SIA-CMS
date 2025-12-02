@@ -51,13 +51,16 @@
   transform: translateY(-50%);
   z-index: 3;
   max-width: 750px;
-  padding: 90px;
+  padding: 20px;
   border-radius: 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-end;
   text-align: right;
+    background-color: rgba(255, 255, 255, 0.3); /* Semi-transparent background */
+  backdrop-filter: blur(3px);  
+  border-radius: 20px;
 }
 
 .modern .home-left h1 {
@@ -76,6 +79,8 @@
   line-height: 1.8;
   font-weight: 600;
   margin-bottom: 35px;
+  
+   
 }
 
 /* Hero Buttons Container */
