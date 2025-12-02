@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 01, 2025 at 05:23 PM
+-- Generation Time: Dec 01, 2025 at 06:51 PM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- PHP Version: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -73,6 +73,7 @@ CREATE TABLE `announcement` (
 --
 
 INSERT INTO `announcement` (`id`, `short_title`, `full_title`, `topic_tags`, `description`, `image`, `status`, `scheduled_at`, `created_at`, `updated_at`, `author`, `slug`) VALUES
+('0ac603da-ced5-11f0-a10f-c018509200f9', 'fgweyu', 'uguyfgukw', 'ugwugfeuwe', '<p>kfebjhwe</p>', NULL, 'published', NULL, '2025-12-02 00:44:20', '2025-12-02 00:44:20', 12, 'fgweyu'),
 ('2bc0948c-b990-11f0-b748-c018509200f9', 'jfjhwbjfe', 'jbwjbw', 'jbjhbe', '<p>jfbjebfjwefjhfe</p>', '1762268913014-777763467.webp', 'published', NULL, '2025-11-04 23:08:33', '2025-11-10 13:41:07', 12, 'Kuromi'),
 ('3ae25719-cb63-11f0-9e6e-c0185091f4ff', 'Lorem Ipsum', 'Lorem Ipusm', 'Lorem Ipsum', '<p>Lorem Ipsum</p>', '1764228749833-182185891.jpg', 'published', NULL, '2025-11-27 15:32:29', '2025-11-27 15:32:29', 12, 'lorem-ipsum'),
 ('5649a7dc-b997-11f0-b748-c018509200f9', 'jfjhweb', 'jbwejfeb', 'jbjeh', '<p>bfhebfewf</p>', '1762271990847-429750890.webp', 'published', NULL, '2025-11-04 23:59:50', '2025-11-04 23:59:50', 12, NULL),
@@ -116,21 +117,6 @@ INSERT INTO `contact_info` (`id`, `contact_us`, `contact_info`, `hospital_addres
 CREATE TABLE `doctors_visibility` (
   `employee_id` int(11) NOT NULL,
   `is_shown` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `ems_job_logs`
---
-
-CREATE TABLE `ems_job_logs` (
-  `id` int(11) NOT NULL,
-  `job_id` int(11) NOT NULL,
-  `action` varchar(50) NOT NULL COMMENT 'submitted, approve, reject',
-  `ems_user_id` varchar(100) DEFAULT NULL,
-  `cms_reviewer_id` bigint(20) DEFAULT NULL,
-  `timestamp` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -226,26 +212,20 @@ INSERT INTO `health_tips` (`id`, `short_title`, `full_title`, `topic_tags`, `des
 
 CREATE TABLE `jobs` (
   `id` int(11) NOT NULL,
+  `post_type` enum('event','career') NOT NULL DEFAULT 'career',
   `job_title` varchar(255) NOT NULL,
   `short_title` varchar(255) DEFAULT NULL,
+  `full_title` varchar(500) NOT NULL,
   `department` varchar(255) NOT NULL,
-  `job_type` varchar(255) NOT NULL,
+  `job_type` enum('Full-time','Part-time','Contract') NOT NULL DEFAULT 'Full-time',
   `location` varchar(255) NOT NULL,
   `qualifications` varchar(500) NOT NULL,
   `application_deadline` date NOT NULL,
   `tags` varchar(255) DEFAULT NULL,
   `description` text DEFAULT NULL,
-  `status` enum('draft','pending_approval','posted','publish','published','rejected','trash') NOT NULL DEFAULT 'draft',
+  `status` enum('draft','posted','trash') NOT NULL DEFAULT 'draft',
   `image` varchar(255) DEFAULT NULL,
-  `author` int(11) DEFAULT NULL,
-  `submitted_by_ems` tinyint(1) DEFAULT 0,
-  `ems_user_id` varchar(100) DEFAULT NULL,
-  `ems_user_name` varchar(255) DEFAULT NULL,
-  `ems_notes` text DEFAULT NULL COMMENT 'Notes from EMS to CMS admin',
-  `urgency_level` enum('urgent','medium','low') DEFAULT 'medium' COMMENT 'Job posting urgency',
-  `reviewed_by` int(11) DEFAULT NULL,
-  `reviewed_at` datetime DEFAULT NULL,
-  `rejection_reason` text DEFAULT NULL,
+  `author` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -254,14 +234,10 @@ CREATE TABLE `jobs` (
 -- Dumping data for table `jobs`
 --
 
-INSERT INTO `jobs` (`id`, `job_title`, `short_title`, `department`, `job_type`, `location`, `qualifications`, `application_deadline`, `tags`, `description`, `status`, `image`, `author`, `submitted_by_ems`, `ems_user_id`, `ems_user_name`, `ems_notes`, `urgency_level`, `reviewed_by`, `reviewed_at`, `rejection_reason`, `created_at`, `updated_at`) VALUES
-(1, 'aaaa', NULL, 'Administration', 'Part-time', 'aaa', 'aaaaa', '2025-11-28', NULL, '<p>aaaaa</p>', 'trash', '1762687515597.jpg', 26, 0, NULL, NULL, NULL, 'medium', NULL, NULL, NULL, '2025-11-09 11:25:15', '2025-11-10 04:28:07'),
-(2, 'Nursing Intern', NULL, 'Nursing', 'Full-time', 'Quezon City', 'BSNursing Graduate', '2025-11-27', NULL, '<p class=\"ql-align-justify\">We are <span style=\"background-color: rgb(255, 255, 255); color: inherit;\">is looking to hire an experienced and highly dynamic </span><strong style=\"background-color: rgb(255, 255, 255); color: inherit;\">Corporate Legal Counsel</strong><span style=\"background-color: rgb(255, 255, 255); color: inherit;\"> who oversees the legal aspects of the business and ensures that the hospital operates within the law at all times.  S/He creates an effective guardian of the organization and facilitates business strategies development.  S/He serves as a resource person to senior management and physicians; offers counsel on legal issues, guarantees legal compliance in the institution and limits risk exposure. Additionally, s/he aligns and improves the culture of the Corporate Affairs Division’s services and organizes its structure to support the hospital’s core purpose. </span></p><p><span style=\"background-color: rgb(248, 250, 252); color: rgb(31, 33, 36);\">Job Duties &amp; Responsibilities</span></p><ol><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Provides expert and strategic legal advice to management </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Anticipates issues and estimate risks strategically  </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Sets internal governance policies and manage the impact of external factors. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Keeps abreast of legislative changes. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Communicate and negotiate with external parties (regulators, external counsel, politicians, clients). </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Collaborate with management to devise efficient defense strategies. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Liaise with relevant departments to ensure that where legal risks have been identified, appropriate courses of action have been taken </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Provide legal protection and risk management advice to management. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Review ongoing cases and advice management accordingly. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Review and advise management on legal implications of internal policies and procedures. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Review progress of outstanding litigation and liaise with and manage external lawyers. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Continuously monitor compliance with statutory obligations and advise management accordingly. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Prepare monthly and quarterly reports for the department for executive management meetings. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Responsible for the review and streamlining of processes and policies to continuously improve the quality of service in the department.   </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Leads or directs the team or creates functional team to identify performance gaps and formulate strategic interventions to continuously improve on identified areas for improvement, when required </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Oversees the development and placement of safety strategies and continuous quality improvement of service initiatives in the department. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Participates in the planning and implementation of performance management program and in communicating this with different department leaders. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Monitors the compliance of employee movement and regularization through collaboration with other HR leaders; ensures that all rewards related to employee movement and regularization are communicated and implemented by the respective department/section/ unit leader.   </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Mentors and/or trains the junior leaders to ensure proper cascading and/or learning of technical know-how and soft skills that contribute to the achievement organization’s strategic objectives.  </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Oversees the development and placement of safety strategies and continuous quality improvement of service initiatives in the department. </span></li></ol><p><br></p>', 'trash', '1762748397865.jpg', 12, 0, NULL, NULL, NULL, 'medium', NULL, NULL, NULL, '2025-11-10 04:19:57', '2025-11-10 04:27:59'),
-(3, 'Nursing Intern', 'We are Looking for Nursing Intern', 'Nursing', 'Full-time', 'Pasig CIty', 'BSNursing Graduate', '2025-11-19', NULL, '<p class=\"ql-align-justify\"><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">is looking to hire an experienced and highly dynamic </span><strong style=\"background-color: rgb(255, 255, 255); color: inherit;\">Corporate Legal Counsel</strong><span style=\"background-color: rgb(255, 255, 255); color: inherit;\"> who oversees the legal aspects of the business and ensures that the hospital operates within the law at all times.  S/He creates an effective guardian of the organization and facilitates business strategies development.  S/He serves as a resource person to senior management and physicians; offers counsel on legal issues, guarantees legal compliance in the institution and limits risk exposure. Additionally, s/he aligns and improves the culture of the Corporate Affairs Division’s services and organizes its structure to support the hospital’s core purpose. </span></p><p><span style=\"background-color: rgb(248, 250, 252); color: rgb(31, 33, 36);\">Job Duties &amp; Responsibilities</span></p><ol><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Provides expert and strategic legal advice to management </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Anticipates issues and estimate risks strategically  </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Sets internal governance policies and manage the impact of external factors. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Keeps abreast of legislative changes. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Communicate and negotiate with external parties (regulators, external counsel, politicians, clients). </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Collaborate with management to devise efficient defense strategies. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Liaise with relevant departments to ensure that where legal risks have been identified, appropriate courses of action have been taken </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Provide legal protection and risk management advice to management. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Review ongoing cases and advice management accordingly. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Review and advise management on legal implications of internal policies and procedures. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Review progress of outstanding litigation and liaise with and manage external lawyers. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Continuously monitor compliance with statutory obligations and advise management accordingly. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Prepare monthly and quarterly reports for the department for executive management meetings. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Responsible for the review and streamlining of processes and policies to continuously improve the quality of service in the department.   </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Leads or directs the team or creates functional team to identify performance gaps and formulate strategic interventions to continuously improve on identified areas for improvement, when required </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Oversees the development and placement of safety strategies and continuous quality improvement of service initiatives in the department. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Participates in the planning and implementation of performance management program and in communicating this with different department leaders. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Monitors the compliance of employee movement and regularization through collaboration with other HR leaders; ensures that all rewards related to employee movement and regularization are communicated and implemented by the respective department/section/ unit leader.   </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Mentors and/or trains the junior leaders to ensure proper cascading and/or learning of technical know-how and soft skills that contribute to the achievement organization’s strategic objectives.  </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Oversees the development and placement of safety strategies and continuous quality improvement of service initiatives in the department. </span></li></ol><p><span style=\"background-color: rgb(248, 250, 252); color: rgb(31, 33, 36);\">Qualifications</span></p><h2 class=\"ql-align-center\"><span style=\"background-color: rgb(255, 255, 255); color: rgb(0, 148, 68);\">Apply for this position</span></h2><p><br></p>', 'posted', '1762750852806.jpg', 12, 0, NULL, NULL, NULL, 'medium', NULL, NULL, NULL, '2025-11-10 05:00:52', '2025-11-10 05:00:52'),
-(4, 'xdfhg', '', 'Administration', '', '', '', '0000-00-00', NULL, '<p><br></p>', 'posted', NULL, 12, 0, NULL, NULL, NULL, 'medium', NULL, NULL, NULL, '2025-11-30 12:25:41', '2025-11-30 12:25:41'),
-(5, 'Senior Staff Nurse - Emergency Department', 'We are looking for Senior Staff Nurse RN', 'Nursing', '', 'Pasig', 'Bachelor of Science in Nursing (BSN) degree, Minimum 3 years of experience in Emergency Department nursing', '2025-12-01', NULL, '<p><em>📍 POSITION: Senior Staff Nurse - Emergency Department</em></p><p><em>🏥 DEPARTMENT: Emergency Medicine</em></p><p><em>📌 EMPLOYMENT TYPE: Full-time Regular</em></p><p><em>📍 LOCATION: Main Hospital, Pasig</em></p><p><em>👥 VACANCIES: 3 Positions</em></p><p><em>📅 APPLICATION DEADLINE: January 30, 2024</em></p><p><br></p><p><br></p><h2>🎯 JOB SUMMARY</h2><p><br></p><p>General Hospital is seeking experienced and compassionate Senior Staff Nurses to join our expanding Emergency Department team. The ideal candidate will provide high-quality emergency care, mentor junior staff, and contribute to our mission of delivering exceptional patient-centered care in critical situations.</p><p><br></p><p><br></p><h2>📋 KEY RESPONSIBILITIES</h2><p><br></p><p>• Triage and assess patients arriving in the Emergency Department</p><p>• Provide immediate nursing care to critically ill or injured patients</p><p>• Administer medications, treatments, and emergency procedures as ordered</p><p>• Monitor patient conditions and vital signs continuously</p><p>• Collaborate with emergency physicians and healthcare team members</p><p>• Mentor and guide junior nursing staff and new graduates</p><p>• Maintain accurate and timely electronic health records</p><p>• Ensure compliance with hospital protocols and safety standards</p><p>• Participate in emergency drills and continuous training programs</p><p>• Provide emotional support and clear communication to patients and families</p><p><br></p><h2><br></h2><h2>🎓 QUALIFICATIONS &amp; REQUIREMENTS</h2><p><br></p><p><strong>Education:</strong></p><p>• Bachelor of Science in Nursing (BSN) degree</p><p>• Master\'s degree in Nursing or related field (preferred but not required)</p><p><br></p><p><strong>Licenses &amp; Certifications:</strong></p><p>• Active PRC Professional Nursing License</p><p>• Basic Life Support (BLS) certification</p><p>• Advanced Cardiac Life Support (ACLS) certification</p><p>• Pediatric Advanced Life Support (PALS) certification</p><p>• Emergency Nursing Training certification (preferred)</p><p><br></p><p><strong>Experience:</strong></p><p>• Minimum 3 years of experience in Emergency Department nursing</p><p>• At least 1 year in a senior or charge nurse role</p><p>• Experience in trauma care and critical emergency situations</p><p><br></p><p><strong>Skills &amp; Competencies:</strong></p><p>• Excellent clinical assessment and decision-making skills</p><p>• Strong leadership and team management abilities</p><p>• Effective communication and interpersonal skills</p><p>• Ability to work under pressure in fast-paced environments</p><p>• Proficiency in electronic health record systems</p><p>• Fluency in English and Filipino</p><p><br></p><p><br></p><h2>💼 WHAT WE OFFER</h2><p><br></p><p><strong>Compensation &amp; Benefits:</strong></p><p>• Competitive salary package with hazard pay</p><p>• Government-mandated benefits (SSS, PhilHealth, Pag-IBIG)</p><p>• Comprehensive HMO coverage for employee and dependents</p><p>• Retirement plan benefits</p><p>• Annual salary increase and performance bonus</p><p><br></p><p><strong>Professional Development:</strong></p><p>• Continuous training and skills enhancement programs</p><p>• Opportunities for career advancement</p><p>• Conference and seminar allowances</p><p>• Tuition fee assistance for further studies</p><p><br></p><p><strong>Work Environment:</strong></p><p>• State-of-the-art emergency facilities and equipment</p><p>• Supportive and collaborative team environment</p><p>• Regular work schedule with rotating shifts</p><p>• Modern employee facilities and amenities</p><p><br></p><p><br></p><h2>📞 HOW TO APPLY</h2><p><br></p><p>Interested and qualified applicants may submit the following documents:</p><p><br></p><p>1. Updated Resume with recent 2x2 photo</p><p>2. PRC Board Rating and License</p><p>3. Transcript of Records</p><p>4. Certificates of Employment</p><p>5. Training and Seminar Certificates</p><p>6. Other relevant credentials</p><p><br></p><p><strong>Application Methods:</strong></p><p>• Online: careers.generalhospital.ph/senior-nurse-ed</p><p>• Email: hr.recruitment@generalhospital.ph</p><p>• In-person: HR Department, 3rd Floor, Main Building</p><p><br></p><p><strong>For inquiries, please contact:</strong></p><p>Human Resources Department</p><p>📞 (02) 8123-4567 local 245</p><p>📱 0917-123-4567</p><p>🕘 Monday to Friday, 8:00 AM - 5:00 PM</p><p><br></p><p><br></p><h2>📍 ABOUT GENERAL HOSPITAL</h2><p><br></p><p>General Hospital is a premier healthcare institution with over 50 years of service excellence. We are committed to providing world-class medical care while nurturing our employees\' professional growth and well-being. Join our family of healthcare professionals and make a difference in the lives of our patients every day.</p><p><br></p><p><br></p><h2>⚖️ EQUAL OPPORTUNITY EMPLOYER</h2><p><br></p><p>General Hospital is an equal opportunity employer and does not discriminate on the basis of race, color, religion, gender, sexual orientation, gender identity, national origin, age, disability, or any other protected status.</p>', 'posted', '1764505640026.jpg', 12, 0, NULL, NULL, NULL, 'medium', NULL, NULL, NULL, '2025-11-30 12:27:20', '2025-11-30 12:27:20'),
-(6, 'Senior Staff Nurse - Emergency Department', 'We are looking for Senior Staff Nurse RN', 'Nursing', 'Regular / Permanent', 'Pasig', 'Minimum 3 years of experience in Emergency Department nursing', '2025-12-02', NULL, '<p><em>📍 POSITION: Senior Staff Nurse - Emergency Department</em></p><p><em>🏥 DEPARTMENT: Emergency Medicine</em></p><p><em>📌 EMPLOYMENT TYPE: Full-time Regular</em></p><p><em>📍 LOCATION: Main Hospital, Pasig</em></p><p><em>👥 VACANCIES: 3 Positions</em></p><p><em>📅 APPLICATION DEADLINE: January 30, 2024</em></p><p><br></p><p><br></p><h2>🎯 JOB SUMMARY</h2><p><br></p><p>General Hospital is seeking experienced and compassionate Senior Staff Nurses to join our expanding Emergency Department team. The ideal candidate will provide high-quality emergency care, mentor junior staff, and contribute to our mission of delivering exceptional patient-centered care in critical situations.</p><p><br></p><p><br></p><h2>📋 KEY RESPONSIBILITIES</h2><p><br></p><p>• Triage and assess patients arriving in the Emergency Department</p><p>• Provide immediate nursing care to critically ill or injured patients</p><p>• Administer medications, treatments, and emergency procedures as ordered</p><p>• Monitor patient conditions and vital signs continuously</p><p>• Collaborate with emergency physicians and healthcare team members</p><p>• Mentor and guide junior nursing staff and new graduates</p><p>• Maintain accurate and timely electronic health records</p><p>• Ensure compliance with hospital protocols and safety standards</p><p>• Participate in emergency drills and continuous training programs</p><p>• Provide emotional support and clear communication to patients and families</p><p><br></p><h2><br></h2><h2>🎓 QUALIFICATIONS &amp; REQUIREMENTS</h2><p><br></p><p><strong>Education:</strong></p><p>• Bachelor of Science in Nursing (BSN) degree</p><p>• Master\'s degree in Nursing or related field (preferred but not required)</p><p><br></p><p><strong>Licenses &amp; Certifications:</strong></p><p>• Active PRC Professional Nursing License</p><p>• Basic Life Support (BLS) certification</p><p>• Advanced Cardiac Life Support (ACLS) certification</p><p>• Pediatric Advanced Life Support (PALS) certification</p><p>• Emergency Nursing Training certification (preferred)</p><p><br></p><p><strong>Experience:</strong></p><p>• Minimum 3 years of experience in Emergency Department nursing</p><p>• At least 1 year in a senior or charge nurse role</p><p>• Experience in trauma care and critical emergency situations</p><p><br></p><p><strong>Skills &amp; Competencies:</strong></p><p>• Excellent clinical assessment and decision-making skills</p><p>• Strong leadership and team management abilities</p><p>• Effective communication and interpersonal skills</p><p>• Ability to work under pressure in fast-paced environments</p><p>• Proficiency in electronic health record systems</p><p>• Fluency in English and Filipino</p><p><br></p><p><br></p><h2>💼 WHAT WE OFFER</h2><p><br></p><p><strong>Compensation &amp; Benefits:</strong></p><p>• Competitive salary package with hazard pay</p><p>• Government-mandated benefits (SSS, PhilHealth, Pag-IBIG)</p><p>• Comprehensive HMO coverage for employee and dependents</p><p>• Retirement plan benefits</p><p>• Annual salary increase and performance bonus</p><p><br></p><p><strong>Professional Development:</strong></p><p>• Continuous training and skills enhancement programs</p><p>• Opportunities for career advancement</p><p>• Conference and seminar allowances</p><p>• Tuition fee assistance for further studies</p><p><br></p><p><strong>Work Environment:</strong></p><p>• State-of-the-art emergency facilities and equipment</p><p>• Supportive and collaborative team environment</p><p>• Regular work schedule with rotating shifts</p><p>• Modern employee facilities and amenities</p><p><br></p><p><br></p><h2>📞 HOW TO APPLY</h2><p><br></p><p>Interested and qualified applicants may submit the following documents:</p><p><br></p><p>1. Updated Resume with recent 2x2 photo</p><p>2. PRC Board Rating and License</p><p>3. Transcript of Records</p><p>4. Certificates of Employment</p><p>5. Training and Seminar Certificates</p><p>6. Other relevant credentials</p><p><br></p><p><strong>Application Methods:</strong></p><p>• Online: careers.generalhospital.ph/senior-nurse-ed</p><p>• Email: hr.recruitment@generalhospital.ph</p><p>• In-person: HR Department, 3rd Floor, Main Building</p><p><br></p><p><strong>For inquiries, please contact:</strong></p><p>Human Resources Department</p><p>📞 (02) 8123-4567 local 245</p><p>📱 0917-123-4567</p><p>🕘 Monday to Friday, 8:00 AM - 5:00 PM</p><p><br></p><p><br></p><h2>📍 ABOUT GENERAL HOSPITAL</h2><p><br></p><p>General Hospital is a premier healthcare institution with over 50 years of service excellence. We are committed to providing world-class medical care while nurturing our employees\' professional growth and well-being. Join our family of healthcare professionals and make a difference in the lives of our patients every day.</p><p><br></p><p><br></p><h2>⚖️ EQUAL OPPORTUNITY EMPLOYER</h2><p><br></p><p>General Hospital is an equal opportunity employer and does not discriminate on the basis of race, color, religion, gender, sexual orientation, gender identity, national origin, age, disability, or any other protected status.</p>', 'rejected', '1764593142289-744839527.jpg', NULL, 1, 'EMS-PILOT-2025', 'EMS HR (Pilot Tester)', 'Please Upload Now!!', 'urgent', 12, '2025-12-01 20:48:41', 'Ulitin mo', '2025-12-01 12:45:42', '2025-12-01 12:48:41'),
-(7, 'Senior Staff Nurse - Emergency Department', 'We are looking for Senior Staff Nurse RN', 'Nursing', 'Contractual', 'Pasig', 'Active PRC Professional Nursing License', '2025-12-02', NULL, '<p><em>📍 POSITION: Senior Staff Nurse - Emergency Department</em></p><p><em>🏥 DEPARTMENT: Emergency Medicine</em></p><p><em>📌 EMPLOYMENT TYPE: Full-time Regular</em></p><p><em>📍 LOCATION: Main Hospital, Pasig</em></p><p><em>👥 VACANCIES: 3 Positions</em></p><p><em>📅 APPLICATION DEADLINE: January 30, 2024</em></p><p><br></p><p><br></p><h2>🎯 JOB SUMMARY</h2><p><br></p><p>General Hospital is seeking experienced and compassionate Senior Staff Nurses to join our expanding Emergency Department team. The ideal candidate will provide high-quality emergency care, mentor junior staff, and contribute to our mission of delivering exceptional patient-centered care in critical situations.</p><p><br></p><p><br></p><h2>📋 KEY RESPONSIBILITIES</h2><p><br></p><p>• Triage and assess patients arriving in the Emergency Department</p><p>• Provide immediate nursing care to critically ill or injured patients</p><p>• Administer medications, treatments, and emergency procedures as ordered</p><p>• Monitor patient conditions and vital signs continuously</p><p>• Collaborate with emergency physicians and healthcare team members</p><p>• Mentor and guide junior nursing staff and new graduates</p><p>• Maintain accurate and timely electronic health records</p><p>• Ensure compliance with hospital protocols and safety standards</p><p>• Participate in emergency drills and continuous training programs</p><p>• Provide emotional support and clear communication to patients and families</p><p><br></p><h2><br></h2><h2>🎓 QUALIFICATIONS &amp; REQUIREMENTS</h2><p><br></p><p><strong>Education:</strong></p><p>• Bachelor of Science in Nursing (BSN) degree</p><p>• Master\'s degree in Nursing or related field (preferred but not required)</p><p><br></p><p><strong>Licenses &amp; Certifications:</strong></p><p>• Active PRC Professional Nursing License</p><p>• Basic Life Support (BLS) certification</p><p>• Advanced Cardiac Life Support (ACLS) certification</p><p>• Pediatric Advanced Life Support (PALS) certification</p><p>• Emergency Nursing Training certification (preferred)</p><p><br></p><p><strong>Experience:</strong></p><p>• Minimum 3 years of experience in Emergency Department nursing</p><p>• At least 1 year in a senior or charge nurse role</p><p>• Experience in trauma care and critical emergency situations</p><p><br></p><p><strong>Skills &amp; Competencies:</strong></p><p>• Excellent clinical assessment and decision-making skills</p><p>• Strong leadership and team management abilities</p><p>• Effective communication and interpersonal skills</p><p>• Ability to work under pressure in fast-paced environments</p><p>• Proficiency in electronic health record systems</p><p>• Fluency in English and Filipino</p><p><br></p><p><br></p><h2>💼 WHAT WE OFFER</h2><p><br></p><p><strong>Compensation &amp; Benefits:</strong></p><p>• Competitive salary package with hazard pay</p><p>• Government-mandated benefits (SSS, PhilHealth, Pag-IBIG)</p><p>• Comprehensive HMO coverage for employee and dependents</p><p>• Retirement plan benefits</p><p>• Annual salary increase and performance bonus</p><p><br></p><p><strong>Professional Development:</strong></p><p>• Continuous training and skills enhancement programs</p><p>• Opportunities for career advancement</p><p>• Conference and seminar allowances</p><p>• Tuition fee assistance for further studies</p><p><br></p><p><strong>Work Environment:</strong></p><p>• State-of-the-art emergency facilities and equipment</p><p>• Supportive and collaborative team environment</p><p>• Regular work schedule with rotating shifts</p><p>• Modern employee facilities and amenities</p><p><br></p><p><br></p><h2>📞 HOW TO APPLY</h2><p><br></p><p>Interested and qualified applicants may submit the following documents:</p><p><br></p><p>1. Updated Resume with recent 2x2 photo</p><p>2. PRC Board Rating and License</p><p>3. Transcript of Records</p><p>4. Certificates of Employment</p><p>5. Training and Seminar Certificates</p><p>6. Other relevant credentials</p><p><br></p><p><strong>Application Methods:</strong></p><p>• Online: careers.generalhospital.ph/senior-nurse-ed</p><p>• Email: hr.recruitment@generalhospital.ph</p><p>• In-person: HR Department, 3rd Floor, Main Building</p><p><br></p><p><strong>For inquiries, please contact:</strong></p><p>Human Resources Department</p><p>📞 (02) 8123-4567 local 245</p><p>📱 0917-123-4567</p><p>🕘 Monday to Friday, 8:00 AM - 5:00 PM</p><p><br></p><p><br></p><h2>📍 ABOUT GENERAL HOSPITAL</h2><p><br></p><p>General Hospital is a premier healthcare institution with over 50 years of service excellence. We are committed to providing world-class medical care while nurturing our employees\' professional growth and well-being. Join our family of healthcare professionals and make a difference in the lives of our patients every day.</p><p><br></p><p><br></p><h2>⚖️ EQUAL OPPORTUNITY EMPLOYER</h2><p><br></p><p>General Hospital is an equal opportunity employer and does not discriminate on the basis of race, color, religion, gender, sexual orientation, gender identity, national origin, age, disability, or any other protected status.</p>', 'posted', '1764593394375-543430466.jpg', NULL, 1, 'EMS-PILOT-2025', 'EMS HR (Pilot Tester)', 'maybe mamaya na', 'medium', 12, '2025-12-01 20:51:50', NULL, '2025-12-01 12:49:54', '2025-12-01 12:51:50');
+INSERT INTO `jobs` (`id`, `post_type`, `job_title`, `short_title`, `full_title`, `department`, `job_type`, `location`, `qualifications`, `application_deadline`, `tags`, `description`, `status`, `image`, `author`, `created_at`, `updated_at`) VALUES
+(1, 'career', 'aaaa', NULL, '', 'Administration', 'Part-time', 'aaa', 'aaaaa', '2025-11-28', NULL, '<p>aaaaa</p>', 'trash', '1762687515597.jpg', 26, '2025-11-09 11:25:15', '2025-11-10 04:28:07'),
+(2, 'career', 'Nursing Intern', NULL, '', 'Nursing', 'Full-time', 'Quezon City', 'BSNursing Graduate', '2025-11-27', NULL, '<p class=\"ql-align-justify\">We are <span style=\"background-color: rgb(255, 255, 255); color: inherit;\">is looking to hire an experienced and highly dynamic </span><strong style=\"background-color: rgb(255, 255, 255); color: inherit;\">Corporate Legal Counsel</strong><span style=\"background-color: rgb(255, 255, 255); color: inherit;\"> who oversees the legal aspects of the business and ensures that the hospital operates within the law at all times.  S/He creates an effective guardian of the organization and facilitates business strategies development.  S/He serves as a resource person to senior management and physicians; offers counsel on legal issues, guarantees legal compliance in the institution and limits risk exposure. Additionally, s/he aligns and improves the culture of the Corporate Affairs Division’s services and organizes its structure to support the hospital’s core purpose. </span></p><p><span style=\"background-color: rgb(248, 250, 252); color: rgb(31, 33, 36);\">Job Duties &amp; Responsibilities</span></p><ol><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Provides expert and strategic legal advice to management </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Anticipates issues and estimate risks strategically  </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Sets internal governance policies and manage the impact of external factors. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Keeps abreast of legislative changes. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Communicate and negotiate with external parties (regulators, external counsel, politicians, clients). </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Collaborate with management to devise efficient defense strategies. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Liaise with relevant departments to ensure that where legal risks have been identified, appropriate courses of action have been taken </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Provide legal protection and risk management advice to management. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Review ongoing cases and advice management accordingly. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Review and advise management on legal implications of internal policies and procedures. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Review progress of outstanding litigation and liaise with and manage external lawyers. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Continuously monitor compliance with statutory obligations and advise management accordingly. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Prepare monthly and quarterly reports for the department for executive management meetings. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Responsible for the review and streamlining of processes and policies to continuously improve the quality of service in the department.   </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Leads or directs the team or creates functional team to identify performance gaps and formulate strategic interventions to continuously improve on identified areas for improvement, when required </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Oversees the development and placement of safety strategies and continuous quality improvement of service initiatives in the department. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Participates in the planning and implementation of performance management program and in communicating this with different department leaders. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Monitors the compliance of employee movement and regularization through collaboration with other HR leaders; ensures that all rewards related to employee movement and regularization are communicated and implemented by the respective department/section/ unit leader.   </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Mentors and/or trains the junior leaders to ensure proper cascading and/or learning of technical know-how and soft skills that contribute to the achievement organization’s strategic objectives.  </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Oversees the development and placement of safety strategies and continuous quality improvement of service initiatives in the department. </span></li></ol><p><br></p>', 'trash', '1762748397865.jpg', 12, '2025-11-10 04:19:57', '2025-11-10 04:27:59'),
+(3, 'career', 'Nursing Intern', 'We are Looking for Nursing Intern', '', 'Nursing', 'Full-time', 'Pasig CIty', 'BSNursing Graduate', '2025-11-19', NULL, '<p class=\"ql-align-justify\"><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">is looking to hire an experienced and highly dynamic </span><strong style=\"background-color: rgb(255, 255, 255); color: inherit;\">Corporate Legal Counsel</strong><span style=\"background-color: rgb(255, 255, 255); color: inherit;\"> who oversees the legal aspects of the business and ensures that the hospital operates within the law at all times.  S/He creates an effective guardian of the organization and facilitates business strategies development.  S/He serves as a resource person to senior management and physicians; offers counsel on legal issues, guarantees legal compliance in the institution and limits risk exposure. Additionally, s/he aligns and improves the culture of the Corporate Affairs Division’s services and organizes its structure to support the hospital’s core purpose. </span></p><p><span style=\"background-color: rgb(248, 250, 252); color: rgb(31, 33, 36);\">Job Duties &amp; Responsibilities</span></p><ol><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Provides expert and strategic legal advice to management </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Anticipates issues and estimate risks strategically  </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Sets internal governance policies and manage the impact of external factors. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Keeps abreast of legislative changes. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Communicate and negotiate with external parties (regulators, external counsel, politicians, clients). </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Collaborate with management to devise efficient defense strategies. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Liaise with relevant departments to ensure that where legal risks have been identified, appropriate courses of action have been taken </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Provide legal protection and risk management advice to management. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Review ongoing cases and advice management accordingly. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Review and advise management on legal implications of internal policies and procedures. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Review progress of outstanding litigation and liaise with and manage external lawyers. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Continuously monitor compliance with statutory obligations and advise management accordingly. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Prepare monthly and quarterly reports for the department for executive management meetings. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Responsible for the review and streamlining of processes and policies to continuously improve the quality of service in the department.   </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Leads or directs the team or creates functional team to identify performance gaps and formulate strategic interventions to continuously improve on identified areas for improvement, when required </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Oversees the development and placement of safety strategies and continuous quality improvement of service initiatives in the department. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Participates in the planning and implementation of performance management program and in communicating this with different department leaders. </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Monitors the compliance of employee movement and regularization through collaboration with other HR leaders; ensures that all rewards related to employee movement and regularization are communicated and implemented by the respective department/section/ unit leader.   </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Mentors and/or trains the junior leaders to ensure proper cascading and/or learning of technical know-how and soft skills that contribute to the achievement organization’s strategic objectives.  </span></li><li data-list=\"bullet\" class=\"ql-align-justify\"><span class=\"ql-ui\" contenteditable=\"false\"></span><span style=\"background-color: rgb(255, 255, 255); color: inherit;\">Oversees the development and placement of safety strategies and continuous quality improvement of service initiatives in the department. </span></li></ol><p><span style=\"background-color: rgb(248, 250, 252); color: rgb(31, 33, 36);\">Qualifications</span></p><h2 class=\"ql-align-center\"><span style=\"background-color: rgb(255, 255, 255); color: rgb(0, 148, 68);\">Apply for this position</span></h2><p><br></p>', 'posted', '1762750852806.jpg', 12, '2025-11-10 05:00:52', '2025-11-10 05:00:52');
 
 -- --------------------------------------------------------
 
@@ -308,24 +284,6 @@ INSERT INTO `news` (`id`, `short_title`, `full_title`, `slug`, `topic_tags`, `de
 -- --------------------------------------------------------
 
 --
--- Table structure for table `notifications`
---
-
-CREATE TABLE `notifications` (
-  `id` int(11) NOT NULL,
-  `type` varchar(50) NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `description` text DEFAULT NULL,
-  `metadata` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`metadata`)),
-  `user_id` bigint(20) DEFAULT NULL,
-  `is_read` tinyint(1) DEFAULT 0,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `page_views`
 --
 
@@ -345,17 +303,18 @@ INSERT INTO `page_views` (`page_name`, `view_date`, `visit_count`) VALUES
 ('/', '2025-11-25', 5),
 ('/', '2025-11-27', 8),
 ('/', '2025-11-28', 4),
-('/', '2025-11-29', 22),
-('/', '2025-11-30', 4),
-('/', '2025-12-01', 19),
+('/', '2025-12-01', 11),
+('/', '2025-12-02', 8),
 ('/about', '2025-11-22', 4),
 ('/about', '2025-11-27', 3),
-('/about', '2025-12-01', 2),
+('/about', '2025-12-02', 1),
 ('/announcements', '2025-11-22', 5),
 ('/announcements', '2025-11-24', 26),
 ('/announcements', '2025-11-25', 1),
 ('/announcements', '2025-11-27', 5),
 ('/announcements', '2025-11-28', 4),
+('/announcements', '2025-12-01', 1),
+('/announcements', '2025-12-02', 7),
 ('/announcements/3ae25719-cb63-11f0-9e6e-c0185091f4ff', '2025-11-27', 1),
 ('/announcements/announcement', '2025-11-28', 4),
 ('/announcements/jame', '2025-11-24', 5),
@@ -367,22 +326,16 @@ INSERT INTO `page_views` (`page_name`, `view_date`, `visit_count`) VALUES
 ('/announcements/welcome-to-medisync', '2025-11-27', 1),
 ('/careers', '2025-11-22', 5),
 ('/careers', '2025-11-27', 3),
-('/careers', '2025-11-30', 11),
-('/careers', '2025-12-01', 9),
+('/careers', '2025-12-02', 1),
 ('/careers/3', '2025-11-27', 2),
-('/careers/3', '2025-11-30', 2),
-('/careers/5', '2025-11-30', 2),
-('/careers/5', '2025-12-01', 25),
-('/careers/7', '2025-12-01', 1),
 ('/contact', '2025-11-22', 3),
 ('/contact', '2025-11-25', 14),
 ('/contact', '2025-11-27', 1),
-('/contact', '2025-12-01', 1),
-('/dashboard', '2025-12-01', 10),
+('/contact', '2025-12-02', 1),
 ('/doctors', '2025-11-17', 7),
 ('/doctors', '2025-11-22', 3),
 ('/doctors', '2025-11-27', 3),
-('/doctors', '2025-12-01', 1),
+('/doctors', '2025-12-02', 3),
 ('/health', '2025-11-22', 4),
 ('/health', '2025-11-24', 2),
 ('/health', '2025-11-25', 2),
@@ -403,12 +356,16 @@ INSERT INTO `page_views` (`page_name`, `view_date`, `visit_count`) VALUES
 ('/news/null', '2025-11-24', 6),
 ('/news/undefined', '2025-11-25', 2),
 ('/posts', '2025-11-27', 2),
-('/posts', '2025-12-01', 2),
 ('/services', '2025-11-17', 12),
 ('/services', '2025-11-22', 9),
 ('/services', '2025-11-27', 3),
 ('/services', '2025-11-28', 8),
-('/services', '2025-12-01', 1);
+('/services', '2025-12-02', 86),
+('/services/aaaaa', '2025-12-02', 2),
+('/services/aaaaab', '2025-12-02', 1),
+('/services/ampota', '2025-12-02', 1),
+('/services/null', '2025-12-02', 4),
+('/services/wdwadwad', '2025-12-02', 2);
 
 -- --------------------------------------------------------
 
@@ -444,6 +401,7 @@ CREATE TABLE `services` (
   `user_id` bigint(20) NOT NULL,
   `short_title` varchar(255) NOT NULL,
   `full_title` varchar(255) NOT NULL,
+  `slug` varchar(255) DEFAULT NULL,
   `topic_tags` text DEFAULT NULL,
   `description` text NOT NULL,
   `status` enum('published','draft','archived') DEFAULT 'published',
@@ -456,9 +414,9 @@ CREATE TABLE `services` (
 -- Dumping data for table `services`
 --
 
-INSERT INTO `services` (`id`, `user_id`, `short_title`, `full_title`, `topic_tags`, `description`, `status`, `image`, `created_at`, `updated_at`) VALUES
-('f7c25549-c94d-11f0-a10f-c018509200f9', 12, 'kfebfhk', 'kjfkwej', 'kjnkjbfekjw', '<p>efjbwefbjwhfe</p>', 'published', '6b70b638-7e9b-409e-8a9b-c32cd0143b35.webp', '2025-11-24 23:54:57', '2025-11-24 23:54:57'),
-('346aae8b-cc6b-11f0-88eb-c0185091f91d', 12, 'Mental health', 'Mental health', 'Mental health', '<p>Mental healthMental healthMental healthMental healthMental health</p>', 'published', '55d4c3f9-dd53-4d31-b7c5-8650e42d0387.png', '2025-11-28 23:02:06', '2025-11-28 23:02:06');
+INSERT INTO `services` (`id`, `user_id`, `short_title`, `full_title`, `slug`, `topic_tags`, `description`, `status`, `image`, `created_at`, `updated_at`) VALUES
+('d9494d67-cedc-11f0-b55f-c0185091f4ff', 12, 'AAAAA', 'AAAAA', 'aaaaa', 'AAAAA', '<p>AAAAA</p>', 'published', 'd0f7dd4e-9c7f-46c4-9e7c-adcd9c578f1a.png', '2025-12-02 01:40:38', '2025-12-02 01:40:38'),
+('a53c6d87-cedd-11f0-b55f-c0185091f4ff', 12, 'AAAAAB', 'AAAAAB', 'aaaaab', 'AAAAAAB', '<p>AAAAABBB</p>', 'published', '5b3e167d-a64e-4c72-b870-109ac1faaff1.webp', '2025-12-02 01:46:20', '2025-12-02 01:46:20');
 
 -- --------------------------------------------------------
 
@@ -485,9 +443,8 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `full_name`, `email`, `password`, `created_at`, `role`, `last_login`, `reset_code`, `code_expiry`) VALUES
 (8, 'Lynn', 'lynnzylameczdo@gmail.com', '$2b$10$ADe2OQ01nBT9Udz1/wJZaOc2XXdJ.OyPChMfN/PSD8x3Z2wzHkyOq', '2025-10-17 21:31:06', 'hr_administrator', '2025-11-08 02:03:38', '514594', '2025-10-25 10:41:31'),
 (11, 'Lynn Czyla Alpuerto', 'alpuerto_lynnczyla@plpasig.edu.ph', '$2b$10$ADe2OQ01nBT9Udz1/wJZaOc2XXdJ.OyPChMfN/PSD8x3Z2wzHkyOq', '2025-10-18 03:32:20', 'content_administrator', NULL, NULL, NULL),
-(12, 'James', 'flavierlaurence01@gmail.com', '$2b$10$ADe2OQ01nBT9Udz1/wJZaOc2XXdJ.OyPChMfN/PSD8x3Z2wzHkyOq', '2025-10-18 03:40:35', 'super_administrator', '2025-12-01 16:27:18', NULL, NULL),
-(26, 'Laurence HR', 'dumpblj@gmail.com', '$2b$10$Kx3YJuI3AzNiqMq/88FSUuuowi7bRwEJGU3AnyTzoEVT8QFwZ6VrK', '2025-11-09 11:04:50', 'hr_administrator', '2025-11-09 19:23:47', NULL, NULL),
-(27, 'Jerimiah Bitancor', 'bitancor1234amora@gmail.com', '$2b$10$zxqK8QflgGRswo/zYAwpauqny3wLeS478qdLvL9ofyoJQOkkpovEi', '2025-11-29 02:05:38', 'hr_administrator', '2025-12-01 06:42:29', NULL, NULL);
+(12, 'James', 'flavierlaurence01@gmail.com', '$2b$10$ADe2OQ01nBT9Udz1/wJZaOc2XXdJ.OyPChMfN/PSD8x3Z2wzHkyOq', '2025-10-18 03:40:35', 'super_administrator', '2025-12-02 00:54:21', NULL, NULL),
+(26, 'Laurence HR', 'dumpblj@gmail.com', '$2b$10$Kx3YJuI3AzNiqMq/88FSUuuowi7bRwEJGU3AnyTzoEVT8QFwZ6VrK', '2025-11-09 11:04:50', 'hr_administrator', '2025-11-09 19:23:47', NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -519,16 +476,6 @@ ALTER TABLE `doctors_visibility`
   ADD UNIQUE KEY `employee_id` (`employee_id`);
 
 --
--- Indexes for table `ems_job_logs`
---
-ALTER TABLE `ems_job_logs`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `cms_reviewer_id` (`cms_reviewer_id`),
-  ADD KEY `idx_job_id` (`job_id`),
-  ADD KEY `idx_action` (`action`),
-  ADD KEY `idx_timestamp` (`timestamp`);
-
---
 -- Indexes for table `events_careers`
 --
 ALTER TABLE `events_careers`
@@ -551,8 +498,7 @@ ALTER TABLE `health_tips`
 -- Indexes for table `jobs`
 --
 ALTER TABLE `jobs`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `idx_urgency` (`urgency_level`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `news`
@@ -560,17 +506,6 @@ ALTER TABLE `jobs`
 ALTER TABLE `news`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `slug` (`slug`);
-
---
--- Indexes for table `notifications`
---
-ALTER TABLE `notifications`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `idx_user_id` (`user_id`),
-  ADD KEY `idx_created_at` (`created_at`),
-  ADD KEY `idx_is_read` (`is_read`),
-  ADD KEY `idx_type` (`type`),
-  ADD KEY `idx_user_read` (`user_id`,`is_read`);
 
 --
 -- Indexes for table `page_views`
@@ -589,6 +524,7 @@ ALTER TABLE `post_logs`
 -- Indexes for table `services`
 --
 ALTER TABLE `services`
+  ADD UNIQUE KEY `slug` (`slug`),
   ADD KEY `fk_service_user` (`user_id`);
 
 --
@@ -615,12 +551,6 @@ ALTER TABLE `contact_info`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `ems_job_logs`
---
-ALTER TABLE `ems_job_logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
 -- AUTO_INCREMENT for table `events_careers`
 --
 ALTER TABLE `events_careers`
@@ -642,13 +572,7 @@ ALTER TABLE `health_tips`
 -- AUTO_INCREMENT for table `jobs`
 --
 ALTER TABLE `jobs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-
---
--- AUTO_INCREMENT for table `notifications`
---
-ALTER TABLE `notifications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `post_logs`
@@ -660,24 +584,11 @@ ALTER TABLE `post_logs`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- Constraints for dumped tables
 --
-
---
--- Constraints for table `ems_job_logs`
---
-ALTER TABLE `ems_job_logs`
-  ADD CONSTRAINT `ems_job_logs_ibfk_1` FOREIGN KEY (`job_id`) REFERENCES `jobs` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `ems_job_logs_ibfk_2` FOREIGN KEY (`cms_reviewer_id`) REFERENCES `users` (`id`) ON DELETE SET NULL;
-
---
--- Constraints for table `notifications`
---
-ALTER TABLE `notifications`
-  ADD CONSTRAINT `notifications_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `services`

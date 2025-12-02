@@ -310,6 +310,7 @@ function Home() {
                               </div>
                               <div className="news-content">
                                 <h5 className="news-heading">{item.short_title}</h5>
+                                <p className="news-desc">{item.short_description}</p>
                                 <p className="news-date">
                                   {new Date(item.created_at).toLocaleDateString()}
                                 </p>

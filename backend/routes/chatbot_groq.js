@@ -92,7 +92,7 @@ Examples:
         ...conversationHistory,
         { role: "user", content: message }
       ],
-      temperature: 0.3, // Low temperature for strict adherence
+      temperature: 0.3, // Low temperature for strict adherencevfvdfvdfvdfvdfvdfvdfvdf 
       max_tokens: 100,
     });
 

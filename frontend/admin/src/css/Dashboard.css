@@ -110,16 +110,14 @@
   display: flex;
   justify-content: center; /* CENTER the cards */
   gap: 20px;
-  margin-bottom: 24px;
   flex-wrap: wrap; /* allow wrapping on smaller screens */
-  padding-bottom: 6px;
 }
 
 .stats-card {
   flex: 0 0 300px;
   min-width: 380px;
   max-width: 100%;
-  height: 10%;
+  height: 200px;
   background: var(--white);
   border-radius: var(--card-radius);
   display: flex;

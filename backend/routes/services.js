@@ -23,6 +23,16 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // -----------------------------
+// Helper function to generate slug
+// -----------------------------
+function generateSlug(title) {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+// -----------------------------
 // CREATE SERVICE
 // -----------------------------
 router.post("/", upload.single("image"), (req, res) => {
@@ -35,21 +45,25 @@ router.post("/", upload.single("image"), (req, res) => {
     return res.status(400).json({ success: false, message: "Missing required fields" });
   }
 
+  // Generate slug from fullTitle
+  const slug = generateSlug(fullTitle);
+
   const sql = `
     INSERT INTO services
-    (id, user_id, short_title, full_title, topic_tags, description, status, image, created_at, updated_at)
-    VALUES (UUID(), ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+    (id, user_id, short_title, full_title, slug, topic_tags, description, status, image, created_at, updated_at)
+    VALUES (UUID(), ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
   `;
 
   db.query(
     sql,
-    [userId, shortTitle, fullTitle, topicTags || null, description, status || "published", image],
+    [userId, shortTitle, fullTitle, slug, topicTags || null, description, status || "published", image],
     (err) => {
       if (err) return res.status(500).json({ success: false, message: err.sqlMessage });
 
       res.json({
         success: true,
         message: "Service created successfully",
+        slug: slug,
         image_url: image ? `http://localhost:5000/uploads/services/${image}` : null,
       });
     }
@@ -60,27 +74,33 @@ router.post("/", upload.single("image"), (req, res) => {
 // -----------------------------
 // GET ALL PUBLISHED SERVICES
 // -----------------------------
+// GET ALL PUBLISHED SERVICES
+// -----------------------------
 router.get("/", (req, res) => {
   const sql = "SELECT * FROM services WHERE status='published' ORDER BY created_at DESC";
 
   db.query(sql, (err, results) => {
     if (err) return res.status(500).json({ success: false, message: err.sqlMessage });
 
-    res.json(
-      results.map((r) => ({
-        ...r,
-        image_url: r.image ? `http://localhost:5000/uploads/services/${r.image}` : null,
-      }))
-    );
+    // Add full URL for images
+    const servicesWithUrls = results.map((r) => ({
+      ...r,
+      image_url: r.image ? `http://localhost:5000/uploads/services/${r.image}` : null,
+    }));
+    
+    console.log("Returning services:", servicesWithUrls.length);
+    console.log("First service image_url:", servicesWithUrls[0]?.image_url);
+    
+    res.json(servicesWithUrls);
   });
 });
 
 // -----------------------------
-// GET SINGLE SERVICE BY ID
+// GET SINGLE SERVICE BY SLUG
 // -----------------------------
-router.get("/:id", (req, res) => {
-  const sql = "SELECT * FROM services WHERE id=?";
-  db.query(sql, [req.params.id], (err, results) => {
+router.get("/:slug", (req, res) => {
+  const sql = "SELECT * FROM services WHERE slug=?";
+  db.query(sql, [req.params.slug], (err, results) => {
     if (err) return res.status(500).json({ success: false, message: err.sqlMessage });
     if (!results.length) return res.status(404).json({ success: false, message: "Service not found" });
 

@@ -1,120 +1,152 @@
-// src/components/Chatbot.jsx
 import { useState, useEffect, useRef } from "react";
-import { MdClose } from "react-icons/md";
-import { FaComments } from "react-icons/fa";
-import "../components/components-css/Chatbot.css";
 
 function Chatbot() {
   const [showChat, setShowChat] = useState(false);
   const [messages, setMessages] = useState([
-    { sender: "bot", text: "👋 Hi! I'm Lunax — your Healthcare Companion." },
+    {
+      sender: "bot",
+      text: "Hi! I'm <strong>Lunax</strong> — your Healthcare Companion. How can I help you today?",
+    },
   ]);
   const [input, setInput] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
 
-  // Generate a unique userId per browser session
-  const [userId, setUserId] = useState("");
-
+  // Assign unique user ID
   useEffect(() => {
-    let id = sessionStorage.getItem("lunaxUserId");
-    if (!id) {
-      id = crypto.randomUUID(); // generate a random ID
-      sessionStorage.setItem("lunaxUserId", id);
+    if (!sessionStorage.getItem("lunaxUserId")) {
+      sessionStorage.setItem("lunaxUserId", crypto.randomUUID());
     }
-    setUserId(id);
   }, []);
 
-  // Scrolls to bottom on message update
+  // Auto scroll
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [messages, isTyping]);
 
   const handleSend = async () => {
     if (!input.trim()) return;
-  
+
     const userText = input.trim();
-    const userMsg = { sender: "user", text: userText };
-    setMessages(prev => [...prev, userMsg]);
+    setMessages((prev) => [...prev, { sender: "user", text: userText }]);
     setInput("");
-  
+    setIsTyping(true);
+
     try {
-      const response = await fetch("http://localhost:5000/api/chatbot-groq", {
+      const res = await fetch("http://localhost:5000/api/chatbot-groq", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: userText, userId }),
+        body: JSON.stringify({
+          message: userText,
+          userId: sessionStorage.getItem("lunaxUserId"),
+        }),
       });
-  
-      const data = await response.json();
-      setMessages(prev => [...prev, { sender: "bot", text: data.reply }]);
-  
-    } catch (error) {
-      setMessages(prev => [
+
+      const data = await res.json();
+      setIsTyping(false);
+
+      setMessages((prev) => [
         ...prev,
-        { sender: "bot", text: "❌ Error: Unable to reach Lunax server." }
+        { sender: "bot", text: data.reply || "I'm here to help!" },
+      ]);
+    } catch (err) {
+      setIsTyping(false);
+      setMessages((prev) => [
+        ...prev,
+        { sender: "bot", text: "Sorry, connection error. Try again." },
       ]);
     }
-  };  
+  };
 
   return (
-    <div className="chatbot-container">
-      {/* --- Popup Window --- */}
-      {showChat && (
-        <div className="chatbot-popup">
-          <div className="chatbot-header">
-            <div className="chatbot-info">
-              <img
-                src="lunax.svg"
-                alt="Lunax"
-                className="chatbot-avatar"
-              />
-              <div>
-                <h5 className="mb-0">
-                  Hi! I'm <span className="text-highlight">Lunax</span>
-                </h5>
-                <p className="mb-0 small text-white">
-                  Your Healthcare Companion
-                </p>
+    <>
+    
+
+      <div className="chatbot-wrapper">
+        {/* CHAT WINDOW */}
+        {showChat && (
+          <div className="chatbot-window">
+            <div className="chatbot-header">
+              <div className="chatbot-header-info">
+                <img 
+                  src="/lunax.svg" 
+                  alt="Lunax" 
+                  className="chatbot-avatar"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23007bff'/%3E%3Ccircle cx='35' cy='40' r='5' fill='white'/%3E%3Ccircle cx='65' cy='40' r='5' fill='white'/%3E%3Cpath d='M 30 60 Q 50 75 70 60' stroke='white' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E";
+                  }}
+                />
+                <div className="chatbot-header-text">
+                  <h3>Lunax</h3>
+                  <p>Your Healthcare Companion</p>
+                </div>
               </div>
+              <button 
+                className="chatbot-header-close" 
+                onClick={() => setShowChat(false)}
+                aria-label="Close chat"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="chatbot-messages">
+              {messages.map((msg, i) => (
+                <div key={i} className={`message ${msg.sender === "user" ? "user" : "bot"}`}>
+                  <div className="bubble" dangerouslySetInnerHTML={{ __html: msg.text }} />
+                </div>
+              ))}
+
+              {isTyping && (
+                <div className="message bot">
+                  <div className="bubble typing">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+                </div>
+              )}
+
+              <div ref={messagesEndRef} />
+            </div>
+
+            <div className="chatbot-input-bar">
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSend()}
+                placeholder="Type your message..."
+              />
+              <button onClick={handleSend} disabled={!input.trim()}>
+                Send
+              </button>
             </div>
           </div>
+        )}
 
-          <div className="chatbot-messages">
-            {messages.map((msg, index) => (
-              <div
-                key={index}
-                className={`chat-message ${
-                  msg.sender === "user" ? "user-msg" : "bot-msg"
-                }`}
-              >
-                {msg.text}
-              </div>
-            ))}
-            <div ref={messagesEndRef} />
-          </div>
-
-          <div className="chatbot-input">
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Type a message..."
-              onKeyDown={(e) => e.key === "Enter" && handleSend()}
-            />
-            <button onClick={handleSend}>➤</button>
-          </div>
-        </div>
-      )}
-
-      {/* --- Floating Button --- */}
-      <button
-        className="chatbot-btn"
-        onClick={() => setShowChat((prev) => !prev)}
-      >
-        {showChat ? <MdClose /> : <FaComments />}
-      </button>
-    </div>
+        {/* FAB BUTTON */}
+        <button
+          className="chatbot-fab"
+          onClick={() => setShowChat(!showChat)}
+          aria-label={showChat ? "Close chat" : "Open chat"}
+        >
+          {showChat ? (
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          ) : (
+            <svg className="pulse-icon" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
+            </svg>
+          )}
+        </button>
+      </div>
+    </>
   );
 }
 
 export default Chatbot;
-
