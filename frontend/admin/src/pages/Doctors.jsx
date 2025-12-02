@@ -4,6 +4,7 @@ import ApexCharts from "apexcharts";
 import Swal from "sweetalert2";
 import defaultProfile from "../assets/default-doctors-profile.svg";
 import "../css/doctors.css";
+import { FcClearFilters } from "react-icons/fc";
 
 // Toggle Switch Component
 const ToggleSwitch = ({ isOn, onToggle }) => {
@@ -398,7 +399,8 @@ const [doctors, setDoctors] = useState([]);
 
           <button className="btn btn-search">Search</button>
           <button className="btn btn-clearFilter" onClick={handleClearFilters}>
-            Clear Filter
+           <FcClearFilters />
+
           </button>
         </div>
 

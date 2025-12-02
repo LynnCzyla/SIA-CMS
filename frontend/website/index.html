@@ -10,16 +10,7 @@
     <div id="root"></div>
     <script type="module">
       // Load settings from localStorage
-      const settings = JSON.parse(localStorage.getItem("siteSettings"));
-      if (settings) {
-        if (settings.siteName && settings.tagline) {
-          document.title = `${settings.siteName} - ${settings.tagline}`;
-        }
-        if (settings.favicon) {
-          const faviconEl = document.getElementById("favicon");
-          faviconEl.href = settings.favicon;
-        }
-      }
+   
     </script>
     <script type="module" src="/src/main.jsx"></script>
   </body>

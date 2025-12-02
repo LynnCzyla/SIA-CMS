@@ -230,15 +230,20 @@
 
 .btn-search:hover {
   background-color: #3b82f6;
+    color: white;
+
 }
 
 .btn-clearFilter {
-  background-color: #1e3a8a;
   color: white;
+  width: 150px;
+  font-size: 28px;
+
 }
 
 .btn-clearFilter:hover {
-  background-color: #172554;
+    color: white;
+
 }
 
 .btn-refresh {
@@ -248,6 +253,8 @@
 
 .btn-refresh:hover {
   background-color: #172554;
+    color: white;
+
 }
 
 .btn-show-all {

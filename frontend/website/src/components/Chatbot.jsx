@@ -16,14 +16,12 @@ function Chatbot() {
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
 
-  // Assign unique user ID
   useEffect(() => {
     if (!sessionStorage.getItem("lunaxUserId")) {
       sessionStorage.setItem("lunaxUserId", crypto.randomUUID());
     }
   }, []);
 
-  // Auto scroll
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isTyping]);
@@ -64,8 +62,6 @@ function Chatbot() {
 
   return (
     <div className="chatbot-wrapper">
-
-      {/* CHAT WINDOW */}
       {showChat && (
         <div className="chatbot-window">
           <div className="chatbot-header">
@@ -76,6 +72,11 @@ function Chatbot() {
                 <p>Your Healthcare Companion</p>
               </div>
             </div>
+
+            {/* MOBILE CLOSE BUTTON */}
+            <button className="chatbot-header-close" onClick={() => setShowChat(false)}>
+              <MdClose />
+            </button>
           </div>
 
           <div className="chatbot-messages">
@@ -111,17 +112,12 @@ function Chatbot() {
         </div>
       )}
 
-      {/* FAB BUTTON */}
       <button
         className="chatbot-fab"
         onClick={() => setShowChat(!showChat)}
         aria-label={showChat ? "Close chat" : "Open chat"}
       >
-        {showChat ? (
-          <MdClose className="icon" />
-        ) : (
-          <FaComments className="icon pulse-icon" />
-        )}
+        {showChat ? <MdClose className="icon" /> : <FaComments className="icon pulse-icon" />}
       </button>
     </div>
   );

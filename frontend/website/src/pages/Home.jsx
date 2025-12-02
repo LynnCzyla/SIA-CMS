@@ -448,7 +448,6 @@ function Home() {
         </div>
       </div>
 
-      <Chatbot />
       <AppointmentModal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
