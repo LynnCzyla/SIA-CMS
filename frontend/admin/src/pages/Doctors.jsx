@@ -405,14 +405,7 @@ const [doctors, setDoctors] = useState([]);
         </div>
 
         <div className="secondary-filter-row d-flex align-items-center gap-3">
-          <button
-            className={`btn ${showAll ? "btn-active" : "btn-show-all"}`}
-            onClick={() => setShowAll(!showAll)}
-          >
-            {showAll ? "Filtered View" : "Show All Records"}
-          </button>
 
-          {/* NEW: Toggle All ON/OFF */}
           <button
             className="btn btn-warning text-white fw-bold"
             onClick={() => {
