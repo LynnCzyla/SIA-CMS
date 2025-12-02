@@ -6,7 +6,6 @@ import dotenv from "dotenv";
 import multer from "multer";
 
 
-
 // 📦 Route Imports
 import loginRoute from "../routes/login.js";
 import newsRoute from "../routes/news.js";
@@ -27,7 +26,7 @@ import notificationsRoute from "../routes/notifications.js";
 import postLogsRoute from "../routes/postLogs.js"; // adjust path
 import chatbotGroqRoute from "../routes/chatbot_groq.js";
 
-dotenv.config({ path: "../.env" });
+dotenv.config({ path: ".env" });
 
 const app = express();
 
