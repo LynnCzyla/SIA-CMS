@@ -43,6 +43,9 @@ export default function Posts() {
   const [pendingPage, setPendingPage] = useState(1);
   const pendingPerPage = 10;
 
+  const role = localStorage.getItem("role"); 
+  console.log("Logged-in role:", role);
+
   useEffect(() => {
     fetchPosts();
     fetchLogs();
@@ -89,11 +92,11 @@ export default function Posts() {
 
   // Handle Review - Navigate to Careers page
   const handleReviewInCareers = (jobId) => {
-    navigate('/careers', {
+    navigate("/careers", {
       state: {
         pendingJobId: jobId,
-        scrollToPending: true
-      }
+        scrollToPending: true,
+      },
     });
   };
 
@@ -101,22 +104,34 @@ export default function Posts() {
   useEffect(() => {
     let filtered = posts.map((p) => ({
       ...p,
-      normalizedStatus:
-        ["posted", "publish", "published"].includes((p.status || "").toLowerCase())
-          ? "published"
-          : ["draft", "pending"].includes((p.status || "").toLowerCase())
-          ? "draft"
-          : ["trash", "deleted", "archived"].includes((p.status || "").toLowerCase())
-          ? "trash"
-          : p.status || "draft",
+      normalizedStatus: ["posted", "publish", "published"].includes(
+        (p.status || "").toLowerCase()
+      )
+        ? "published"
+        : ["draft", "pending"].includes((p.status || "").toLowerCase())
+        ? "draft"
+        : ["trash", "deleted", "archived"].includes(
+            (p.status || "").toLowerCase()
+          )
+        ? "trash"
+        : p.status || "draft",
     }));
 
-    if (activeTab === "Published") filtered = filtered.filter((p) => p.normalizedStatus === "published");
-    if (activeTab === "Drafts") filtered = filtered.filter((p) => p.normalizedStatus === "draft");
-    if (activeTab === "Trash") filtered = filtered.filter((p) => p.normalizedStatus === "trash");
+    if (activeTab === "Published")
+      filtered = filtered.filter((p) => p.normalizedStatus === "published");
+    if (activeTab === "Drafts")
+      filtered = filtered.filter((p) => p.normalizedStatus === "draft");
+    if (activeTab === "Trash")
+      filtered = filtered.filter((p) => p.normalizedStatus === "trash");
 
-    if (filterAuthor !== "All") filtered = filtered.filter((p) => (p.author || "Unknown") === filterAuthor);
-    if (filterCategory !== "All") filtered = filtered.filter((p) => (p.category || "Uncategorized") === filterCategory);
+    if (filterAuthor !== "All")
+      filtered = filtered.filter(
+        (p) => (p.author || "Unknown") === filterAuthor
+      );
+    if (filterCategory !== "All")
+      filtered = filtered.filter(
+        (p) => (p.category || "Uncategorized") === filterCategory
+      );
 
     if (filterDate === "Today") {
       const today = new Date().toISOString().split("T")[0];
@@ -152,12 +167,22 @@ export default function Posts() {
     setPosts((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
   const handleApplyDelete = (postId) =>
     setPosts((prev) =>
-      prev.map((p) => (p.id === postId ? { ...p, status: "trash", normalizedStatus: "trash" } : p))
+      prev.map((p) =>
+        p.id === postId
+          ? { ...p, status: "trash", normalizedStatus: "trash" }
+          : p
+      )
     );
 
   // Generate unique authors/categories for filters
-  const authors = ["All", ...Array.from(new Set(posts.map((p) => p.author || "Unknown")))];
-  const categories = ["All", ...Array.from(new Set(posts.map((p) => p.category || "Uncategorized")))];
+  const authors = [
+    "All",
+    ...Array.from(new Set(posts.map((p) => p.author || "Unknown"))),
+  ];
+  const categories = [
+    "All",
+    ...Array.from(new Set(posts.map((p) => p.category || "Uncategorized"))),
+  ];
 
   // Pagination logic
   const total = filteredPosts.length;
@@ -166,11 +191,17 @@ export default function Posts() {
 
   const logsTotal = logs.length;
   const logsPages = Math.max(1, Math.ceil(logsTotal / logsPerPage));
-  const logsPageItems = logs.slice((logsPage - 1) * logsPerPage, logsPage * logsPerPage);
+  const logsPageItems = logs.slice(
+    (logsPage - 1) * logsPerPage,
+    logsPage * logsPerPage
+  );
 
   const pendingTotal = pendingJobs.length;
   const pendingPages = Math.max(1, Math.ceil(pendingTotal / pendingPerPage));
-  const pendingPageItems = pendingJobs.slice((pendingPage - 1) * pendingPerPage, pendingPage * pendingPerPage);
+  const pendingPageItems = pendingJobs.slice(
+    (pendingPage - 1) * pendingPerPage,
+    pendingPage * pendingPerPage
+  );
 
   // Urgency badge styling
   const getUrgencyBadge = (urgency) => {
@@ -198,12 +229,12 @@ export default function Posts() {
 
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
-    return new Date(dateString).toLocaleDateString("en-US", { 
-      year: "numeric", 
-      month: "short", 
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
       day: "numeric",
       hour: "2-digit",
-      minute: "2-digit"
+      minute: "2-digit",
     });
   };
 
@@ -218,7 +249,14 @@ export default function Posts() {
       </ul>
 
       <div className="tab-row">
-        {["All", "Published", "Drafts", "Trash", "Pending Request", "Edit Logs"].map((label) => (
+        {[
+          "All",
+          "Published",
+          "Drafts",
+          "Trash",
+          "Pending Request",
+          "Edit Logs",
+        ].map((label) => (
           <span
             key={label}
             className={`tab-item ${activeTab === label ? "active" : ""}`}
@@ -237,7 +275,8 @@ export default function Posts() {
           {/* Pending Jobs Table */}
           <div className="pending-jobs-info">
             <p className="info-text">
-              📋 Job posting requests submitted from EMS awaiting review and approval
+              📋 Job posting requests submitted from EMS awaiting review and
+              approval
             </p>
           </div>
 
@@ -257,45 +296,65 @@ export default function Posts() {
                 </tr>
               </thead>
               <tbody>
-                {pendingPageItems.length ? pendingPageItems.map((job, idx) => (
-                  <tr key={job.id} className="pending-job-row">
-                    <td>{(pendingPage - 1) * pendingPerPage + idx + 1}</td>
-                    <td className="job-title-cell">
-                      <strong>{job.job_title}</strong>
-                      {job.short_title && (
-                        <div className="short-title">{job.short_title}</div>
-                      )}
-                    </td>
-                    <td>
-                      <span className="department-badge">{job.department}</span>
-                    </td>
-                    <td>{job.job_type}</td>
-                    <td>{getUrgencyBadge(job.urgency_level)}</td>
-                    <td className="text-center">
-                      {job.ems_notes ? (
-                        <span className="has-notes-badge">✓ Yes</span>
-                      ) : (
-                        <span className="no-notes-badge">—</span>
-                      )}
-                    </td>
-                    <td>
-                      <div className="submitter-info">
-                        <strong>{job.ems_user_name}</strong>
-                        <div className="submitter-source">EMS</div>
-                      </div>
-                    </td>
-                    <td>{formatDate(job.created_at)}</td>
-                    <td className="actions">
-                      <button 
-                        className="actions-btn review" 
-                        onClick={() => handleReviewInCareers(job.id)}
-                        title="Review in Careers page"
-                      >
-                        Review
-                      </button>
-                    </td>
-                  </tr>
-                )) : (
+                {pendingPageItems.length ? (
+                  pendingPageItems.map((job, idx) => (
+                    <tr key={job.id} className="pending-job-row">
+                      <td>{(pendingPage - 1) * pendingPerPage + idx + 1}</td>
+                      <td className="job-title-cell">
+                        <strong>{job.job_title}</strong>
+                        {job.short_title && (
+                          <div className="short-title">{job.short_title}</div>
+                        )}
+                      </td>
+                      <td>
+                        <span className="department-badge">
+                          {job.department}
+                        </span>
+                      </td>
+                      <td>{job.job_type}</td>
+                      <td>{getUrgencyBadge(job.urgency_level)}</td>
+                      <td className="text-center">
+                        {job.ems_notes ? (
+                          <span className="has-notes-badge">✓ Yes</span>
+                        ) : (
+                          <span className="no-notes-badge">—</span>
+                        )}
+                      </td>
+                      <td>
+                        <div className="submitter-info">
+                          <strong>{job.ems_user_name}</strong>
+                          <div className="submitter-source">EMS</div>
+                        </div>
+                      </td>
+                      <td>{formatDate(job.created_at)}</td>
+                      <td className="actions">
+                        <button
+                          className="actions-btn review"
+                          onClick={() => {
+                            if (role === "super_administrator") {
+                              handleReviewInCareers(job.id);
+                            }
+                          }}
+                          disabled={role !== "super_administrator"}
+                          title={
+                            role === "super_administrator"
+                              ? "Review and approve/reject this job request"
+                              : "Only Super Admin can review job requests"
+                          }
+                          style={{
+                            opacity: role === "super_administrator" ? 1 : 0.4,
+                            cursor:
+                              role === "super_administrator"
+                                ? "pointer"
+                                : "not-allowed",
+                          }}
+                        >
+                          Review
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
                   <tr>
                     <td colSpan="9" className="no-posts">
                       <div className="no-pending-illustration">
@@ -314,16 +373,42 @@ export default function Posts() {
           {pendingPages > 1 && (
             <nav aria-label="Pending jobs pagination">
               <ul className="pagination justify-content-center mt-3">
-                <li className={`page-item ${pendingPage === 1 ? "disabled" : ""}`}>
-                  <button className="page-link" onClick={() => setPendingPage(pendingPage - 1)}>Previous</button>
+                <li
+                  className={`page-item ${pendingPage === 1 ? "disabled" : ""}`}
+                >
+                  <button
+                    className="page-link"
+                    onClick={() => setPendingPage(pendingPage - 1)}
+                  >
+                    Previous
+                  </button>
                 </li>
                 {Array.from({ length: pendingPages }).map((_, i) => (
-                  <li key={i} className={`page-item ${pendingPage === i + 1 ? "active" : ""}`}>
-                    <button className="page-link" onClick={() => setPendingPage(i + 1)}>{i + 1}</button>
+                  <li
+                    key={i}
+                    className={`page-item ${
+                      pendingPage === i + 1 ? "active" : ""
+                    }`}
+                  >
+                    <button
+                      className="page-link"
+                      onClick={() => setPendingPage(i + 1)}
+                    >
+                      {i + 1}
+                    </button>
                   </li>
                 ))}
-                <li className={`page-item ${pendingPage === pendingPages ? "disabled" : ""}`}>
-                  <button className="page-link" onClick={() => setPendingPage(pendingPage + 1)}>Next</button>
+                <li
+                  className={`page-item ${
+                    pendingPage === pendingPages ? "disabled" : ""
+                  }`}
+                >
+                  <button
+                    className="page-link"
+                    onClick={() => setPendingPage(pendingPage + 1)}
+                  >
+                    Next
+                  </button>
                 </li>
               </ul>
             </nav>
@@ -336,19 +421,42 @@ export default function Posts() {
             <button className="sort-btn">
               <IoFilter /> Sort
             </button>
-            <select className="filter-select" value={filterAuthor} onChange={(e) => setFilterAuthor(e.target.value)}>
-              {authors.map((a) => <option key={a}>{a}</option>)}
+            <select
+              className="filter-select"
+              value={filterAuthor}
+              onChange={(e) => setFilterAuthor(e.target.value)}
+            >
+              {authors.map((a) => (
+                <option key={a}>{a}</option>
+              ))}
             </select>
-            <select className="filter-select" value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
-              {categories.map((c) => <option key={c}>{c}</option>)}
+            <select
+              className="filter-select"
+              value={filterCategory}
+              onChange={(e) => setFilterCategory(e.target.value)}
+            >
+              {categories.map((c) => (
+                <option key={c}>{c}</option>
+              ))}
             </select>
-            <select className="filter-select" value={filterDate} onChange={(e) => setFilterDate(e.target.value)}>
+            <select
+              className="filter-select"
+              value={filterDate}
+              onChange={(e) => setFilterDate(e.target.value)}
+            >
               <option>All</option>
               <option>Today</option>
             </select>
             <div className="search-box">
-              <input type="text" placeholder="Search by title..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
-              <button className="search-btn"><IoMdSearch /></button>
+              <input
+                type="text"
+                placeholder="Search by title..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <button className="search-btn">
+                <IoMdSearch />
+              </button>
             </div>
           </div>
 
@@ -367,22 +475,48 @@ export default function Posts() {
                 </tr>
               </thead>
               <tbody>
-                {pageItems.length ? pageItems.map((post, idx) => (
-                  <tr key={post.id}>
-                    <td>{(page - 1) * pageSize + idx + 1}</td>
-                    <td>{post.title || post.full_title || post.short_title}</td>
-                    <td>{post.author}</td>
-                    <td>{post.category}</td>
-                    <td>{post.normalizedStatus.charAt(0).toUpperCase() + post.normalizedStatus.slice(1)}</td>
-                    <td>{post.date ? formatDate(post.date) : "—"}</td>
-                    <td className="actions">
-                      <button className="actions-btn edit" onClick={() => openEdit(post)}>Edit</button>
-                      <button className="actions-btn view" onClick={() => openView(post)}>View</button>
-                      <button className="actions-btn delete" onClick={() => openDelete(post)}>Delete</button>
+                {pageItems.length ? (
+                  pageItems.map((post, idx) => (
+                    <tr key={post.id}>
+                      <td>{(page - 1) * pageSize + idx + 1}</td>
+                      <td>
+                        {post.title || post.full_title || post.short_title}
+                      </td>
+                      <td>{post.author}</td>
+                      <td>{post.category}</td>
+                      <td>
+                        {post.normalizedStatus.charAt(0).toUpperCase() +
+                          post.normalizedStatus.slice(1)}
+                      </td>
+                      <td>{post.date ? formatDate(post.date) : "—"}</td>
+                      <td className="actions">
+                        <button
+                          className="actions-btn edit"
+                          onClick={() => openEdit(post)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="actions-btn view"
+                          onClick={() => openView(post)}
+                        >
+                          View
+                        </button>
+                        <button
+                          className="actions-btn delete"
+                          onClick={() => openDelete(post)}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="7" className="no-posts">
+                      No posts found.
                     </td>
                   </tr>
-                )) : (
-                  <tr><td colSpan="7" className="no-posts">No posts found.</td></tr>
                 )}
               </tbody>
             </table>
@@ -392,15 +526,24 @@ export default function Posts() {
           <nav aria-label="Posts pagination">
             <ul className="pagination justify-content-center mt-3">
               <li className={`page-item ${page === 1 ? "disabled" : ""}`}>
-                <button className="page-link" onClick={() => setPage(page - 1)}>Previous</button>
+                <button className="page-link" onClick={() => setPage(page - 1)}>
+                  Previous
+                </button>
               </li>
               {Array.from({ length: pages }).map((_, i) => (
-                <li key={i} className={`page-item ${page === i + 1 ? "active" : ""}`}>
-                  <button className="page-link" onClick={() => setPage(i + 1)}>{i + 1}</button>
+                <li
+                  key={i}
+                  className={`page-item ${page === i + 1 ? "active" : ""}`}
+                >
+                  <button className="page-link" onClick={() => setPage(i + 1)}>
+                    {i + 1}
+                  </button>
                 </li>
               ))}
               <li className={`page-item ${page === pages ? "disabled" : ""}`}>
-                <button className="page-link" onClick={() => setPage(page + 1)}>Next</button>
+                <button className="page-link" onClick={() => setPage(page + 1)}>
+                  Next
+                </button>
               </li>
             </ul>
           </nav>
@@ -422,17 +565,34 @@ export default function Posts() {
                 </tr>
               </thead>
               <tbody>
-                {logsPageItems.length ? logsPageItems.map((l, idx) => (
-                  <tr key={l.id}>
-                    <td>{(logsPage - 1) * logsPerPage + idx + 1}</td>
-                    <td style={{ fontFamily: "monospace" }}>{l.post_id}</td>
-                    <td>{l.category}</td>
-                    <td>{l.action}</td>
-                    <td>{l.editor}</td>
-                    <td style={{ maxWidth: 400, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{l.message}</td>
-                    <td>{formatDate(l.created_at)}</td>
+                {logsPageItems.length ? (
+                  logsPageItems.map((l, idx) => (
+                    <tr key={l.id}>
+                      <td>{(logsPage - 1) * logsPerPage + idx + 1}</td>
+                      <td style={{ fontFamily: "monospace" }}>{l.post_id}</td>
+                      <td>{l.category}</td>
+                      <td>{l.action}</td>
+                      <td>{l.editor}</td>
+                      <td
+                        style={{
+                          maxWidth: 400,
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {l.message}
+                      </td>
+                      <td>{formatDate(l.created_at)}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="7" className="no-posts">
+                      No logs found.
+                    </td>
                   </tr>
-                )) : <tr><td colSpan="7" className="no-posts">No logs found.</td></tr>}
+                )}
               </tbody>
             </table>
           </div>
@@ -441,15 +601,37 @@ export default function Posts() {
           <nav aria-label="Logs pagination">
             <ul className="pagination justify-content-center mt-3">
               <li className={`page-item ${logsPage === 1 ? "disabled" : ""}`}>
-                <button className="page-link" onClick={() => setLogsPage(logsPage - 1)}>Previous</button>
+                <button
+                  className="page-link"
+                  onClick={() => setLogsPage(logsPage - 1)}
+                >
+                  Previous
+                </button>
               </li>
               {Array.from({ length: logsPages }).map((_, i) => (
-                <li key={i} className={`page-item ${logsPage === i + 1 ? "active" : ""}`}>
-                  <button className="page-link" onClick={() => setLogsPage(i + 1)}>{i + 1}</button>
+                <li
+                  key={i}
+                  className={`page-item ${logsPage === i + 1 ? "active" : ""}`}
+                >
+                  <button
+                    className="page-link"
+                    onClick={() => setLogsPage(i + 1)}
+                  >
+                    {i + 1}
+                  </button>
                 </li>
               ))}
-              <li className={`page-item ${logsPage === logsPages ? "disabled" : ""}`}>
-                <button className="page-link" onClick={() => setLogsPage(logsPage + 1)}>Next</button>
+              <li
+                className={`page-item ${
+                  logsPage === logsPages ? "disabled" : ""
+                }`}
+              >
+                <button
+                  className="page-link"
+                  onClick={() => setLogsPage(logsPage + 1)}
+                >
+                  Next
+                </button>
               </li>
             </ul>
           </nav>
@@ -457,9 +639,26 @@ export default function Posts() {
       )}
 
       {/* Modals */}
-      {showViewModal && <ViewModal post={selectedPost} onClose={() => setShowViewModal(false)} />}
-      {showEditModal && <EditModal post={selectedPost} onClose={() => setShowEditModal(false)} onUpdated={handleApplyEdit} />}
-      {showDeleteModal && <DeleteModal post={selectedPost} onClose={() => setShowDeleteModal(false)} onDeleted={handleApplyDelete} />}
+      {showViewModal && (
+        <ViewModal
+          post={selectedPost}
+          onClose={() => setShowViewModal(false)}
+        />
+      )}
+      {showEditModal && (
+        <EditModal
+          post={selectedPost}
+          onClose={() => setShowEditModal(false)}
+          onUpdated={handleApplyEdit}
+        />
+      )}
+      {showDeleteModal && (
+        <DeleteModal
+          post={selectedPost}
+          onClose={() => setShowDeleteModal(false)}
+          onDeleted={handleApplyDelete}
+        />
+      )}
     </div>
   );
 }

@@ -244,7 +244,8 @@ router.get("/ems/all", validateEMSApiKey, (req, res) => {
     SELECT 
       id, job_title, short_title, department, job_type, 
       location, status, urgency_level, ems_notes,
-      created_at, reviewed_at, ems_user_name
+      created_at, reviewed_at, ems_user_name,
+      rejection_reason
     FROM jobs 
     WHERE submitted_by_ems = 1
   `;

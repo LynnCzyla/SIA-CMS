@@ -234,6 +234,7 @@
 .btn-clearFilter {
   background-color: #1e3a8a;
   color: white;
+  width: 600px;
 }
 
 .btn-clearFilter:hover {

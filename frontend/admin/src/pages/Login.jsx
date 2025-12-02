@@ -44,6 +44,12 @@ export default function Login() {
         localStorage.setItem("user", JSON.stringify(user));
         localStorage.setItem("token", token); // <-- store token
 
+        // THESE TWO LINES ARE THE FINAL FIX
+        localStorage.setItem("role", user.role);        // This makes role work
+        localStorage.setItem("userId", user.id);        // Optional but useful
+            
+        console.log("Logged in as:", user.role); // You’ll see "super_administrator"
+
         // Redirect to dashboard
         window.location.href = "/dashboard";
       });

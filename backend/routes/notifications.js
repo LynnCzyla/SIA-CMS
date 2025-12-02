@@ -28,7 +28,7 @@ router.get("/:userId", (req, res) => {
         ELSE DATE_FORMAT(n.created_at, '%M %d, %Y')
       END as date_label
     FROM notifications n
-    WHERE n.user_id = ? OR n.user_id IS NULL OR n.type = 'job_approval'
+    WHERE n.user_id = ?
     ORDER BY n.created_at DESC
     LIMIT 50
   `;
@@ -74,22 +74,6 @@ router.put("/:notificationId/read", (req, res) => {
   );
 });
 
-// ===== Mark all notifications as read =====
-router.put("/user/:userId/read-all", (req, res) => {
-  const { userId } = req.params;
-
-  db.query(
-    "UPDATE notifications SET is_read = TRUE WHERE user_id = ? OR user_id IS NULL",
-    [userId],
-    (err) => {
-      if (err) {
-        console.error("❌ Error marking all notifications as read:", err);
-        return res.status(500).json({ success: false, message: "Database error" });
-      }
-      res.json({ success: true, message: "All notifications marked as read" });
-    }
-  );
-});
 
 // ===== Create a new notification (for job postings, etc.) =====
 router.post("/", (req, res) => {
@@ -115,6 +99,25 @@ router.post("/", (req, res) => {
       });
     }
   );
+});
+
+// ===== Delete all read notifications =====
+router.delete("/clear-read/:userId", (req, res) => {
+  const { userId } = req.params;
+
+  const query = `
+    DELETE FROM notifications 
+    WHERE is_read = TRUE 
+    AND (user_id = ? OR user_id IS NULL)
+  `;
+
+  db.query(query, [userId], (err, result) => {
+    if (err) {
+      console.error("❌ Error clearing read notifications:", err);
+      return res.status(500).json({ success: false, message: "Database error" });
+    }
+    res.json({ success: true, message: "All read notifications cleared" });
+  });
 });
 
 export default router;
