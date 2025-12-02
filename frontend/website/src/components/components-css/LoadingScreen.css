@@ -9,7 +9,7 @@
 
   /* Smooth fade-out */
   opacity: 1;
-  transition: opacity 1s ease-out;
+  transition: opacity 0.8s ease-out;
 }
 
 .loading-overlay.fade-out {
@@ -19,14 +19,14 @@
 
 .loading-content {
   text-align: center;
-  transform: translateY(-20px);
-  animation: floatUp 0.8s ease-out forwards;
+  animation: fadeSlideIn 0.7s ease-out forwards;
 }
 
-@keyframes floatUp {
+/* Simple fade + slight lift */
+@keyframes fadeSlideIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
@@ -34,32 +34,32 @@
   }
 }
 
-/* GIF CENTERED + MUCH BIGGER */
+/* Clean centered GIF */
 .loading-gif {
-  width: 260px;              /* 🔥 BIG SIZE */
-  max-width: 65vw;           /* Responsive */
+  width: 240px;
+  max-width: 55vw;
   height: auto;
   display: block;
   margin: 0 auto;
 }
 
-/* Loading text */
+/* Subtle text */
 .loading-text {
-  margin-top: 1.4rem;
-  color: #444;
-  font-size: 1.3rem;
+  margin-top: 1rem;
+  color: #333;
+  font-size: 1.15rem;
   font-weight: 500;
-  letter-spacing: 0.6px;
-  opacity: 0.9;
+  letter-spacing: 0.4px;
+  opacity: 0.85;
 }
 
-/* MOBILE RESPONSIVE */
+/* MOBILE */
 @media (max-width: 480px) {
   .loading-gif {
-    width: 180px;           /* Still big for mobile */
+    width: 160px;
   }
 
   .loading-text {
-    font-size: 1.05rem;
+    font-size: 1rem;
   }
 }
