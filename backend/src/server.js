@@ -66,6 +66,8 @@ app.use("/api/post-logs", postLogsRoute);
 app.use("/api/contact", contactRoute);
 app.use("/api/doctors", doctorsVisibilityRouter);
 app.use("/api/notifications", notificationsRoute);
+app.use("/api/chatbot-groq", chatbotGroqRoute);
+
 
 
 // Test Endpoint
