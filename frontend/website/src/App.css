@@ -26,6 +26,41 @@
   --text-color: #1a1a1a;
 }
 
+.page-transition {
+  opacity: 0;
+  animation: fadeInPage 0.6s ease forwards;
+}
+
+/* Fade IN animation */
+@keyframes fadeInPage {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Optional: fade elements inside pages */
+.page-transition * {
+  animation: fadeChildren 0.6s ease forwards;
+  animation-delay: 0.1s;
+  opacity: 0;
+}
+
+@keyframes fadeChildren {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 body {
   transition: all 0.3s ease-in-out;
 }

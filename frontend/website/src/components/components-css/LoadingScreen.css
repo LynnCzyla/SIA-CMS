@@ -1,0 +1,65 @@
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+
+  /* Smooth fade-out */
+  opacity: 1;
+  transition: opacity 1s ease-out;
+}
+
+.loading-overlay.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.loading-content {
+  text-align: center;
+  transform: translateY(-20px);
+  animation: floatUp 0.8s ease-out forwards;
+}
+
+@keyframes floatUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* GIF CENTERED + MUCH BIGGER */
+.loading-gif {
+  width: 260px;              /* 🔥 BIG SIZE */
+  max-width: 65vw;           /* Responsive */
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Loading text */
+.loading-text {
+  margin-top: 1.4rem;
+  color: #444;
+  font-size: 1.3rem;
+  font-weight: 500;
+  letter-spacing: 0.6px;
+  opacity: 0.9;
+}
+
+/* MOBILE RESPONSIVE */
+@media (max-width: 480px) {
+  .loading-gif {
+    width: 180px;           /* Still big for mobile */
+  }
+
+  .loading-text {
+    font-size: 1.05rem;
+  }
+}
