@@ -45,31 +45,48 @@ export default function Dashboard() {
 
   useEffect(() => {
     const normalizeDate = (d) => d.split("T")[0];
+    
+    // Function to check if it's a main page
+    const isMainPage = (page) => {
+      // Main pages are: home ("/"), about, announcements (main page only)
+      const mainPages = ["/", "/about", "/announcements"];
+      
+      // Check if it's exactly a main page
+      if (mainPages.includes(page)) return true;
+      
+      // Or check if it doesn't have extra path segments (no extra "/" after first segment)
+      // This would include pages like "/contact", "/services" etc if they exist
+      const pathSegments = page.split('/').filter(segment => segment.length > 0);
+      return pathSegments.length === 1; // Only one segment after the initial slash
+    };
 
     fetch("http://localhost:5000/api/track")
       .then(res => res.json())
       .then(data => {
-        const pages = [...new Set(data.map(d => d.page_name))];
-        const dates = [...new Set(data.map(d => normalizeDate(d.view_date)))];
+        // Filter data to only include main pages
+        const mainPageData = data.filter(d => isMainPage(d.page_name));
+        
+        // Get unique main pages
+        const pages = [...new Set(mainPageData.map(d => d.page_name))];
+        const dates = [...new Set(mainPageData.map(d => normalizeDate(d.view_date)))];
 
         const series = pages.map(page => ({
           name: page,
           data: dates.map(date => {
-            const r = data.find(
+            const r = mainPageData.find(
               d => d.page_name === page && normalizeDate(d.view_date) === date
             );
             return r ? r.visit_count : 0;
           }),
         }));
 
-        setChartCategories(dates);
+        setChartCategories(dates.sort()); // Sort dates chronologically
         setChartSeries(series);
         setChartColors(generateColors(pages.length));
 
         const home = data
           .filter(i => i.page_name === "/")
           .reduce((a, b) => a + Number(b.visit_count), 0);
-
 
         setHomeVisits(home);
       });
@@ -81,12 +98,46 @@ export default function Dashboard() {
     const chart = new ApexCharts(
       document.querySelector("#dashboard-chart"),
       {
-        chart: { type: "line", height: 600 },
-        xaxis: { categories: chartCategories },
+        chart: { 
+          type: "area", 
+          height: 600,
+          toolbar: {
+            show: true,
+            tools: {
+              download: true,
+              selection: false,
+              zoom: false,
+              zoomin: false,
+              zoomout: false,
+              pan: false,
+              reset: false
+            }
+          }
+        },
+        xaxis: { 
+          categories: chartCategories,
+          labels: {
+            rotate: -45,
+            style: {
+              fontSize: '11px'
+            }
+          }
+        },
         series: chartSeries,
         colors: chartColors,
-        stroke: { curve: "smooth", width: 3 },
-        legend: { show: false }
+        plotOptions: {
+          bar: {
+            columnWidth: '50%',
+            borderRadius: 4,
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        legend: { 
+          show: true,
+          position: 'top'
+        }
       }
     );
 
