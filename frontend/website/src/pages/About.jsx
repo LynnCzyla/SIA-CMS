@@ -31,6 +31,8 @@ function About() {
   }, []);
 
   return (
+    <div className="page-transition">
+
     <div className="about-wrapper">
       {/* --- About Section --- */}
       <section className="about-intro">
@@ -88,6 +90,8 @@ function About() {
         <p>{aboutData.privacyPolicy}</p>
       </section>
     </div>
+    </div>
+
   );
 }
 

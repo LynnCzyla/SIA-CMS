@@ -164,6 +164,7 @@ function Home() {
   ];
 
   return (
+    <div className="page-transition">
     <div className={`home-wrapper ${layout}`}>
       <CookieConsent />
 
@@ -452,6 +453,7 @@ function Home() {
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
       />
+    </div>
     </div>
   );
 }

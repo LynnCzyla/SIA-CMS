@@ -34,6 +34,7 @@ const Contact = () => {
   };
 
   return (
+    <div className="page-transition">
     <div className="contact-section container py-5">
       {/* Title */}
       <div className="text-center mb-5">
@@ -133,6 +134,7 @@ const Contact = () => {
       </div>
 
       <Chatbot />
+    </div>
     </div>
   );
 };

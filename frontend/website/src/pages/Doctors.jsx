@@ -189,6 +189,7 @@ function Doctors() {
   };
 
   return (
+    <div className="page-transition">
     <section className="doctors-page">
       {/* Header */}
       <div className="doctors-header text-center">
@@ -480,6 +481,7 @@ function Doctors() {
         </div>
       )}
     </section>
+    </div>
   );
 }
 

@@ -52,6 +52,7 @@ const Careers = () => {
   }, [keyword, jobField, location, sortBy]);
 
   return (
+    <div className="page-transition">
     <div className="news-section1 container py-5">
       {/* Title Section */}
       {loading ? (
@@ -220,6 +221,7 @@ const Careers = () => {
       </div>
 
       <Chatbot />
+    </div>
     </div>
   );
 };

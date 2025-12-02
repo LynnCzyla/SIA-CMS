@@ -97,6 +97,7 @@ const AppointmentModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
+    
     <div className="appointment-modal-overlay">
       <div className="appointment-modal-container-wide">
         <div className="appointment-modal-header-blue">

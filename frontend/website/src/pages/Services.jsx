@@ -85,6 +85,7 @@ export default function Services() {
   };
 
   return (
+    <div className="page-transition">
     <div className="services-page">
       {/* Header / Top Services */}
       <div className="services-header-section">
@@ -164,6 +165,7 @@ export default function Services() {
           </div>
         ))}
       </div>
+    </div>
     </div>
   );
 }

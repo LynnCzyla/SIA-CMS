@@ -36,6 +36,7 @@ const Announcements = () => {
   };
 
   return (
+    <div className="page-transition">
     <div className="announcements-section container py-5">
       {loading ? (
         <div className="text-center mb-5">
@@ -114,6 +115,7 @@ const Announcements = () => {
       </div>
 
       <Chatbot />
+    </div>
     </div>
   );
 };
