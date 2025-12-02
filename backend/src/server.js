@@ -61,6 +61,7 @@ app.use("/api/about", aboutRoute);
 app.use("/api/post-logs", postLogsRoute);
 app.use("/api/contact", contactRoute);
 app.use("/api/doctors", doctorsVisibilityRouter);
+app.use("/api/notifications", notificationsRoute);
 
 
 // Test route

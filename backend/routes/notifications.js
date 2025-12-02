@@ -28,7 +28,7 @@ router.get("/:userId", (req, res) => {
         ELSE DATE_FORMAT(n.created_at, '%M %d, %Y')
       END as date_label
     FROM notifications n
-    WHERE n.user_id = ? OR n.user_id IS NULL
+    WHERE n.user_id = ? OR n.user_id IS NULL OR n.type = 'job_approval'
     ORDER BY n.created_at DESC
     LIMIT 50
   `;
