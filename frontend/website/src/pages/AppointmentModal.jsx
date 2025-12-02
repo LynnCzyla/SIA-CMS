@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { MdClose } from "react-icons/md";
 import axios from "axios";
+import Swal from "sweetalert2";
 import "../css/AppointmentModal.css";
 
 const AppointmentModal = ({ isOpen, onClose }) => {
@@ -22,25 +23,20 @@ const AppointmentModal = ({ isOpen, onClose }) => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
-  // Load doctors when modal opens
   useEffect(() => {
     if (!isOpen) return;
-
     const loadDoctors = async () => {
       try {
         const res = await axios.get(
           "http://147.185.221.27:34249/Group-4-SIA-EMS/api/api.php?module=employee&filter_doctors=1"
         );
-
         const doctorList = res.data.map((doc) => ({
           id: Number(doc.employeeID),
           name: `Dr. ${doc.firstName} ${doc.lastName}`,
         }));
-
         setDoctors(doctorList);
       } catch (err) {
         console.error("Failed to load doctors:", err);
-        // Fallback doctors
         setDoctors([
           { id: 1, name: "Dr. Andrea Orel Valle" },
           { id: 2, name: "Dr. Eileen Liesl Cubillan" },
@@ -49,7 +45,6 @@ const AppointmentModal = ({ isOpen, onClose }) => {
         ]);
       }
     };
-
     loadDoctors();
   }, [isOpen]);
 
@@ -58,16 +53,43 @@ const AppointmentModal = ({ isOpen, onClose }) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const isValidTimeHHMM = (time) => /^([01]\d|2[0-3]):[0-5]\d$/.test(time);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
     setSuccess(false);
 
-    const finalType =
-      formData.appointmentType === "Other" && formData.specifyType.trim()
-        ? formData.specifyType.trim()
-        : formData.appointmentType;
+    if (!formData.firstName.trim() || !formData.lastName.trim()) {
+      setError("First name and last name are required.");
+      setLoading(false);
+      return;
+    }
+
+    if (!formData.doctor) {
+      setError("Please select a doctor.");
+      setLoading(false);
+      return;
+    }
+
+    if (!formData.appointmentDate) {
+      setError("Please select an appointment date.");
+      setLoading(false);
+      return;
+    }
+
+    if (!isValidTimeHHMM(formData.appointmentTime)) {
+      setError("Invalid time format. Use HH:MM (24-hour format).");
+      setLoading(false);
+      return;
+    }
+
+    if (formData.appointmentType === "Other" && !formData.specifyType.trim()) {
+      setError("Please specify the appointment type.");
+      setLoading(false);
+      return;
+    }
 
     const doctorObj = doctors.find((d) => d.id === Number(formData.doctor));
 
@@ -78,9 +100,11 @@ const AppointmentModal = ({ isOpen, onClose }) => {
       doctor_id: Number(formData.doctor),
       doctor_name: doctorObj ? doctorObj.name : "",
       appointment_date: formData.appointmentDate,
-      appointment_time: formData.appointmentTime + ":00",
-      appointment_type: finalType,
-      notes: formData.notes.trim() || null,
+      appointment_time: formData.appointmentTime,
+      appointment_type: formData.appointmentType, // dropdown value
+      specify_appointment_type:
+        formData.appointmentType === "Other" ? formData.specifyType.trim() : "", // exactly typed
+      notes: formData.notes.trim() || "",
       status: "Scheduled",
     };
 
@@ -96,26 +120,46 @@ const AppointmentModal = ({ isOpen, onClose }) => {
         }
       );
 
-      if (response.data && response.data.success) {
+      if (response.data?.success) {
         setSuccess(true);
+        Swal.fire({
+          icon: "success",
+          title: "Appointment Booked!",
+          text: "Your appointment has been scheduled successfully.",
+          timer: 2000,
+          showConfirmButton: false,
+          customClass: { popup: "swal-high-zindex" },
+        });
         setTimeout(() => onClose(), 2000);
       } else {
-        setError(response.data?.message || "Failed to create appointment");
+        const errMsg = response.data?.message || "Failed to create appointment";
+        setError(errMsg);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: errMsg,
+          customClass: { popup: "swal-high-zindex" },
+        });
       }
     } catch (err) {
       console.error("Appointment submit error:", err);
-      setError(
+      const errMsg =
         err.response?.data?.message ||
-          err.response?.data?.error ||
-          err.message ||
-          "Server error. Ensure backend accepts JSON."
-      );
+        err.response?.data?.error ||
+        err.message ||
+        "Server error. Ensure backend accepts JSON.";
+      setError(errMsg);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: errMsg,
+        customClass: { popup: "swal-high-zindex" },
+      });
     } finally {
       setLoading(false);
     }
   };
 
-  // Reset form when modal closes
   useEffect(() => {
     if (!isOpen) {
       setFormData({
@@ -227,26 +271,26 @@ const AppointmentModal = ({ isOpen, onClose }) => {
                 onChange={handleChange}
                 className="appointment-modal-select"
               >
-                <option>Consultation</option>
-                <option>Follow-up</option>
-                <option>Check-up</option>
-                <option>Other</option>
+                <option value="Consultation">Consultation</option>
+                <option value="Follow-up Checkup">Follow-up Checkup</option>
+                <option value="Check-up">Check-up</option>
+                <option value="Other">Other</option>
               </select>
             </div>
           </div>
 
-          {/* Row 3 */}
+          {/* Row 3: Show specifyType if Other */}
           {formData.appointmentType === "Other" && (
             <div className="appointment-modal-row">
               <div className="appointment-modal-form-group">
-                <label className="appointment-modal-label-blue">Specify Appointment Type</label>
+                <label className="appointment-modal-label-blue">Specify Appointment Type *</label>
                 <input
                   type="text"
                   name="specifyType"
                   value={formData.specifyType}
                   onChange={handleChange}
                   className="appointment-modal-input"
-                  placeholder="Specify appointment type"
+                  placeholder="Enter appointment type"
                   required
                 />
               </div>

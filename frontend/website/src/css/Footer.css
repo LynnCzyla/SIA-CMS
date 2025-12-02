@@ -42,9 +42,11 @@
 }
 
 .brand-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    flex-direction: row;
+
 }
 
 .brand-icon-wrapper {

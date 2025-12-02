@@ -84,11 +84,10 @@
   object-fit: contain;
 }
 
-.brand-name {
+.brand-name1 {
   font-size: 2.5rem;
   font-weight: 700;
   color: #002c7c;
-  margin-top: 20px;
   position: relative;
   z-index: 1;
   text-align: center;
@@ -168,17 +167,35 @@
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
-  padding: 80px 10%;
-  margin: 60px 0;
+  width: 100%;
+  min-height: 100vh; /* make it full screen height-ish */
+  display: flex;
+  align-items: flex-end; /* overlay aligns at bottom */
+  justify-content: center;
 }
 
 .core-values-overlay {
-  background: rgba(255, 255, 255, 0.95);
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  max-width: 1600px;
   padding: 50px 30px;
-  border-radius: 15px;
-  max-width: 1400px;
-  margin: 0 auto;
+  border-radius: 15px 15px 0 0;
+background: linear-gradient(
+  to top,
+  rgba(255, 255, 255, 1) 0%,       /* bottom solid white */
+  rgba(255, 255, 255, 0) 40%,      /* start transparent */
+  rgba(255, 255, 255, 0) 60%,      /* end transparent */
+  rgba(255, 255, 255, 1) 100%      /* top solid white */
+);
+
+  box-sizing: border-box;
+  z-index: 2;
+  text-align: center;
+    min-height: 100vh; /* make it full screen height-ish */
+
 }
+
 
 .section-title {
   text-align: center;

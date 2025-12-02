@@ -10,10 +10,18 @@
   flex-direction: column;
 }
 
-.modern .services-block     { order: 1; }
-.modern .announcements-block { order: 2; }
-.modern .welcome-block      { order: 3; }
-.modern .contact-block      { order: 4; }
+.modern .services-block {
+  order: 1;
+}
+.modern .announcements-block {
+  order: 2;
+}
+.modern .welcome-block {
+  order: 3;
+}
+.modern .contact-block {
+  order: 4;
+}
 
 /* ============================================
    MAIN MODERN BACKGROUND
@@ -23,7 +31,62 @@
   color: #333;
 }
 
-.modern .home-section { position: relative; min-height: 800px; min-height: 100vh; padding: 0; overflow: hidden; } .modern .home-section .container { position: relative; z-index: 2; } .modern .home-section .row { position: relative; z-index: 2; } .modern .home-section { min-height: 100vh; /* instead of 600px */ } .modern .home-right { height: 100vh; /* force parent to match the image */ } .modern .home-right .carousel-slide { position: absolute; top: 0; left: 0; width: 100%; height: 120vh; max-width: 100%; border-radius: 0; } /* Make the carousel image full size and keep aspect ratio */ .home-right .carousel-image { width: 100%; height: 100vh; object-fit: cover; display: block; } /* Modern layout2 carousel overlay */ .modern .home-right .carousel-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient( to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 80%, rgba(255, 255, 255, 1) 100%, rgba(255, 255, 255, 1) 100% ); pointer-events: none; display: flex; align-items: flex-end; justify-content: center; z-index: 2; color: #000; }
+.modern .home-section {
+  position: relative;
+  min-height: 800px;
+  min-height: 100vh;
+  padding: 0;
+  overflow: hidden;
+}
+.modern .home-section .container {
+  position: relative;
+  z-index: 2;
+}
+.modern .home-section .row {
+  position: relative;
+  z-index: 2;
+}
+.modern .home-section {
+  min-height: 100vh; /* instead of 600px */
+}
+.modern .home-right {
+  height: 100vh; /* force parent to match the image */
+}
+.modern .home-right .carousel-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 120vh;
+  max-width: 100%;
+  border-radius: 0;
+} /* Make the carousel image full size and keep aspect ratio */
+.home-right .carousel-image {
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+  display: block;
+} /* Modern layout2 carousel overlay */
+.modern .home-right .carousel-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 1) 80%,
+    rgba(255, 255, 255, 1) 100%,
+    rgba(255, 255, 255, 1) 100%
+  );
+  pointer-events: none;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 2;
+  color: #000;
+}
 
 .modern .home-right .carousel-dots {
   position: absolute;
@@ -41,8 +104,6 @@
   background-color: white;
 }
 
-
-
 /* Position the hero card on the right */
 .modern .home-left {
   position: absolute;
@@ -58,13 +119,13 @@
   justify-content: center;
   align-items: flex-end;
   text-align: right;
-    background-color: rgba(255, 255, 255, 0.3); /* Semi-transparent background */
-  backdrop-filter: blur(3px);  
+  background-color: rgba(255, 255, 255, 0.3); /* Semi-transparent background */
+  backdrop-filter: blur(3px);
   border-radius: 20px;
 }
 
 .modern .home-left h1 {
-  font-family: 'EB Garamond', serif;
+  font-family: "EB Garamond", serif;
   font-size: 3rem;
   font-weight: 600;
   font-style: italic;
@@ -79,8 +140,6 @@
   line-height: 1.8;
   font-weight: 600;
   margin-bottom: 35px;
-  
-   
 }
 
 /* Hero Buttons Container */
@@ -141,8 +200,7 @@
   padding: 0;
 }
 
-
-.services-desc{
+.services-desc {
   color: #000;
 }
 .modern .services-header {
@@ -151,7 +209,7 @@
 }
 
 .modern .services-header h2 {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 2.8rem;
   font-weight: 700;
   color: #043873;
@@ -186,7 +244,7 @@
   padding: 35px 25px;
   height: 100%;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
   position: relative;
   overflow: visible;
   text-align: left;
@@ -254,7 +312,6 @@
   box-shadow: 0 6px 20px rgba(79, 156, 249, 0.4);
 }
 
-
 /* ============================================
    SECTION 4: WELCOME
 ============================================ */
@@ -265,7 +322,13 @@
 
 .top {
   height: 100px;
-  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 70px), 50% 100%, 0 calc(100% - 70px));
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 70px),
+    50% 100%,
+    0 calc(100% - 70px)
+  );
   background-color: #fff;
 }
 
@@ -290,7 +353,7 @@
 .bottom-logo {
   width: 90px;
   margin-top: 20px;
-  margin: 30px
+  margin: 30px;
 }
 
 .welcome-text {
@@ -568,7 +631,7 @@
 .modern .map-container {
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
   min-height: 450px;
   border: 2px solid #e3e8ef;
 }
@@ -603,21 +666,42 @@
     height: 400px;
   }
 
-  .modern .hero-title { font-size: 2.5rem; }
-  .modern .news-title1 { font-size: 2.2rem; }
-  .modern .services-header h2 { font-size: 2.2rem; }
-  .modern .contact-section h2 { font-size: 2.2rem; }
+  .modern .hero-title {
+    font-size: 2.5rem;
+  }
+  .modern .news-title1 {
+    font-size: 2.2rem;
+  }
+  .modern .services-header h2 {
+    font-size: 2.2rem;
+  }
+  .modern .contact-section h2 {
+    font-size: 2.2rem;
+  }
 }
 
 @media (max-width: 768px) {
-  .modern .home-section { min-height: 500px; }
-  .modern .home-left h1 { font-size: 2rem; }
-  .modern .home-left p { font-size: 1rem; }
+  .modern .home-section {
+    min-height: 500px;
+  }
+  .modern .home-left h1 {
+    font-size: 2rem;
+  }
+  .modern .home-left p {
+    font-size: 1rem;
+  }
   .modern .home-btn,
-  .modern .doc-btn { width: 100%; margin: 8px 0; justify-content: center; }
-  .modern .hero-title { font-size: 2rem; }
-  .modern .hero-desc { font-size: 1rem; }
- 
+  .modern .doc-btn {
+    width: 100%;
+    margin: 8px 0;
+    justify-content: center;
+  }
+  .modern .hero-title {
+    font-size: 2rem;
+  }
+  .modern .hero-desc {
+    font-size: 1rem;
+  }
 }
 
 .modern .announcements-block {
@@ -626,7 +710,7 @@
 }
 
 .modern .announcements-header h2 {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 2.5rem;
   font-weight: 700;
   text-align: center;
@@ -644,7 +728,7 @@
   background: #fff;
   border-radius: 20px;
   padding: 20px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
   transition: transform 0.3s, box-shadow 0.3s;
   display: flex;
   flex-direction: column;
@@ -657,7 +741,7 @@
 
 .modern .news-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
 }
 
 .modern .news-image img {
@@ -686,7 +770,8 @@
   flex-grow: 1;
 }
 
-.modern .news-btn, .modern .all-news-btn {
+.modern .news-btn,
+.modern .all-news-btn {
   background-color: #4f9cf9;
   color: #fff;
   border: none;
@@ -697,7 +782,8 @@
   transition: all 0.3s;
 }
 
-.modern .news-btn:hover, .modern .all-news-btn:hover {
+.modern .news-btn:hover,
+.modern .all-news-btn:hover {
   background-color: #3a7dd9;
 }
 
@@ -708,7 +794,7 @@
 }
 
 .modern .news-title1 {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 2.5rem;
   font-weight: 700;
   color: #043873;
