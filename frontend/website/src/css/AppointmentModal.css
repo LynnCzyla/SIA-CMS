@@ -7,8 +7,8 @@
   align-items: center;
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.5);
-    padding-top: 50px;
-  }
+  padding-top: 40px;
+}
 
 /* Modal Container - Wide Layout with Background Image */
 .appointment-modal-container-wide {
@@ -23,9 +23,8 @@
   width: 100%;
   max-width: 90rem;
   margin: 0 1rem;
-  height: 75vh;
+  height: 80vh;
   overflow-y: auto;
-  /* Add semi-transparent overlay to ensure text readability */
   position: relative;
 }
 
@@ -40,6 +39,7 @@
   background-color: rgba(245, 247, 250, 0.92);
   z-index: 0;
   pointer-events: none;
+  height: 690px;
 }
 
 /* Ensure content appears above the overlay */
@@ -55,7 +55,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 1.5rem 2rem;
-  background-color: rgba(0, 61, 130, 0.95); /* Semi-transparent */
+  background-color: rgba(0, 61, 130, 0.95);
 }
 
 .appointment-modal-title-white {
@@ -63,6 +63,14 @@
   font-weight: 600;
   color: white;
   margin: 0;
+}
+
+/* Subtitle for Patient Registration */
+.appointment-modal-subtitle {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0.25rem 0 0 0;
+  font-weight: 400;
 }
 
 .appointment-modal-close-btn-white {
@@ -98,15 +106,17 @@
 }
 
 .appointment-modal-form-group-wide {
-  grid-column: span 2;
+  grid-column: span 3;
 }
 
 .appointment-modal-label-blue {
   display: block;
-  font-size: 1rem;
+  font-size: 0.75rem;
   font-weight: 600;
-  color: #003d82;
+  color: #374151;
   margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 /* Input Fields */
@@ -119,7 +129,7 @@
   border-radius: 0;
   font-size: 1rem;
   color: #111827;
-  background-color: rgba(255, 255, 255, 0.95); /* Semi-transparent white */
+  background-color: rgba(255, 255, 255, 0.95);
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
@@ -130,6 +140,15 @@
   border-color: #003d82;
   box-shadow: 0 0 0 3px rgba(0, 61, 130, 0.1);
   background-color: white;
+}
+
+/* Password field with light blue background */
+.appointment-modal-input-password {
+  background-color: #eff6ff;
+}
+
+.appointment-modal-input-password:focus {
+  background-color: #dbeafe;
 }
 
 .appointment-modal-select {
@@ -155,6 +174,29 @@
   font-style: italic;
 }
 
+/* Success and Error Messages */
+.appointment-modal-success {
+  padding: 1rem;
+  background-color: #d1fae5;
+  color: #065f46;
+  border-radius: 0;
+  font-size: 1rem;
+  text-align: center;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.appointment-modal-error {
+  padding: 1rem;
+  background-color: #fee2e2;
+  color: #991b1b;
+  border-radius: 0;
+  font-size: 1rem;
+  text-align: center;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
 /* Action Buttons */
 .appointment-modal-actions {
   display: flex;
@@ -175,12 +217,17 @@
   border: none;
 }
 
+.appointment-modal-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .appointment-modal-btn-cancel-red {
   color: white;
   background-color: #dc2626;
 }
 
-.appointment-modal-btn-cancel-red:hover {
+.appointment-modal-btn-cancel-red:hover:not(:disabled) {
   background-color: #b91c1c;
 }
 
@@ -189,7 +236,7 @@
   background-color: #003d82;
 }
 
-.appointment-modal-btn-submit-blue:hover {
+.appointment-modal-btn-submit-blue:hover:not(:disabled) {
   background-color: #002d5f;
 }
 
@@ -227,6 +274,10 @@
 
   .appointment-modal-title-white {
     font-size: 1.25rem;
+  }
+
+  .appointment-modal-subtitle {
+    font-size: 0.8rem;
   }
 
   .appointment-modal-form-wide {
