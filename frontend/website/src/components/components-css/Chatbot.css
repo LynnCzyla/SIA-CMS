@@ -1,4 +1,25 @@
-     .chatbot-wrapper {
+    :root {
+  --primary-color: #043873;
+  --primary-color2: #4f9cf9;
+  --secondary-color: #ffe492;
+  --bg-blue: #f3f7ff;
+  --footer-bg: #003087;
+  --footer-text: #ffffff;
+  --footer-link: #d3d8e0;
+  --text-dark: #333;
+  --text-gray: #555;
+  --text-light: #666;
+  --hero-bg: #e6f0fa;
+  --services-bg: #ffffff;
+  --news-bg: #f8f9fa;
+  --about-bg: #e9ecef;
+  --contact-bg: #f0f8ff;
+  --container-max: 1320px;
+  --radius-large: 16px;
+}
+    
+    
+    .chatbot-wrapper {
           position: fixed;
           bottom: 20px;
           right: 20px;
@@ -10,7 +31,7 @@
           width: 58px;
           height: 58px;
           border-radius: 50%;
-          background: #007bff;
+          background: var(--primary-color);
           color: white;
           border: none;
           cursor: pointer;
@@ -18,7 +39,7 @@
           align-items: center;
           justify-content: center;
           transition: all 0.25s ease;
-          box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+          box-shadow: 0 6px 20px rgba(4, 56, 115, 0.4);
         }
 
         .chatbot-fab:hover {
@@ -109,13 +130,13 @@
         }
 
         .chatbot-header {
-          background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+          background: linear-gradient(135deg, var(--primary-color2) 0%, var(--primary-color) 100%);
           color: white;
-          padding: 20px;
+          padding: 10px;
           box-shadow: 0 2px 10px rgba(0,0,0,0.1);
           display: flex;
           align-items: center;
-          justify-content: space-between;
+          justify-content: center;
         }
 
         .chatbot-header-info {
@@ -123,6 +144,7 @@
           align-items: center;
           gap: 14px;
           flex: 1;
+          justify-content: center;
         }
 
         .chatbot-avatar {
@@ -143,6 +165,7 @@
           margin: 0;
           font-size: 0.85rem;
           opacity: 0.9;
+          color: #fff;
         }
 
         .chatbot-header-close {
