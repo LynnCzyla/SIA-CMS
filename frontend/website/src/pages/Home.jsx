@@ -24,7 +24,6 @@ import Chatbot from "../components/Chatbot";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { fetchMedia, fetchAnnouncements, fetchNews } from "../api/api";
 import { FaUserDoctor } from "react-icons/fa6";
-import CookieConsent from "../components/CookieConsent";
 
 const POLL_INTERVAL = 5000;
 
@@ -166,7 +165,6 @@ function Home() {
   return (
     <div className="page-transition">
     <div className={`home-wrapper ${layout}`}>
-      <CookieConsent />
 
       {/* --- Section 1: Home Carousel --- */}
       <section className="home-section">
@@ -364,8 +362,7 @@ function Home() {
                   Provide our <span className="text-primary2">Best Services</span>
                 </h2>
                 <p className="services-desc">
-                  Comprehensive medical care with state-of-the-art facilities
-                  and expert healthcare professionals dedicated to your well-being.
+                 At MediSync, we provide a comprehensive array of medical services designed to meet the diverse healthcare needs of our community. As a Level 3 hospital, MediSync is equipped with advanced facilities and supported by a team of highly skilled professionals committed to delivering exceptional patient care.
                 </p>
               </div>
               <div className="services-grid">

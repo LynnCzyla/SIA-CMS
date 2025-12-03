@@ -6,13 +6,12 @@ import "../css/about.css";
 import "quill/dist/quill.snow.css";
 import { IoMdCreate } from "react-icons/io";
 import "../css/News.css";
-import GeneralSettings from "../components/settings/General";
 
 export default function Hospital() {
   const quillRef = useRef(null);
   const fileInputRef = useRef(null);
   const [fileInfo, setFileInfo] = useState(null);
-  const [activeTab, setActiveTab] = useState("general");
+  const [activeTab, setActiveTab] = useState("about"); // About tab active by default
 
   const [aboutForm, setAboutForm] = useState({
     aboutHospital: "",
@@ -24,7 +23,6 @@ export default function Hospital() {
     privacyPolicy: "",
   });
 
-  // ✅ UPDATED: Contact form state structure
   const [contactForm, setContactForm] = useState({
     contact_us: "",
     contact_info: "",
@@ -35,9 +33,9 @@ export default function Hospital() {
       sales: "",
       emergency: "",
       outpatient: "",
-      radiology: ""
+      radiology: "",
     },
-    email: ""
+    email: "",
   });
 
   const [servicesForm, setServicesForm] = useState({
@@ -72,7 +70,7 @@ export default function Hospital() {
     }
   }, [activeTab]);
 
-  // Fetch About info whenever About tab is active
+  // Fetch About info
   useEffect(() => {
     if (activeTab === "about") {
       fetch("http://localhost:5000/api/about")
@@ -92,7 +90,7 @@ export default function Hospital() {
     }
   }, [activeTab]);
 
-  // ✅ NEW: Fetch contact info when Contact tab is active
+  // Fetch Contact info
   useEffect(() => {
     if (activeTab === "contact") {
       fetch("http://localhost:5000/api/contact")
@@ -108,9 +106,9 @@ export default function Hospital() {
               sales: "",
               emergency: "",
               outpatient: "",
-              radiology: ""
+              radiology: "",
             },
-            email: data.email || ""
+            email: data.email || "",
           });
         })
         .catch((err) => console.error("Error fetching contact info:", err));
@@ -131,18 +129,16 @@ export default function Hospital() {
   const handleAboutFormChange = (field, value) =>
     setAboutForm((prev) => ({ ...prev, [field]: value || "" }));
 
-  // ✅ UPDATED: Handle contact form changes
   const handleContactFormChange = (field, value) =>
     setContactForm((prev) => ({ ...prev, [field]: value || "" }));
 
-  // ✅ NEW: Handle mobile number changes
   const handleMobileNumberChange = (key, value) => {
     setContactForm((prev) => ({
       ...prev,
       mobile_numbers: {
         ...prev.mobile_numbers,
-        [key]: value || ""
-      }
+        [key]: value || "",
+      },
     }));
   };
 
@@ -151,12 +147,8 @@ export default function Hospital() {
 
   // Submit handler
   const handleSubmit = async (status) => {
-    const mode = status === "draft" ? "Draft Saved" : "Published";
-
     try {
-      if (activeTab === "general") {
-        Swal.fire({ icon: "success", title: "General Settings Updated!" });
-      } else if (activeTab === "about") {
+      if (activeTab === "about") {
         const res = await fetch("http://localhost:5000/api/about", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -164,10 +156,8 @@ export default function Hospital() {
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || "Save failed");
-
         Swal.fire({ icon: "success", title: "About Info Updated!" });
       } else if (activeTab === "contact") {
-        // ✅ UPDATED: Actually save contact info to database
         const res = await fetch("http://localhost:5000/api/contact", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -175,11 +165,9 @@ export default function Hospital() {
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || "Save failed");
-
         Swal.fire({ icon: "success", title: "Contact Info Updated!" });
       } else if (activeTab === "services") {
         const description = quillRef.current?.__quill?.root.innerHTML.trim();
-
         if (
           !servicesForm.shortTitle.trim() ||
           !servicesForm.fullTitle.trim() ||
@@ -200,18 +188,15 @@ export default function Hospital() {
         formData.append("topicTags", servicesForm.topicTags.trim());
         formData.append("description", description);
         formData.append("status", status);
-
         if (fileInputRef.current?.files[0]) {
           formData.append("image", fileInputRef.current.files[0]);
         }
-
         formData.append("userId", currentUser.id);
 
         const res = await fetch("http://localhost:5000/api/services", {
           method: "POST",
           body: formData,
         });
-
         const data = await res.json();
         if (!data.success) throw new Error(data.message);
 
@@ -221,7 +206,6 @@ export default function Hospital() {
           confirmButtonColor: "#043873",
         });
 
-        // Reset form
         setServicesForm({ shortTitle: "", fullTitle: "", topicTags: "" });
         setFileInfo(null);
         quillRef.current.__quill.setContents([]);
@@ -243,7 +227,7 @@ export default function Hospital() {
 
       {/* Tabs */}
       <div className="cms-tabs">
-        {["general", "about", "services", "contact"].map((tab) => (
+        {["about", "services", "contact"].map((tab) => (
           <div
             key={tab}
             className={`cms-tab-item ${activeTab === tab ? "active" : ""}`}
@@ -258,7 +242,6 @@ export default function Hospital() {
       <div className="card announcement-card">
         <div className="head">
           <h3 className="announcement-title">
-            {activeTab === "general" && "General Settings Update"}
             {activeTab === "about" && "About Hospital Update"}
             {activeTab === "services" && "Services Update"}
             {activeTab === "contact" && "Contact Update"}
@@ -274,26 +257,23 @@ export default function Hospital() {
       {/* Form */}
       <div className="cms-card cms-form-card">
         <form className="cms-form" onSubmit={(e) => e.preventDefault()}>
-          {/* GENERAL */}
-          {activeTab === "general" && <GeneralSettings />}
-
           {/* ABOUT */}
           {activeTab === "about" && (
             <div className="about-form-container">
               {[
-                "Update the About Hospital",
-                "Update the Mission",
-                "Update the Vision",
-                "Update the Quality Policy",
-                "Update the Core Values",
-                "Update the Our History",
-                "Update the Privacy Policy",
+                "aboutHospital",
+                "mission",
+                "vision",
+                "qualityPolicy",
+                "coreValues",
+                "ourHistory",
+                "privacyPolicy",
               ].map((field) => (
                 <div className="about-form-group" key={field}>
-                  <label>{field.replace(/([A-Z])/g, " $1")}</label>
+                  <label>{field}</label>
                   <textarea
                     value={aboutForm[field] || ""}
-                    placeholder={`Enter ${field.replace(/([A-Z])/g, " $1")}`}
+                    placeholder={`Enter ${field}`}
                     onChange={(e) => handleAboutFormChange(field, e.target.value)}
                     rows={4}
                   />
@@ -302,7 +282,7 @@ export default function Hospital() {
             </div>
           )}
 
-          {/* ✅ UPDATED: CONTACT SECTION - Completely replaced */}
+          {/* CONTACT */}
           {activeTab === "contact" && (
             <div className="about-form-container">
               <div className="about-form-group">
@@ -357,57 +337,20 @@ export default function Hospital() {
 
               <div className="about-form-group">
                 <label>Mobile Numbers</label>
-                
                 <div style={{ marginLeft: "20px", marginTop: "10px" }}>
-                  <div style={{ marginBottom: "10px" }}>
-                    <label style={{ fontSize: "14px", fontWeight: "normal" }}>Admitting Section</label>
-                    <input
-                      type="text"
-                      value={contactForm.mobile_numbers?.admitting || ""}
-                      placeholder="Enter admitting section number"
-                      onChange={(e) => handleMobileNumberChange("admitting", e.target.value)}
-                    />
-                  </div>
-
-                  <div style={{ marginBottom: "10px" }}>
-                    <label style={{ fontSize: "14px", fontWeight: "normal" }}>Sales and Marketing</label>
-                    <input
-                      type="text"
-                      value={contactForm.mobile_numbers?.sales || ""}
-                      placeholder="Enter sales number"
-                      onChange={(e) => handleMobileNumberChange("sales", e.target.value)}
-                    />
-                  </div>
-
-                  <div style={{ marginBottom: "10px" }}>
-                    <label style={{ fontSize: "14px", fontWeight: "normal" }}>Emergency Department</label>
-                    <input
-                      type="text"
-                      value={contactForm.mobile_numbers?.emergency || ""}
-                      placeholder="Enter emergency number"
-                      onChange={(e) => handleMobileNumberChange("emergency", e.target.value)}
-                    />
-                  </div>
-
-                  <div style={{ marginBottom: "10px" }}>
-                    <label style={{ fontSize: "14px", fontWeight: "normal" }}>Outpatient Department</label>
-                    <input
-                      type="text"
-                      value={contactForm.mobile_numbers?.outpatient || ""}
-                      placeholder="Enter outpatient number"
-                      onChange={(e) => handleMobileNumberChange("outpatient", e.target.value)}
-                    />
-                  </div>
-
-                  <div style={{ marginBottom: "10px" }}>
-                    <label style={{ fontSize: "14px", fontWeight: "normal" }}>Radiology Department</label>
-                    <input
-                      type="text"
-                      value={contactForm.mobile_numbers?.radiology || ""}
-                      placeholder="Enter radiology number"
-                      onChange={(e) => handleMobileNumberChange("radiology", e.target.value)}
-                    />
-                  </div>
+                  {Object.keys(contactForm.mobile_numbers).map((key) => (
+                    <div style={{ marginBottom: "10px" }} key={key}>
+                      <label style={{ fontSize: "14px", fontWeight: "normal" }}>
+                        {key.charAt(0).toUpperCase() + key.slice(1)} Department
+                      </label>
+                      <input
+                        type="text"
+                        value={contactForm.mobile_numbers[key] || ""}
+                        placeholder={`Enter ${key} number`}
+                        onChange={(e) => handleMobileNumberChange(key, e.target.value)}
+                      />
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -417,11 +360,7 @@ export default function Hospital() {
           {activeTab === "services" && (
             <>
               <div className="cms-form-row">
-                {[
-                  { key: "shortTitle", label: "Short Title" },
-                  { key: "fullTitle", label: "Full Title" },
-                  { key: "topicTags", label: "Topic Tags" },
-                ].map(({ key, label }) => (
+                {[{ key: "shortTitle", label: "Short Title" }, { key: "fullTitle", label: "Full Title" }, { key: "topicTags", label: "Topic Tags" }].map(({ key, label }) => (
                   <div className="cms-form-group" key={key}>
                     <label>{label}</label>
                     <input
@@ -442,28 +381,15 @@ export default function Hospital() {
 
                 <div className="cms-form-group" style={{ flex: 1 }}>
                   <label>Upload Image</label>
-                  <div
-                    className="file-upload-container"
-                    onClick={() => fileInputRef.current?.click()}
-                  >
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      accept="image/*"
-                      onChange={handleFileChange}
-                      className="file-input-hidden"
-                    />
+                  <div className="file-upload-container" onClick={() => fileInputRef.current?.click()}>
+                    <input ref={fileInputRef} type="file" accept="image/*" onChange={handleFileChange} className="file-input-hidden" />
                     <label className="upload-label">
                       <IoMdCreate /> Choose Image
                     </label>
                     <div className="file-preview-area">
                       {fileInfo ? (
                         fileInfo.isImage && fileInfo.preview ? (
-                          <img
-                            src={fileInfo.preview}
-                            alt="preview"
-                            className="file-preview-img"
-                          />
+                          <img src={fileInfo.preview} alt="preview" className="file-preview-img" />
                         ) : (
                           <p className="file-name">{fileInfo.name}</p>
                         )
@@ -476,7 +402,6 @@ export default function Hospital() {
               </div>
             </>
           )}
-
         </form>
       </div>
     </div>

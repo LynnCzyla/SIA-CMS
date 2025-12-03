@@ -109,9 +109,11 @@ const Contact = () => {
               <Skeleton height={20} width={200} className="mx-auto" />
             </>
           ) : (
+           <div className="text-center mb-5">
             <h2 className="title-center mb-5">
               Contact <span className="title-primary">Us</span>
             </h2>
+          </div>
           )}
         </div>
 
@@ -130,20 +132,30 @@ const Contact = () => {
                 <h4 className="mb-4 text-center">Send Us a Message</h4>
                 <form onSubmit={handleSubmit}>
                   <div className="mb-3">
-                    <input type="text" name="fullName" value={formData.fullName} onChange={handleChange} className="form-control" placeholder="Full Name" required />
+                    <label htmlFor="fullName" className="form-label">Full Name *</label>
+                    <input type="text" id="fullName" name="fullName" value={formData.fullName} onChange={handleChange} className="form-control" placeholder="Full Name" required />
                   </div>
+
                   <div className="mb-3">
-                    <input type="text" name="mobile" value={formData.mobile} onChange={handleChange} className="form-control" placeholder="Mobile Number" />
+                    <label htmlFor="mobile" className="form-label">Mobile Number</label>
+                    <input type="text" id="mobile" name="mobile" value={formData.mobile} onChange={handleChange} className="form-control" placeholder="Mobile Number" />
                   </div>
+
                   <div className="mb-3">
-                    <input type="text" name="subject" value={formData.subject} onChange={handleChange} className="form-control" placeholder="Subject" />
+                    <label htmlFor="subject" className="form-label">Subject</label>
+                    <input type="text" id="subject" name="subject" value={formData.subject} onChange={handleChange} className="form-control" placeholder="Subject" />
                   </div>
+
                   <div className="mb-3">
-                    <input type="email" name="email" value={formData.email} onChange={handleChange} className="form-control" placeholder="Email" required />
+                    <label htmlFor="email" className="form-label">Email *</label>
+                    <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} className="form-control" placeholder="Email" required />
                   </div>
+
                   <div className="mb-3">
-                    <textarea name="message" value={formData.message} onChange={handleChange} className="form-control" rows="5" placeholder="Your Message" required></textarea>
+                    <label htmlFor="message" className="form-label">Your Message *</label>
+                    <textarea id="message" name="message" value={formData.message} onChange={handleChange} className="form-control" rows="5" placeholder="Your Message" required></textarea>
                   </div>
+
                   <div className="text-center">
                     <button type="submit" className="btn btn-primary px-5" disabled={submitting}>
                       {submitting ? "Sending..." : "Send Message"}

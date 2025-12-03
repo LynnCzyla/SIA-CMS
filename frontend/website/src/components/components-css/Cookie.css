@@ -6,24 +6,20 @@
   transform: translateX(-50%) translateY(20px);
 
   width: 90%;
-  max-width: 480px;
+  max-width: 720px;
 
   background: #ffffff;
-  padding: 20px 26px;
-  border-radius: 12px;
+  padding: 16px 24px;
+  border-radius: 8px;
 
   border: 1px solid #d7e3f0;
-  box-shadow: 0 6px 28px rgba(0, 60, 125, 0.12);
+  box-shadow: 0 4px 20px rgba(0, 60, 125, 0.12);
 
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 18px;
+  gap: 16px;
 
   font-family: "Inter", sans-serif;
-
-  opacity: 0;
-  visibility: hidden;
 
   animation: cookieSlideUp 0.45s ease forwards;
   z-index: 9999;
@@ -34,33 +30,67 @@
   margin: 0;
   font-size: 14px;
   color: #2c3e50;
-  line-height: 1.45;
+  line-height: 1.5;
   flex: 1;
-  
-  /* Medical UI touch */
-  font-weight: 500;
 }
 
-/* Button */
-.cookie-popup button {
-  padding: 10px 18px;
-  background: #0077cc;      /* Medical blue */
-  color: #ffffff;
-  border: none;
-  border-radius: 6px;
+.cookie-popup a.cookie-link {
+  color: #0077cc;
+  text-decoration: underline;
+}
 
+.cookie-popup a.cookie-link:hover {
+  color: #005fa1;
+}
+
+/* Actions buttons */
+.cookie-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.cookie-btn {
+  padding: 8px 16px;
   font-size: 14px;
   font-weight: 600;
+  border-radius: 6px;
   cursor: pointer;
+  border: none;
   white-space: nowrap;
-
-  transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  transition: 0.2s ease;
 }
 
-.cookie-popup button:hover {
+.cookie-btn.primary {
+  background: #0077cc;
+  color: #fff;
+}
+
+.cookie-btn.primary:hover {
   background: #005fa1;
-  transform: translateY(-1px);
-  box-shadow: 0 3px 10px rgba(0, 60, 125, 0.25);
+}
+
+.cookie-btn.secondary {
+  background: #f0f0f0;
+  color: #2c3e50;
+}
+
+.cookie-btn.secondary:hover {
+  background: #e0e0e0;
+}
+
+/* Close button */
+.cookie-close {
+  background: transparent;
+  border: none;
+  color: #2c3e50;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  margin-left: 8px;
+}
+
+.cookie-close:hover {
+  color: #0077cc;
 }
 
 /* Animation */
@@ -68,28 +98,36 @@
   0% {
     opacity: 0;
     transform: translateX(-50%) translateY(20px);
-    visibility: visible;
   }
   100% {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
-    visibility: visible;
   }
 }
 
 /* Mobile */
-@media (max-width: 480px) {
+@media (max-width: 600px) {
   .cookie-popup {
-    bottom: 12px;
-    width: 92%;
-    padding: 18px 20px;
     flex-direction: column;
+    align-items: flex-start;
     gap: 12px;
-    text-align: center;
+    text-align: left;
   }
 
-  .cookie-popup button {
+  .cookie-actions {
     width: 100%;
-    padding: 12px;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .cookie-btn {
+    width: auto;
+    flex: 1 1 auto;
+  }
+
+  .cookie-close {
+    position: absolute;
+    top: 6px;
+    right: 6px;
   }
 }

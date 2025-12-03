@@ -18,29 +18,8 @@
   box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
 
-.title-center {
-  font-family: "Inter", sans-serif;
-  font-size: 2.5rem;
-  color: var(--primary-color2, #1d72b8);
-  font-weight: 700;
-  text-align: center;
-  position: relative;
-}
 
-.title-center::after {
-  content: "";
-  display: block;
-  width: 180px;
-  height: 4px;
-  background-color: var(--secondary-color, #00b4d8);
-  margin: 0.5rem auto 0;
-  border-radius: 2px;
-}
 
-.title-primary {
-  color: var(--primary-color, #1d72b8);
-  font-weight: 700;
-}
 
 .contact-info h5 {
   font-weight: 600;

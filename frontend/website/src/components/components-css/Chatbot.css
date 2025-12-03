@@ -31,7 +31,7 @@
           width: 58px;
           height: 58px;
           border-radius: 50%;
-          background: var(--primary-color);
+          background: var(--primary-color2);
           color: white;
           border: none;
           cursor: pointer;
@@ -250,7 +250,7 @@
         }
 
         .message.user .bubble {
-          background: #007bff;
+          background: var(--primary-color2);
           color: white;
           border-bottom-right-radius: 4px;
         }

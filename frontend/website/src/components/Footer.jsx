@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import {
   FaPhone,
   FaEnvelope,
@@ -14,95 +15,83 @@ import Logo from "/src/assets/logo1.svg";
 const Footer = () => {
   return (
     <footer className="footer">
-      <div className="footer-glow"></div>
-
+      {/* TOP FOOTER */}
       <div className="footer-container">
-        {/* TOP FOOTER GRID */}
         <div className="footer-content">
-          {/* BRAND */}
+          {/* BRAND + SOCIALS */}
           <div className="footer-column footer-brand">
-            <div className="brand-header">
-              <div className="brand-icon-wrapper">
-                <img src={Logo} alt="MediSync Logo" className="brand-logo" />
-              </div>
-              <h2 className="brand-name">
-                <span className="brand-name-primary">Medi</span>
-                <span className="brand-name-secondary">Sync</span>
-              </h2>
-            </div>
-
+            <img src={Logo} alt="MediSync Logo" className="footer-logo" />
+            <h2 className="brand-name">
+              <span className="brand-name-primary">Medi</span>
+              <span className="brand-name-secondary">Sync</span>
+            </h2>
             <p className="brand-description">
-              Connecting patients with quality healthcare services. Your health,
-              our priority.
+              Connecting patients with quality healthcare services. Your health, our priority.
             </p>
-
             <div className="social-icons">
-              <a className="social-icon"><FaFacebookF /></a>
-              <a className="social-icon"><FaTwitter /></a>
-              <a className="social-icon"><FaInstagram /></a>
-              <a className="social-icon"><FaLinkedinIn /></a>
+              <a href="#" className="social-icon"><FaFacebookF /></a>
+              <a href="#" className="social-icon"><FaTwitter /></a>
+              <a href="#" className="social-icon"><FaInstagram /></a>
+              <a href="#" className="social-icon"><FaLinkedinIn /></a>
             </div>
           </div>
 
-          {/* HOME LINKS */}
+          {/* QUICK LINKS */}
           <div className="footer-column">
-            <h3 className="footer-column-title">Home</h3>
+            <h3 className="footer-column-title">Quick Links</h3>
             <ul className="footer-links">
-              <li><a className="footer-link">Events</a></li>
-              <li><a className="footer-link">Our Doctors</a></li>
-              <li><a className="footer-link">Mission & Vision</a></li>
+              <li><Link to="/" className="footer-link">Home</Link></li>
+              <li><Link to="/services" className="footer-link">Services</Link></li>
+              <li><Link to="/doctors" className="footer-link">Doctors</Link></li>
+              <li><Link to="/news" className="footer-link">News</Link></li>
+              <li><Link to="/careers" className="footer-link">Careers</Link></li>
+              <li><Link to="/about" className="footer-link">About</Link></li>
+              <li><Link to="/contact" className="footer-link">Contact</Link></li>
             </ul>
           </div>
 
-          {/* SERVICES */}
-          <div className="footer-column">
-            <h3 className="footer-column-title">Services</h3>
-            <ul className="footer-links">
-              <li><a className="footer-link">Departments</a></li>
-              <li><a className="footer-link">Emergency Care</a></li>
-              <li><a className="footer-link">Help Center</a></li>
-            </ul>
-          </div>
-
-          {/* CONTACT */}
+          {/* CONTACT INFO */}
           <div className="footer-column">
             <h3 className="footer-column-title">Contact Us</h3>
-
+            <p>We value your feedback and are happy to assist you with inquiries about our hospital services.</p>
             <ul className="contact-list">
-              <li className="contact-item">
-                <FaPhone className="contact-icon" />
-                <div>
-                  <p className="contact-phone">+1 (555) 123-4567</p>
-                  <p className="contact-emergency">24/7 Emergency</p>
-                </div>
-              </li>
-
-              <li className="contact-item">
-                <FaEnvelope className="contact-icon" />
-                info@medisync.com
-              </li>
-
               <li className="contact-item">
                 <FaMapMarkerAlt className="contact-icon" />
                 <div>
-                  <p>123 Healthcare Ave</p>
-                  <p>Medical District, MD 12345</p>
+                  <p>123 Health Avenue</p>
+                  <p>Kapasigan, Pasig City, Philippines</p>
+                </div>
+              </li>
+              <li className="contact-item">
+                <FaPhone className="contact-icon" />
+                <div>
+                  <p>Tel: (+63) 09123456789</p>
+                  <p>Admitting Section: +63 900-111-2222</p>
+                  <p>Sales & Marketing: +63 900-333-4444</p>
+                  <p>Emergency Dept: +63 900-555-6666</p>
+                  <p>Outpatient Dept: +63 900-777-8888</p>
+                  <p>Radiology Dept (calls only): +63 900-999-0000</p>
+                </div>
+              </li>
+              <li className="contact-item">
+                <FaEnvelope className="contact-icon" />
+                <div>
+                  <p>info@medisync.com</p>
                 </div>
               </li>
             </ul>
           </div>
         </div>
 
-        {/* BOTTOM BAR */}
+        {/* BOTTOM FOOTER */}
         <div className="footer-bottom">
           <p className="footer-copy">
             © 2025 <span className="footer-brand-highlight">MediSync</span>. All Rights Reserved.
           </p>
-
           <div className="footer-legal">
-            <a className="footer-legal-link">Privacy Policy</a>
-            <a className="footer-legal-link">Terms of Service</a>
-            <a className="footer-legal-link">Cookie Policy</a>
+            <Link to="/about" className="footer-legal-link">Privacy Policy</Link>
+            <Link to="/about" className="footer-legal-link">Terms of Service</Link>
+            <Link to="/about" className="footer-legal-link">Cookie Policy</Link>
           </div>
         </div>
       </div>

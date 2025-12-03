@@ -24,7 +24,7 @@ import ComponentAnnouncement from "./components/ComponentAnnouncement";
 import ComponentHealth from "./components/ComponentHealth";
 import ComponentCareer from "./components/ComponentCareers";
 import ComponentServices from "./components/ComponentServices";
-
+import CookieConsent from "./components/CookieConsent";
 import Chatbot from "./components/Chatbot";
 import "./App.css";
 
@@ -110,6 +110,8 @@ function App() {
           </Routes>
 
           <Chatbot />
+                <CookieConsent /> {/* ← placed here */}
+
           <Footer />
         </Router>
       </div>

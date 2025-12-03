@@ -5,6 +5,7 @@ import { IoMdArrowDropdown } from "react-icons/io";
 import "boxicons/css/boxicons.min.css";
 import Logo from "/src/assets/logo1.svg";
 import AppointmentModal from "../pages/AppointmentModal"; // Import modal
+import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from "react-icons/fa";
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -30,11 +31,25 @@ function Navbar() {
   return (
     <div className="sticky-header">
       {/* Top Bar */}
-      <div className="top-bar">
-        For emergency concerns, please call our ER at 000-000-0000 or mobile at
-        000-000-0000
+    <div className="top-bar">
+      <div className="contact-info1">
+        For emergency concerns, please call our ER at 000-000-0000 or mobile at 000-000-0000
       </div>
-
+      <div className="social-icons">
+        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+          <FaFacebookF />
+        </a>
+        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+          <FaTwitter />
+        </a>
+        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+          <FaInstagram />
+        </a>
+        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
+          <FaLinkedinIn />
+        </a>
+      </div>
+    </div>
       {/* Navbar */}
       <nav className="navbar">
         <NavLink to="/" className="brand" onClick={(e) => handleNavClick(e, "/")}>

@@ -227,10 +227,14 @@
   border-radius: 12px;
   padding: 16px;
   box-shadow: 0 4px 16px rgba(0,0,0,0.05);
-  justify-content: center;
-  align-items: center;
 
+  /* Center with CSS Grid */
+  display: grid;
+  place-items: center; /* shorthand for align-items + justify-items */
+
+  /* Optional: make it take full height to truly center vertically */
 }
+
 
 .adminCalendar p, h3{
    justify-content: center;

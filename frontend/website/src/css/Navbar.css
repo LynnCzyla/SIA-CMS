@@ -13,12 +13,53 @@
    TOP BAR
 ------------------------------ */
 .top-bar {
-  background-color: #003366;
-  color: white;
-  text-align: center;
-  padding: 6px 0;
-  font-size: 14px;
+  display: flex;
+  justify-content: center; /* centers content horizontally */
+  align-items: center;
+  background-color: #003366; /* dark blue */
+  color: #fff;
+  font-size: 0.9rem;
+  gap: 1rem; 
+  padding: 5px;
 }
+
+.top-bar .contact-info1 {
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  line-height: 0%;
+  /* nothing needed unless you want flex children */
+}
+
+.top-bar .social-icons {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.top-bar .social-icons a {
+  color: #fff;
+  font-size: 16px;
+  transition: color 0.3s;
+  justify-content: center;
+}
+
+.top-bar .social-icons a:hover {
+  color: var(--primary-color2); /* highlight color on hover */
+}
+
+@media (max-width: 768px) {
+  .top-bar {
+    flex-direction: column;
+    align-items: center; /* keep centered on mobile */
+    gap: 0.5rem;
+    text-align: center;
+  }
+
+  .top-bar .social-icons {
+    justify-content: center; /* center icons on mobile */
+  }
+}
+
 
 /* ------------------------------
    NAVBAR
