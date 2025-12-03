@@ -86,53 +86,39 @@ function Doctors() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    let results = allDoctors;
+ const handleSearch = (e) => {
+  e.preventDefault();
+  let results = allDoctors;
 
-    // Surname
-    if (formData.surname) {
-      results = results.filter((d) =>
-        d.lastName.toLowerCase().includes(formData.surname.toLowerCase())
-      );
-    }
+  if (formData.surname)
+    results = results.filter(d =>
+      d.lastName.toLowerCase().includes(formData.surname.toLowerCase())
+    );
 
-    // Firstname
-    if (formData.firstname) {
-      results = results.filter((d) =>
-        d.firstName.toLowerCase().includes(formData.firstname.toLowerCase())
-      );
-    }
+  if (formData.firstname)
+    results = results.filter(d =>
+      d.firstName.toLowerCase().includes(formData.firstname.toLowerCase())
+    );
 
-    // Specialization
-    if (formData.specialization) {
-      results = results.filter((d) => d.spec === formData.specialization);
-    }
+  if (formData.specialization)
+    results = results.filter(d => d.spec === formData.specialization);
 
-    // Schedule (Day)
-    if (formData.schedule) {
-      results = results.filter((d) =>
-        d.schedule.toLowerCase().includes(formData.schedule.toLowerCase())
-      );
-    }
+  if (formData.schedule)
+    results = results.filter(d =>
+      d.schedule.toLowerCase().includes(formData.schedule.toLowerCase())
+    );
 
-    // Time (AM/PM)
-    if (formData.meridiem) {
-      results = results.filter((d) =>
-        d.schedule.toUpperCase().includes(formData.meridiem)
-      );
-    }
+  if (formData.meridiem)
+    results = results.filter(d =>
+      d.schedule.toUpperCase().includes(formData.meridiem)
+    );
 
-    // Alphabet filter
-    if (selectedLetter) {
-      results = results.filter((d) =>
-        d.lastName.toUpperCase().startsWith(selectedLetter)
-      );
-    }
+  setFilteredDoctors(results);
+  updatePage(1, results);
+};
 
-    setFilteredDoctors(results);
-    updatePage(1, results);
-  };
+
+
 
   const handleClear = () => {
     setFormData({
@@ -205,99 +191,89 @@ function Doctors() {
       </div>
 
       {/* Search Filters — SCHEDULE & TIME ARE BACK */}
-      <div className="d-flex justify-content-center mt-4">
-        <div className="search-container shadow-sm p-4 mb-4">
-          <form
-            className="row g-3 justify-content-center"
-            onSubmit={handleSearch}
-          >
-            <div className="col-md-4">
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Doctor's Surname"
-                name="surname"
-                value={formData.surname}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className="col-md-4">
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Doctor's Firstname"
-                name="firstname"
-                value={formData.firstname}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className="col-md-4">
-              <select
-                className="form-select"
-                name="specialization"
-                value={formData.specialization}
-                onChange={handleChange}
-              >
-                <option value="">Specialization</option>
-                {specializations.map((spec) => (
-                  <option key={spec} value={spec}>
-                    {spec}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Schedule Dropdown */}
-            <div className="col-md-4">
-              <select
-                className="form-select"
-                name="schedule"
-                value={formData.schedule}
-                onChange={handleChange}
-              >
-                <option value="">Schedule</option>
-                <option>Monday</option>
-                <option>Tuesday</option>
-                <option>Wednesday</option>
-                <option>Thursday</option>
-                <option>Friday</option>
-                <option>Saturday</option>
-                <option>Sunday</option>
-              </select>
-            </div>
-
-            {/* Time (AM/PM) Dropdown */}
-            <div className="col-md-4">
-              <select
-                className="form-select"
-                name="meridiem"
-                value={formData.meridiem}
-                onChange={handleChange}
-              >
-                <option value="">Time</option>
-                <option>AM</option>
-                <option>PM</option>
-              </select>
-            </div>
-
-            {/* Buttons */}
-            <div className="col-md-4 d-flex justify-content-between align-items-center gap-1">
-              <button
-                type="button"
-                className="btn btn-light btn-cancel px-4"
-                onClick={handleClear}
-              >
-                Cancel
-              </button>
-              <button type="submit" className="btn btn-primary btn-search">
-                Search
-              </button>
-            </div>
-          </form>
-        </div>
+    <div className="d-flex justify-content-center mt-4">
+  <div className="search-container shadow-sm p-4 mb-4">
+    <form className="row g-3 justify-content-center" onSubmit={handleSearch}>
+      {/* Surname */}
+      <div className="col-md-4">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Doctor's Surname"
+          name="surname"
+          value={formData.surname}
+          onChange={handleChange}
+        />
       </div>
+
+      {/* Firstname */}
+      <div className="col-md-4">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Doctor's Firstname"
+          name="firstname"
+          value={formData.firstname}
+          onChange={handleChange}
+        />
+      </div>
+
+      {/* Specialization */}
+      <div className="col-md-4">
+        <select
+          className="form-select"
+          name="specialization"
+          value={formData.specialization}
+          onChange={handleChange}
+        >
+          <option value="">Specialization</option>
+          {specializations.map((spec) => (
+            <option key={spec} value={spec}>{spec}</option>
+          ))}
+        </select>
+      </div>
+
+      {/* Schedule */}
+      <div className="col-md-4">
+        <select
+          className="form-select"
+          name="schedule"
+          value={formData.schedule}
+          onChange={handleChange}
+        >
+          <option value="">Schedule</option>
+          {["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"].map(day => (
+            <option key={day} value={day}>{day}</option>
+          ))}
+        </select>
+      </div>
+
+      {/* Time (AM/PM) */}
+      <div className="col-md-4">
+        <select
+          className="form-select"
+          name="meridiem"
+          value={formData.meridiem}
+          onChange={handleChange}
+        >
+          <option value="">Time</option>
+          <option value="AM">AM</option>
+          <option value="PM">PM</option>
+        </select>
+      </div>
+
+      {/* Buttons */}
+      <div className="col-md-4 d-flex justify-content-between align-items-center gap-1">
+        <button type="button" className="btn btn-light btn-cancel px-4" onClick={handleClear}>
+          Cancel
+        </button>
+        <button type="submit" className="btn btn-primary btn-search">
+          Search
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
 
       {/* Alphabet Bar */}
       <div className="col-md-12 text-center alphabet-bar d-flex align-items-center justify-content-center mb-4">

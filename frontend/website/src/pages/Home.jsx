@@ -188,12 +188,9 @@ function Home() {
                     connection to help you heal, recover, and thrive.
                   </p>
                  <div className="hero-buttons">
-  <button 
-    className="home-btn"
-    onClick={() => setIsModalOpen(true)}
-  >
-    Book Appointment <MdOutlineBookmarkBorder />
-  </button>
+
+
+  
   <button className="doc-btn" onClick={() => navigate("/doctors")}>
     Find a Doctor <FaUserDoctor />
   </button>
