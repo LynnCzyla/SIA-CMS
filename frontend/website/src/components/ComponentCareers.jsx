@@ -18,7 +18,7 @@ const ComponentCareer = () => {
   useEffect(() => {
     const fetchJob = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/jobs/${id}`);
+        const res = await fetch(`http://26.41.72.16:5000/api/jobs/${id}`);
         const data = await res.json();
         if (data.success) {
           setJob(data.job);
@@ -38,7 +38,7 @@ const ComponentCareer = () => {
   useEffect(() => {
     const fetchAllJobs = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/jobs");
+        const res = await fetch("http://26.41.72.16:5000/api/jobs");
         const data = await res.json();
         if (data.success) {
           setAllJobs(data.jobs);
@@ -138,7 +138,7 @@ const ComponentCareer = () => {
           {job.image && (
             <div className="news-image">
               <img
-                src={`http://localhost:5000/uploads/jobs/${job.image}`}
+                src={`http://26.41.72.16:5000/uploads/jobs/${job.image}`}
                 alt={job.full_title}
                 className="news-img"
               />

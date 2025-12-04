@@ -73,7 +73,7 @@ router.get("/", (req, res) => {
     const announcements = results.map((row) => ({
       ...row,
       image: row.image
-        ? `http://localhost:5000/uploads/announcements/${row.image}`
+        ? `http://26.41.72.16:5000/uploads/announcements/${row.image}`
         : null,
       short_description: row.description
         ? stripHtml(row.description).split(" ").slice(0, 5).join(" ") + "..."
@@ -96,7 +96,7 @@ router.get("/:slug", (req, res) => {
 
     const announcement = results[0];
     announcement.image = announcement.image
-      ? `http://localhost:5000/uploads/announcements/${announcement.image}`
+      ? `http://26.41.72.16:5000/uploads/announcements/${announcement.image}`
       : null;
 
     res.json(announcement);

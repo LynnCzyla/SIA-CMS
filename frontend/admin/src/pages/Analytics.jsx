@@ -38,7 +38,7 @@ const Analytics = () => {
   useEffect(() => {
     const fetchWeekly = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/track/weekly");
+        const res = await axios.get("http://26.41.72.16:5000/api/track/weekly");
 
         const categoriesSet = new Set();
         const pageMap = {};
@@ -72,7 +72,7 @@ const Analytics = () => {
   useEffect(() => {
     const fetchMonthly = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/track/monthly");
+        const res = await axios.get("http://26.41.72.16:5000/api/track/monthly");
 
         const categoriesSet = new Set();
         const pageMap = {};
@@ -106,7 +106,7 @@ const Analytics = () => {
   useEffect(() => {
     const fetchPageViews = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/track");
+        const res = await axios.get("http://26.41.72.16:5000/api/track");
         const logsFromDB = res.data.map((row, index) => ({
           id: index + 1,
           page: row.page_name,

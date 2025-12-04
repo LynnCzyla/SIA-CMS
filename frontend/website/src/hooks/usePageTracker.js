@@ -6,7 +6,7 @@ export default function usePageTracker() {
   const location = useLocation();
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/track", {
+    fetch("http://26.41.72.16:5000/api/track", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ page: location.pathname }),

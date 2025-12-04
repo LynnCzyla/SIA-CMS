@@ -109,7 +109,7 @@ export default function Health() {
     }
   
     try {
-      const res = await fetch("http://localhost:5000/api/health-tips", {
+      const res = await fetch("http://26.41.72.16:5000/api/health-tips", {
         method: "POST",
         body: formData,
       });

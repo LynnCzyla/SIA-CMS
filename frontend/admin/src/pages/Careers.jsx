@@ -53,7 +53,7 @@ export default function Careers() {
   const fetchPendingJobs = async () => {
     setIsLoadingPending(true);
     try {
-      const res = await fetch("http://localhost:5000/api/jobs/pending");
+      const res = await fetch("http://26.41.72.16:5000/api/jobs/pending");
       const data = await res.json();
       if (data.success) setPendingJobs(data.jobs);
     } catch (err) {
@@ -88,7 +88,7 @@ export default function Careers() {
     if (fileInfo?.file) formData.append("image", fileInfo.file);
 
     try {
-      const res = await fetch("http://localhost:5000/api/jobs", {
+      const res = await fetch("http://26.41.72.16:5000/api/jobs", {
         method: "POST",
         body: formData,
       });
@@ -114,7 +114,7 @@ export default function Careers() {
 
   const handleApproval = async (jobId, action, reason = "") => {
     try {
-      const res = await fetch(`http://localhost:5000/api/jobs/${jobId}/review`, {
+      const res = await fetch(`http://26.41.72.16:5000/api/jobs/${jobId}/review`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action, reviewer_id: user.id, rejection_reason: reason }),

@@ -41,7 +41,7 @@ router.get("/", (req, res) => {
     res.json(
       results.map((r) => ({
         ...r,
-        image_url: r.image ? `http://localhost:5000/uploads/health_tips/${r.image}` : null,
+        image_url: r.image ? `http://26.41.72.16:5000/uploads/health_tips/${r.image}` : null,
       }))
     );
   });
@@ -69,7 +69,7 @@ router.get("/:slug", (req, res) => {
     
     const article = results[0];
     article.image_url = article.image 
-      ? `http://localhost:5000/uploads/health_tips/${article.image}` 
+      ? `http://26.41.72.16:5000/uploads/health_tips/${article.image}` 
       : null;
     
     res.json(article);
@@ -176,7 +176,7 @@ router.get("/admin/all", (req, res) => {
     res.json(
       results.map((r) => ({
         ...r,
-        image_url: r.image ? `http://localhost:5000/uploads/health_tips/${r.image}` : null,
+        image_url: r.image ? `http://26.41.72.16:5000/uploads/health_tips/${r.image}` : null,
       }))
     );
   });

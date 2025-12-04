@@ -44,7 +44,7 @@ class NotificationService {
 
 export default function NotificationPanel({
   userId,
-  baseURL = "http://localhost:5000",
+  baseURL = "http://26.41.72.16:5000",
 }) {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);

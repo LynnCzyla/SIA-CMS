@@ -19,17 +19,17 @@ const fetchWithTimeout = async (url) => {
 
 // --- GET Requests ---
 export const fetchMedia = async () => {
-  const data = await fetchWithTimeout("http://localhost:5000/api/media/files");
+  const data = await fetchWithTimeout("http://26.41.72.16:5000/api/media/files");
   return data.files || [];
 };
 
 export const fetchAnnouncements = async () => {
-  const data = await fetchWithTimeout("http://localhost:5000/api/announcements");
+  const data = await fetchWithTimeout("http://26.41.72.16:5000/api/announcements");
   return (data || []).filter(item => item.status === "published");
 };
 
 export const fetchNews = async () => {
-  const data = await fetchWithTimeout("http://localhost:5000/api/news");
+  const data = await fetchWithTimeout("http://26.41.72.16:5000/api/news");
   return data || [];
 };
 
@@ -39,7 +39,7 @@ export const uploadMedia = async (file) => {
     const formData = new FormData();
     formData.append("file", file);
 
-    const res = await fetch("http://localhost:5000/api/media/upload", {
+    const res = await fetch("http://26.41.72.16:5000/api/media/upload", {
       method: "POST",
       body: formData,
     });

@@ -62,7 +62,7 @@ export default function Services() {
 
   // Fetch services from backend
   useEffect(() => {
-    fetch("http://localhost:5000/api/services")
+    fetch("http://26.41.72.16:5000/api/services")
       .then((res) => res.json())
       .then((data) => {
         console.log("Fetched services:", data);

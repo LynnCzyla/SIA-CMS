@@ -11,7 +11,7 @@ export const LayoutProvider = ({ children }) => {
   useEffect(() => {
     const fetchLayout = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/layout");
+        const response = await axios.get("http://26.41.72.16:5000/api/layout");
         const fetchedLayout = response.data.layout || 'classic';
         console.log('✅ Layout fetched from backend:', fetchedLayout);
         setLayout(fetchedLayout);

@@ -5,7 +5,7 @@ import axios from "axios";
 export default function DeleteModal({ post, onClose, onDeleted }) {
   const handleDelete = async () => {
     try {
-      await axios.put(`http://localhost:5000/api/posts/trash/${post.category}/${post.id}`, {
+      await axios.put(`http://26.41.72.16:5000/api/posts/trash/${post.category}/${post.id}`, {
         author: post.author
       });
       onDeleted(post.id);

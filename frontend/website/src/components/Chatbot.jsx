@@ -18,10 +18,20 @@ function Chatbot() {
 
   // Assign unique user ID
   useEffect(() => {
-    if (!sessionStorage.getItem("lunaxUserId")) {
-      sessionStorage.setItem("lunaxUserId", crypto.randomUUID());
-    }
-  }, []);
+  if (!sessionStorage.getItem("lunaxUserId")) {
+    const id = generateUUID();
+    sessionStorage.setItem("lunaxUserId", id);
+  }
+}, []);
+
+  const generateUUID = () =>
+    (crypto?.randomUUID?.() ||
+      ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+      )
+    );
+
+
 
   // Auto scroll
   useEffect(() => {
@@ -37,7 +47,7 @@ function Chatbot() {
     setIsTyping(true);
 
     try {
-      const res = await fetch("http://localhost:5000/api/chatbot-groq", {
+      const res = await fetch("http://26.41.72.16:5000/api/chatbot-groq", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

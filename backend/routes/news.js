@@ -43,7 +43,7 @@ router.post("/", upload.single("image"), (req, res) => {
     `;
     db.query(sql, [short_title, full_title, tags, description, status || "draft", image, scheduled_at || null, author || null, slug], (err) => {
       if (err) return res.status(500).json({ message: "DB error", error: err });
-      res.json({ success: true, message: "News created successfully", slug, image_url: image ? `http://localhost:5000/uploads/news/${image}` : null });
+      res.json({ success: true, message: "News created successfully", slug, image_url: image ? `http://26.41.72.16:5000/uploads/news/${image}` : null });
     });
   });
 });
@@ -62,7 +62,7 @@ router.get("/", (req, res) => {
     res.json(
       results.map((r) => ({
         ...r,
-        image_url: r.image ? `http://localhost:5000/uploads/news/${r.image}` : null,
+        image_url: r.image ? `http://26.41.72.16:5000/uploads/news/${r.image}` : null,
       }))
     );
   });
@@ -82,7 +82,7 @@ router.get("/:slug", (req, res) => {
     if (results.length === 0) return res.status(404).json({ message: "News not found" });
 
     const article = results[0];
-    article.image_url = article.image ? `http://localhost:5000/uploads/news/${article.image}` : null;
+    article.image_url = article.image ? `http://26.41.72.16:5000/uploads/news/${article.image}` : null;
     res.json(article);
   });
 });

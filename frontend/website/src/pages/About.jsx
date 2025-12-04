@@ -14,7 +14,7 @@ function About() {
 
   // Fetch About info from backend
   useEffect(() => {
-    fetch("http://localhost:5000/api/about")
+    fetch("http://26.41.72.16:5000/api/about")
       .then((res) => res.json())
       .then((data) => {
         setAboutData({

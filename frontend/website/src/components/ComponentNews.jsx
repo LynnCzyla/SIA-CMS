@@ -17,7 +17,7 @@ const ComponentNews = () => {
   useEffect(() => {
     const fetchArticle = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/news/${slug}`);
+        const res = await fetch(`http://26.41.72.16:5000/api/news/${slug}`);
         const data = await res.json();
         setArticle(data);
       } catch (error) {
@@ -32,7 +32,7 @@ const ComponentNews = () => {
   useEffect(() => {
     const fetchAllNews = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/news`);
+        const res = await fetch(`http://26.41.72.16:5000/api/news`);
         const data = await res.json();
         setAllNews(data);
       } catch (error) {

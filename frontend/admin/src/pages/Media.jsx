@@ -7,7 +7,7 @@ export default function Media() {
   const [files, setFiles] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const filesPerPage = 5;
-  const API_BASE = "http://localhost:5000";
+  const API_BASE = "http://26.41.72.16:5000";
 
   // ------------------ Fetch files ------------------
   useEffect(() => {

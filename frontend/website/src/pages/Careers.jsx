@@ -30,7 +30,7 @@ const Careers = () => {
           sort: sortBy,
         }).toString();
 
-        const res = await fetch(`http://localhost:5000/api/jobs?${query}`);
+        const res = await fetch(`http://26.41.72.16:5000/api/jobs?${query}`);
         const data = await res.json();
 
         if (Array.isArray(data.jobs)) {
@@ -177,7 +177,7 @@ const Careers = () => {
                   style={{
                     backgroundImage: `url(${
                       job.image
-                        ? `http://localhost:5000/uploads/jobs/${job.image}`
+                        ? `http://26.41.72.16:5000/uploads/jobs/${job.image}`
                         : "https://via.placeholder.com/600x300"
                     })`,
                     backgroundSize: "cover",

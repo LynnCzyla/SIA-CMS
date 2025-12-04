@@ -15,7 +15,7 @@ export default function EditModal({ post, onClose, onUpdated }) {
   useEffect(() => {
     if (!post) return;
     axios
-      .get(`http://localhost:5000/api/posts/${post.category}/${post.id}`)
+      .get(`http://26.41.72.16:5000/api/posts/${post.category}/${post.id}`)
       .then((res) => {
         const d = res.data;
         setForm({
@@ -49,7 +49,7 @@ export default function EditModal({ post, onClose, onUpdated }) {
       data.append("author", form.author);
       if (form.image) data.append("image", form.image);
 
-      await axios.put(`http://localhost:5000/api/posts/${post.category}/${post.id}`, data);
+      await axios.put(`http://26.41.72.16:5000/api/posts/${post.category}/${post.id}`, data);
       onUpdated({ ...post, ...form }); // Update frontend immediately
       onClose();
       alert("Post updated successfully");
