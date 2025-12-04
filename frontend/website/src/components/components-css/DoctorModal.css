@@ -1,0 +1,301 @@
+/* frontend/website/src/components/DoctorModal.css */
+
+/* Modal Overlay */
+.doctor-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding-top: 40px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Modal Container */
+.doctor-modal-container {
+  background: linear-gradient(145deg, #e8f4fb 0%, #f5f9fc 100%);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 850px;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Header Section */
+.doctor-modal-header {
+  background: linear-gradient(135deg, #cfe5f5 0%, #e0eef7 100%);
+  padding: 20px 40px;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 3px solid #a8d1ff;
+}
+
+/* Heartbeat Decoration */
+.heartbeat-decoration {
+  position: absolute;
+  left: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 140px;
+  height: 40px;
+}
+
+.heartbeat-svg {
+  width: 100%;
+  height: 100%;
+  color: #4a90e2;
+  opacity: 0.7;
+}
+
+/* Modal Branding */
+.modal-branding {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.brand-name {
+  font-size: 28px;
+  font-weight: 700;
+  color: #0c497a;
+  letter-spacing: 0.5px;
+}
+
+.brand-subtitle {
+  font-size: 12px;
+  font-weight: 500;
+  color: #5a8bb8;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* Close Button */
+.modal-close-button {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  background: rgba(240, 41, 41, 0.9);
+  border: none;
+  font-size: 32px;
+  color: #ffffff;
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100px;
+  transition: all 0.3s ease;
+}
+
+.modal-close-button:hover {
+  background: rgba(255, 255, 255, 1);
+  color: #333;
+}
+
+/* Modal Body */
+.doctor-modal-body {
+  padding: 45px 40px;
+  background: linear-gradient(to bottom, #f5f9fc 0%, #ffffff 100%);
+}
+
+.modal-content-wrapper {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+  padding-right: 0px;
+  margin-right: 0px;
+}
+
+/* Doctor Photo Section */
+.doctor-photo-section {
+  flex-shrink: 0;
+}
+
+.doctor-photo-frame {
+  width: 240px;
+  height: 240px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #a8d1ff 0%, #7fb3e8 100%);
+  padding: 4px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.doctor-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+}
+
+/* Doctor Info Section */
+.doctor-info-section {
+  width: 40%;
+}
+
+.doctor-modal-name {
+  font-size: 32px;
+  font-weight: 700;
+  color: #0c497a;
+  margin: 0 0 8px 0;
+  line-height: 1.2;
+}
+
+.doctor-modal-specialization {
+  font-size: 18px;
+  color: #5a8bb8;
+  font-weight: 600;
+  margin: 0 0 30px 0;
+}
+
+/* Details List */
+.doctor-details-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 12px 0;
+}
+
+.detail-icon {
+  color: #4a90e2;
+  font-size: 20px;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.detail-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.detail-label {
+  font-size: 13px;
+  color: #6b7280;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.detail-value {
+  font-size: 16px;
+  color: #1f2937;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .doctor-modal-container {
+    max-width: 95%;
+    margin: 10px;
+  }
+
+  .doctor-modal-header {
+    padding: 20px;
+  }
+
+  .heartbeat-decoration {
+    display: none;
+  }
+
+  .brand-name {
+    font-size: 22px;
+  }
+
+  .brand-subtitle {
+    font-size: 10px;
+  }
+
+  .doctor-modal-body {
+    padding: 30px 20px;
+  }
+
+  .modal-content-wrapper {
+    flex-direction: column;
+    gap: 30px;
+    align-items: center;
+  }
+
+  .doctor-photo-frame {
+    width: 200px;
+    height: 200px;
+  }
+
+  .doctor-modal-name {
+    font-size: 26px;
+    text-align: center;
+  }
+
+  .doctor-modal-specialization {
+    font-size: 16px;
+    text-align: center;
+    margin-bottom: 25px;
+  }
+
+  .detail-row {
+    gap: 12px;
+  }
+
+  .detail-icon {
+    font-size: 18px;
+  }
+
+  .detail-value {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .doctor-modal-overlay {
+    padding: 10px;
+  }
+
+  .doctor-photo-frame {
+    width: 160px;
+    height: 160px;
+  }
+
+  .doctor-modal-name {
+    font-size: 22px;
+  }
+
+  .doctor-modal-specialization {
+    font-size: 14px;
+  }
+}
