@@ -74,7 +74,7 @@ function Doctors() {
     return scheduleUpper.includes(meridiem.toUpperCase());
   };
 
-  // Fetch doctors
+  // Fetch docggtors
   useEffect(() => {
     async function loadDoctors() {
       setLoading(true);
