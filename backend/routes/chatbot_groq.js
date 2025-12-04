@@ -11,7 +11,7 @@ const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 // Function to fetch services from your API
 async function fetchServices() {
   try {
-    const response = await axios.get(`http://localhost:${process.env.PORT || 5000}/api/services`);
+    const response = await axios.get(`http://26.41.72.16:${process.env.PORT || 5000}/api/services`);
     return response.data;
   } catch (error) {
     console.error("Error fetching services:", error);
@@ -22,7 +22,7 @@ async function fetchServices() {
 // Function to fetch contact info from your API
 async function fetchContactInfo() {
   try {
-    const response = await axios.get(`http://localhost:${process.env.PORT || 5000}/api/contact`);
+    const response = await axios.get(`http://26.41.72.16:${process.env.PORT || 5000}/api/contact`);
     return response.data;
   } catch (error) {
     console.error("Error fetching contact info:", error);

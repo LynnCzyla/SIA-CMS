@@ -12,7 +12,7 @@ const Health = () => {
   useEffect(() => {
     const fetchHealthTips = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/health-tips");
+        const response = await fetch("http://26.41.72.16:5000/api/health-tips");
         const data = await response.json();
         setArticles(data);
       } catch (error) {

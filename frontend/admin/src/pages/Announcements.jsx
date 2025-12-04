@@ -69,7 +69,7 @@ export default function AnnouncementAdmin() {
     if (fileInfo?.file) formData.append("image", fileInfo.file);
 
     try {
-      const res = await fetch("http://localhost:5000/api/announcements", {
+      const res = await fetch("http://26.41.72.16:5000/api/announcements", {
         method: "POST",
         body: formData,
       });

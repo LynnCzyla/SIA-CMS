@@ -124,8 +124,8 @@ export default function News() {
 
     try {
       const url = post
-        ? `http://localhost:5000/api/news/${post.id}` // PUT for edit
-        : "http://localhost:5000/api/news";          // POST for create
+        ? `http://26.41.72.16:5000/api/news/${post.id}` // PUT for edit
+        : "http://26.41.72.16:5000/api/news";          // POST for create
       const method = post ? "PUT" : "POST";
 
       const res = await fetch(url, { method, body: formData });

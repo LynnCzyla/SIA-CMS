@@ -29,7 +29,7 @@ import Chatbot from "./components/Chatbot";
 import "./App.css";
 
 // Axios config
-axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL || "http://26.41.72.16:5000";
 axios.defaults.timeout = 10000;
 axios.interceptors.response.use(
   (response) => response,

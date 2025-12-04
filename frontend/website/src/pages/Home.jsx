@@ -75,7 +75,7 @@ function Home() {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/services");
+        const response = await fetch("http://26.41.72.16:5000/api/services");
         const data = await response.json();
         // Take only first 4 services for home page display
         setServices(data.slice(0, 4));

@@ -107,7 +107,7 @@ const getInitials = (name) => {
           </div>
 
           <div className="navbar-right">
-            <NotificationPanel userId={user.id} baseURL="http://localhost:5000" />
+            <NotificationPanel userId={user.id} baseURL="http://26.41.72.16:5000" />
 
             {/* Profile */}
             <div className="user-profile-container">

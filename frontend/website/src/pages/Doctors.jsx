@@ -82,7 +82,7 @@ function Doctors() {
       
       try {
         const res = await fetch(
-          "http://localhost:5000/api/doctors/visible-full"
+          "http://26.41.72.16:5000/api/doctors/visible-full"
         );
         
         if (!res.ok) {
@@ -95,18 +95,77 @@ function Doctors() {
           throw new Error('Invalid response format');
         }
 
-        const formatted = doctors.map((emp) => ({
-          id: emp.employeeID,
-          name: `${emp.firstName} ${emp.lastName}`.trim(),
-          firstName: emp.firstName,
-          lastName: emp.lastName,
-          spec: emp.position || "General Practitioner",
-          department: emp.departmentname || "General Medicine",      
-          contactNumber: emp.Number || "Not available",           
-          email: emp.Email || "Not available",                     
-          schedule: emp.schedule || "Not specified",                 
-          img: emp.profile_image || defaultProfile,
-        }));
+    // ...existing code...
+        const formatted = doctors.map((emp) => {
+          const rawImg = emp.profile_image;
+          
+          const detectMimeFromBase64 = (b64) => {
+            if (!b64) return "image/jpeg";
+            if (b64.startsWith("/9j") || b64.startsWith("FFD8", 0)) return "image/jpeg";
+            if (b64.startsWith("iVBOR")) return "image/png";
+            return "image/jpeg";
+          };
+
+          const bufferToDataUrl = (bufObj) => {
+            try {
+              // bufObj expected shape: { type: 'Buffer', data: [...] }
+              const bytes = new Uint8Array(bufObj.data || []);
+              let binary = "";
+              for (let i = 0; i < bytes.byteLength; i++) {
+                binary += String.fromCharCode(bytes[i]);
+              }
+              const base64 = btoa(binary);
+              const mime = detectMimeFromBase64(base64);
+              return `data:${mime};base64,${base64}`;
+            } catch (e) {
+              return defaultProfile;
+            }
+          };
+
+          let img = defaultProfile;
+
+          if (rawImg) {
+            if (typeof rawImg === "string") {
+              // Already a data URL
+              if (rawImg.startsWith("data:")) {
+                img = rawImg;
+              }
+              // Absolute URL
+              else if (/^https?:\/\//i.test(rawImg)) {
+                img = rawImg;
+              }
+              // Server-relative path (e.g. "/uploads/x.jpg") — prefix backend origin
+              else if (rawImg.startsWith("/")) {
+                img = `http://26.41.72.16:5000${rawImg}`;
+              }
+              // Likely a raw base64 string (BLOB encoded as base64 in JSON)
+              else if (/^[A-Za-z0-9+/=\s]+$/.test(rawImg) && rawImg.length > 50) {
+                const mime = detectMimeFromBase64(rawImg);
+                img = `data:${mime};base64,${rawImg.replace(/\s+/g, "")}`;
+              } else {
+                img = defaultProfile;
+              }
+            }
+            // Node/DB Buffer-like object
+            else if (rawImg.data && Array.isArray(rawImg.data)) {
+              img = bufferToDataUrl(rawImg);
+            }
+          }
+
+          return {
+            id: emp.employeeID,
+            name: `${emp.firstName} ${emp.lastName}`.trim(),
+            firstName: emp.firstName,
+            lastName: emp.lastName,
+            spec: emp.position || "General Practitioner",
+            department: emp.departmentname || "General Medicine",      
+            contactNumber: emp.Number || "Not available",           
+            email: emp.Email || "Not available",                     
+            schedule: emp.schedule || "Not specified",                 
+            img,
+          };
+        });
+ // ...existing code...
 
         setAllDoctors(formatted);
         setFilteredDoctors(formatted);

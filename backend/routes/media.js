@@ -56,7 +56,7 @@ router.post("/upload", upload.single("file"), (req, res) => {
         return res.status(500).json({ message: "Database insert failed" });
       }
 
-      const baseUrl = `http://localhost:5000`;
+      const baseUrl = `http://26.41.72.16:5000`;
       uploadedFile.url = baseUrl + uploadedFile.url;
       res.status(201).json({ file: uploadedFile });
     }
@@ -71,7 +71,7 @@ router.get("/files", (req, res) => {
       return res.status(500).json({ message: "Database fetch failed" });
     }
 
-    const baseUrl = `http://localhost:5000`;
+    const baseUrl = `http://26.41.72.16:5000`;
     const files = results.map((file) => ({
       ...file,
       url: baseUrl + file.url,

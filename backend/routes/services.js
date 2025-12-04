@@ -64,7 +64,7 @@ router.post("/", upload.single("image"), (req, res) => {
         success: true,
         message: "Service created successfully",
         slug: slug,
-        image_url: image ? `http://localhost:5000/uploads/services/${image}` : null,
+        image_url: image ? `http://26.41.72.16:5000/uploads/services/${image}` : null,
       });
     }
   );
@@ -85,7 +85,7 @@ router.get("/", (req, res) => {
     // Add full URL for images
     const servicesWithUrls = results.map((r) => ({
       ...r,
-      image_url: r.image ? `http://localhost:5000/uploads/services/${r.image}` : null,
+      image_url: r.image ? `http://26.41.72.16:5000/uploads/services/${r.image}` : null,
     }));
     
     console.log("Returning services:", servicesWithUrls.length);
@@ -105,7 +105,7 @@ router.get("/:slug", (req, res) => {
     if (!results.length) return res.status(404).json({ success: false, message: "Service not found" });
 
     const service = results[0];
-    service.image_url = service.image ? `http://localhost:5000/uploads/services/${service.image}` : null;
+    service.image_url = service.image ? `http://26.41.72.16:5000/uploads/services/${service.image}` : null;
     res.json(service);
   });
 });

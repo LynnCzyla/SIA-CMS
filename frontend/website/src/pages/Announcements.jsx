@@ -13,7 +13,7 @@ const Announcements = () => {
   useEffect(() => {
     const fetchAnnouncements = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/announcements");
+        const response = await fetch("http://26.41.72.16:5000/api/announcements");
         let data = await response.json();
         data = data.filter((item) => item.status === "published");
         setAnnouncements(data);

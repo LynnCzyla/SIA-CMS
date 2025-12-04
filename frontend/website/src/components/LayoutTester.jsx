@@ -14,7 +14,7 @@ function LayoutTester() {
 
   const checkCurrentLayout = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/layout');
+      const response = await axios.get('http://26.41.72.16:5000/api/layout');
       setCurrentLayout(response.data.layout);
       setBodyClass(document.body.className);
     } catch (error) {
@@ -24,7 +24,7 @@ function LayoutTester() {
 
   const switchLayout = async (newLayout) => {
     try {
-      await axios.post('http://localhost:5000/api/layout', { layout: newLayout });
+      await axios.post('http://26.41.72.16:5000/api/layout', { layout: newLayout });
       alert(`Layout switched to ${newLayout}! Refreshing page...`);
       window.location.reload();
     } catch (error) {

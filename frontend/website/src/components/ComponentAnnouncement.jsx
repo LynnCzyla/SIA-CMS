@@ -20,7 +20,7 @@ const ComponentAnnouncement = () => {
     const fetchAnnouncement = async () => {
       try {
         // Now using slug instead of id
-        const res = await fetch(`http://localhost:5000/api/announcements/${slug}`);
+        const res = await fetch(`http://26.41.72.16:5000/api/announcements/${slug}`);
         const data = await res.json();
         setAnnouncement(data);
       } catch (error) {
@@ -40,7 +40,7 @@ const ComponentAnnouncement = () => {
   useEffect(() => {
     const fetchAllAnnouncements = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/announcements");
+        const res = await fetch("http://26.41.72.16:5000/api/announcements");
         const data = await res.json();
         setAllAnnouncements(data);
       } catch (error) {

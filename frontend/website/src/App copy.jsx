@@ -29,7 +29,7 @@ function App() {
 useEffect(() => {
   const fetchLayout = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/layout");
+      const res = await axios.get("http://26.41.72.16:5000/api/layout");
       if (res.data.layout) setSelectedLayout(res.data.layout);
     } catch (err) {
       console.error("Failed to fetch layout from backend:", err);

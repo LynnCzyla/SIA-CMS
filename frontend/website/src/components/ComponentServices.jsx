@@ -17,7 +17,7 @@ const ComponentServices = () => {
   useEffect(() => {
     const fetchService = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/services/${slug}`);
+        const res = await fetch(`http://26.41.72.16:5000/api/services/${slug}`);
         const data = await res.json();
         setService(data);
       } catch (error) {
@@ -32,7 +32,7 @@ const ComponentServices = () => {
   useEffect(() => {
     const fetchAllServices = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/services`);
+        const res = await fetch(`http://26.41.72.16:5000/api/services`);
         const data = await res.json();
         setAllServices(data);
       } catch (error) {

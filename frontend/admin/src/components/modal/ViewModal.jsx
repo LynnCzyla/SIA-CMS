@@ -8,7 +8,7 @@ export default function ViewModal({ post, onClose }) {
   useEffect(() => {
     if (!post) return;
     axios
-      .get(`http://localhost:5000/api/posts/${post.category}/${post.id}`)
+      .get(`http://26.41.72.16:5000/api/posts/${post.category}/${post.id}`)
       .then((res) => setData(res.data))
       .catch((err) => {
         console.error(err);
@@ -43,7 +43,7 @@ export default function ViewModal({ post, onClose }) {
         <p><strong>Status:</strong> {post.status}</p>
         {data?.image && (
           <img
-            src={`http://localhost:5000/uploads/${post.category.toLowerCase().replace(/\s+/g,'_')}/${data.image}`}
+            src={`http://26.41.72.16:5000/uploads/${post.category.toLowerCase().replace(/\s+/g,'_')}/${data.image}`}
             alt="post"
             style={{ maxWidth: "100%", marginTop: "10px", borderRadius: "6px" }}
           />

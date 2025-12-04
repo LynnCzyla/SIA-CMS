@@ -29,7 +29,7 @@ export default function Dashboard() {
   const [draftCount, setDraftCount] = useState(0);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/posts")
+    fetch("http://26.41.72.16:5000/api/posts")
       .then(res => res.json())
       .then(data => {
        const normalize = (s) => (s || "").toLowerCase().trim();
@@ -60,7 +60,7 @@ export default function Dashboard() {
       return pathSegments.length === 1; // Only one segment after the initial slash
     };
 
-    fetch("http://localhost:5000/api/track")
+    fetch("http://26.41.72.16:5000/api/track")
       .then(res => res.json())
       .then(data => {
         // Filter data to only include main pages

@@ -88,7 +88,7 @@ const [doctors, setDoctors] = useState([]);
         image: emp.profile_image || defaultProfile,
       }));
 
-      const visRes = await fetch("http://localhost:5000/api/doctors/visibility");
+      const visRes = await fetch("http://26.41.72.16:5000/api/doctors/visibility");
       const visibility = await visRes.json();
       const visMap = {};
       visibility.forEach(v => visMap[v.employee_id] = v.is_shown === 1);
@@ -270,7 +270,7 @@ const [doctors, setDoctors] = useState([]);
 
       await Promise.all(
         updates.map(({ employeeID, isShown }) =>
-          fetch("http://localhost:5000/api/doctors/visibility", {
+          fetch("http://26.41.72.16:5000/api/doctors/visibility", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ employeeID, isShown }),

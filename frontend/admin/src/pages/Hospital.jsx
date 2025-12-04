@@ -73,7 +73,7 @@ export default function Hospital() {
   // Fetch About info
   useEffect(() => {
     if (activeTab === "about") {
-      fetch("http://localhost:5000/api/about")
+      fetch("http://26.41.72.16:5000/api/about")
         .then((res) => res.json())
         .then((data) => {
           setAboutForm({
@@ -93,7 +93,7 @@ export default function Hospital() {
   // Fetch Contact info
   useEffect(() => {
     if (activeTab === "contact") {
-      fetch("http://localhost:5000/api/contact")
+      fetch("http://26.41.72.16:5000/api/contact")
         .then((res) => res.json())
         .then((data) => {
           setContactForm({
@@ -149,7 +149,7 @@ export default function Hospital() {
   const handleSubmit = async (status) => {
     try {
       if (activeTab === "about") {
-        const res = await fetch("http://localhost:5000/api/about", {
+        const res = await fetch("http://26.41.72.16:5000/api/about", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(aboutForm),
@@ -158,7 +158,7 @@ export default function Hospital() {
         if (!res.ok) throw new Error(data.error || "Save failed");
         Swal.fire({ icon: "success", title: "About Info Updated!" });
       } else if (activeTab === "contact") {
-        const res = await fetch("http://localhost:5000/api/contact", {
+        const res = await fetch("http://26.41.72.16:5000/api/contact", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(contactForm),
@@ -193,7 +193,7 @@ export default function Hospital() {
         }
         formData.append("userId", currentUser.id);
 
-        const res = await fetch("http://localhost:5000/api/services", {
+        const res = await fetch("http://26.41.72.16:5000/api/services", {
           method: "POST",
           body: formData,
         });

@@ -54,7 +54,7 @@ export default function Posts() {
 
   const fetchPosts = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/posts");
+      const res = await fetch("http://26.41.72.16:5000/api/posts");
       const data = await res.json();
       const enriched = (data || []).map((p) => ({
         ...p,

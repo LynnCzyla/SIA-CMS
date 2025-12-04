@@ -22,7 +22,7 @@ const Contact = () => {
 
   // Fetch contact data from API
   useEffect(() => {
-    fetch("http://localhost:5000/api/contact")
+    fetch("http://26.41.72.16:5000/api/contact")
       .then((res) => res.json())
       .then((data) => {
         setContactData(data);
@@ -63,7 +63,7 @@ const Contact = () => {
     }
 
     try {
-      const response = await axios.post("http://localhost:5000/api/contact/send", formData, {
+      const response = await axios.post("http://26.41.72.16:5000/api/contact/send", formData, {
         headers: { "Content-Type": "application/json" },
       });
 
