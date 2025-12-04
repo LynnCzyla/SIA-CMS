@@ -258,64 +258,78 @@ const goToPendingPage = (page) => {
                 <button className="refresh-btn" onClick={fetchPendingJobs}>Refresh</button>
               </div>
               
-             <div className="pending-cards-container">
-  {displayedPendingJob.map((job) => {
-    const badge = getUrgencyBadge(job.urgency_level);
-    return (
-      <div key={job.id} className="pending-job-card">
-        <div className="card-header">
-          <h4 className="card-job-title">{job.job_title}</h4>
-          <span className={`card-urgency-badge ${badge.class}`}>{badge.label}</span>
-        </div>
+              <div className="pending-cards-container">
+                {pendingJobs.map((job) => {
+                  const badge = getUrgencyBadge(job.urgency_level);
+                  return (
+                    <div key={job.id} className="pending-job-card">
+                      <div className="card-header">
+                        <h4 className="card-job-title">{job.job_title}</h4>
+                        <span className={`card-urgency-badge ${badge.class}`}>{badge.label}</span>
+                      </div>
+                      
+                      <div className="card-meta">
+                        <span className="meta-badge">Submitted by: {job.ems_user_name} (Pilot Tester) (EMS)</span>
+                        <span className="meta-badge">Date: {formatDate(job.created_at)}</span>
+                      </div>
 
-        <div className="card-meta">
-          <span className="meta-badge">Submitted by: {job.ems_user_name} (Pilot Tester) (EMS)</span>
-          <span className="meta-badge">Date: {formatDate(job.created_at)}</span>
-        </div>
+                      <div className="card-details">
+                        <div className="detail-item">
+                          <strong>Department:</strong> {job.department}
+                        </div>
+                        <div className="detail-item">
+                          <strong>Job Type:</strong> {job.job_type}
+                        </div>
+                        <div className="detail-item">
+                          <strong>Location:</strong> {job.location}
+                        </div>
+                        <div className="detail-item">
+                          <strong>Application Deadline:</strong> {formatDate(job.application_deadline)}
+                        </div>
+                      </div>
 
-        <div className="card-details">
-          <div className="detail-item"><strong>Department:</strong> {job.department}</div>
-          <div className="detail-item"><strong>Job Type:</strong> {job.job_type}</div>
-          <div className="detail-item"><strong>Location:</strong> {job.location}</div>
-          <div className="detail-item"><strong>Application Deadline:</strong> {formatDate(job.application_deadline)}</div>
-        </div>
+                      {job.ems_notes && (
+                        <div className="card-notes">
+                          <strong>Notes from EMS:</strong>
+                          <p>{job.ems_notes}</p>
+                        </div>
+                      )}
 
-        {job.ems_notes && (
-          <div className="card-notes">
-            <strong>Notes from EMS:</strong>
-            <p>{job.ems_notes}</p>
-          </div>
-        )}
-
-        <div className="card-actions">
-          <button className="btn-view" onClick={() => showJobDetails(job)}>View Full Details</button>
-          <button className="btn-approve" onClick={() => handleApproval(job.id, "approve")}>Approve & Published</button>
-          <button className="btn-reject" onClick={() => handleApproval(job.id, "reject")}>Reject</button>
-        </div>
-      </div>
-    );
-  })}
-
-  {/* Bootstrap Pagination */}
-  {totalPendingPages > 1 && (
-    <nav className="mt-3">
-      <ul className="pagination justify-content-center">
-        <li className={`page-item ${currentPendingPage === 1 ? "disabled" : ""}`}>
-          <button className="page-link" onClick={() => goToPendingPage(currentPendingPage - 1)}>Previous</button>
-        </li>
-        {Array.from({ length: totalPendingPages }, (_, i) => (
-          <li key={i} className={`page-item ${currentPendingPage === i + 1 ? "active" : ""}`}>
-            <button className="page-link" onClick={() => goToPendingPage(i + 1)}>{i + 1}</button>
-          </li>
-        ))}
-        <li className={`page-item ${currentPendingPage === totalPendingPages ? "disabled" : ""}`}>
-          <button className="page-link" onClick={() => goToPendingPage(currentPendingPage + 1)}>Next</button>
-        </li>
-      </ul>
-    </nav>
-  )}
-</div>
-
+                      <div className="card-actions">
+                        <button className="btn-view" onClick={() => showJobDetails(job)}>
+                          View Full Details
+                        </button>
+                        <button className="btn-approve" onClick={() => {
+                          Swal.fire({
+                            title: "Approve Job Posting?",
+                            text: `"${job.job_title}" will be published.`,
+                            icon: "question",
+                            showCancelButton: true,
+                            confirmButtonColor: "#10b981",
+                            cancelButtonColor: "#6b7280",
+                            confirmButtonText: "Yes, Approve",
+                          }).then((result) => result.isConfirmed && handleApproval(job.id, "approve"));
+                        }}>
+                          Approve & Published
+                        </button>
+                        <button className="btn-reject" onClick={async () => {
+                          const { value: reason } = await Swal.fire({
+                            title: "Reject Job Posting",
+                            input: "textarea",
+                            inputPlaceholder: "Enter rejection reason...",
+                            showCancelButton: true,
+                            confirmButtonText: "Reject",
+                            inputValidator: (value) => !value && "Reason is required!",
+                          });
+                          if (reason) handleApproval(job.id, "reject", reason);
+                        }}>
+                          Reject
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           ) : (
             <div className="no-pending-card">
