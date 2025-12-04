@@ -108,8 +108,12 @@
 /* FILTERS */
 .filter-bar {
   display: flex;
+  align-items: center;
   gap: 12px;
   margin-bottom: 20px;
+  width: 50%;
+  margin-left: auto;
+  justify-content: flex-end;
 }
 
 .sort-btn,

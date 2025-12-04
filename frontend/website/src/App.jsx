@@ -110,7 +110,6 @@ function App() {
           </Routes>
 
           <Chatbot />
-                <CookieConsent /> {/* ← placed here */}
 
           <Footer />
         </Router>

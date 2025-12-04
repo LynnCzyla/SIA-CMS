@@ -600,46 +600,60 @@ h3{
     justify-content: flex-start;
   }
 }
-
-
-
+/* ================================
+   HIDE DEFAULT FILE INPUT
+================================ */
 .file-input-hidden {
   display: none;
 }
 
+/* ================================
+   UPLOAD BUTTON
+================================ */
 .upload-label {
-  display: inline-block;
-  background-color: var(--primary-color);  
-  color: #fff !important;      
-  padding: 10px 20px;              
-  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--primary-color);
+  color: #fff !important;
+  padding: 8px 14px;
+  font-size: 13px;
   font-weight: 500;
   border-radius: 6px;
   cursor: pointer;
   text-align: center;
-  transition: background 0.2s ease, color 0.2s ease;
-  text-decoration: none;          
+  transition: background 0.2s ease;
+  text-decoration: none;
+  z-index: 2;
 }
 
 .upload-label:hover {
-  background-color: #172554;  
-  color: #fff !important;         
+  background-color: #172554;
 }
 
-
+/* ================================
+   UPLOAD CONTAINER (375 x 250)
+================================ */
 .file-upload-container {
   border: 1px solid #cfd9e6;
   border-radius: 10px;
-  padding: 16px;
   background-color: #f9fbff;
   text-align: center;
   cursor: pointer;
   transition: all 0.2s ease;
-  min-height: 240px;
+
+  width: 375px;
+  height: 250px;
+
+  padding: 10px;
+
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  justify-content: space-between;
+
+  overflow: hidden;
+  position: relative;
 }
 
 .file-upload-container:hover {
@@ -647,49 +661,55 @@ h3{
   background-color: #ffffff;
 }
 
-.file-input-hidden { display: none; }
+/* ================================
+   PREVIEW AREA
+================================ */
+.file-preview-area {
+  width: 100%;
+  height: 100%;
 
-.upload-label {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--primary-color);
-  color: #fff !important;
-  padding: 10px 20px;
-  font-size: 14px;
-  font-weight: 500;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.2s ease;
+
+  overflow: hidden;
 }
 
-.upload-label:hover { background-color: #172554; }
-
-.file-preview-area {
-  margin-top: 8px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-}
-
+/* ================================
+   IMAGE PREVIEW (AUTO-FIT)
+================================ */
 .file-preview-img {
+  width: 100%;
+  height: 100%;
+
   max-width: 100%;
-  max-height: 180px;
-  object-fit: contain;
+  max-height: 100%;
+
+  object-fit: contain;  /* ✅ SHOW ENTIRE IMAGE */
   border-radius: 6px;
   border: 1px solid #e2e8f0;
+  background-color: #f8fafc;
+
+  display: block;
 }
 
+/* ================================
+   FILE TEXT
+================================ */
 .file-name,
 .file-placeholder {
   margin: 0;
-  font-size: 14px;
+  font-size: 12px;
   color: #6b7280;
+  text-align: center;
+  word-break: break-word;
 }
 
-.file-name { color: #1a1a1a; }
+.file-name {
+  color: #1a1a1a;
+  font-weight: 500;
+}
+
 
 @media (max-width: 992px) {
   .cms-form-row { flex-direction: column; }

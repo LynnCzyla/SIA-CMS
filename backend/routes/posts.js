@@ -89,7 +89,6 @@ router.post("/:category", (req, res) => {
   const { category } = req.params;
   const table = tableMap[category];
   if (!table) return res.status(400).json({ message: "Invalid category" });
-
   const upload = getUpload(category);
   upload.single("image")(req, res, (err) => {
     if (err) return res.status(500).json({ message: "Image upload failed" });
@@ -101,9 +100,15 @@ router.post("/:category", (req, res) => {
     const tags = Array.isArray(topic_tags) ? topic_tags.join(",") : topic_tags || "";
     const image = req.file ? req.file.filename : null;
 
-    const sql = `INSERT INTO ${table} (short_title, full_title, topic_tags, description, status, author, image, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`;
+    // jobs and events_careers use column name `tags`, other tables use `topic_tags`
+    const tagsColumn = table === "jobs" || table === "events_careers" ? "tags" : "topic_tags";
+
+    const sql = `INSERT INTO ${table} (short_title, full_title, ${tagsColumn}, description, status, author, image, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`;
     db.query(sql, [short_title, full_title, tags, description, status || "draft", author || "System", image], (err, result) => {
-      if (err) return res.status(500).json({ message: "DB error", error: err });
+      if (err) {
+        console.error("❌ DB Error (create post):", err);
+        return res.status(500).json({ message: "DB error", error: err.message });
+      }
       res.status(201).json({ message: "Post created", id: result.insertId, image });
     });
   });
@@ -125,7 +130,15 @@ router.put("/:category/:id", (req, res) => {
     const tags = Array.isArray(topic_tags) ? topic_tags.join(",") : topic_tags || "";
     const image = req.file ? req.file.filename : null;
 
-    let sql = `UPDATE ${table} SET short_title = ?, full_title = ?, topic_tags = ?, description = ?, updated_at = NOW()`;
+    // jobs and events_careers use column name `tags`, other tables use `topic_tags`
+    const tagsColumn = table === "jobs" || table === "events_careers" ? "tags" : "topic_tags";
+
+    // Basic validation to avoid DB errors from missing required fields
+    if (!short_title || !full_title || !description) {
+      return res.status(400).json({ message: "Required fields missing" });
+    }
+
+    let sql = `UPDATE ${table} SET short_title = ?, full_title = ?, ${tagsColumn} = ?, description = ?, updated_at = NOW()`;
     const values = [short_title, full_title, tags, description];
 
     if (image) {
@@ -136,11 +149,16 @@ router.put("/:category/:id", (req, res) => {
     values.push(id);
 
     db.query(sql, values, (err, result) => {
-      if (err) return res.status(500).json({ message: "Update failed" });
+      if (err) {
+        console.error("❌ Failed to update post:", { table, id, values, error: err });
+        return res.status(500).json({ message: "Update failed", error: err.message });
+      }
 
       // Log edit
       const logSQL = `INSERT INTO post_logs (post_id, category, action, editor, message) VALUES (?, ?, 'edit', ?, 'Post updated')`;
-      db.query(logSQL, [id, category, author || "System"], () => {});
+      db.query(logSQL, [id, category, author || "System"], (logErr) => {
+        if (logErr) console.error("⚠️ Failed to write post_log:", logErr);
+      });
 
       res.json({ message: "Post updated successfully" });
     });

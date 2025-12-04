@@ -418,9 +418,6 @@ export default function Posts() {
         <>
           {/* Filters */}
           <div className="filter-bar">
-            <button className="sort-btn">
-              <IoFilter /> Sort
-            </button>
             <select
               className="filter-select"
               value={filterAuthor}
@@ -447,17 +444,6 @@ export default function Posts() {
               <option>All</option>
               <option>Today</option>
             </select>
-            <div className="search-box">
-              <input
-                type="text"
-                placeholder="Search by title..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-              <button className="search-btn">
-                <IoMdSearch />
-              </button>
-            </div>
           </div>
 
           {/* Posts Table */}
