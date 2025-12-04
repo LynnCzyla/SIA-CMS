@@ -43,6 +43,10 @@ function Home() {
   const [newsSectionLoading, setNewsSectionLoading] = useState(true);
   const [newsLoading, setNewsLoading] = useState(true);
 
+  // Services state
+  const [services, setServices] = useState([]);
+  const [servicesLoading, setServicesLoading] = useState(true);
+
   // Carousel state for 3-slide view
   const [currentAnnouncementSlide, setCurrentAnnouncementSlide] = useState(0);
   const [itemsPerSlide, setItemsPerSlide] = useState(3);
@@ -65,6 +69,26 @@ function Home() {
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Fetch services from API
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/services");
+        const data = await response.json();
+        // Take only first 4 services for home page display
+        setServices(data.slice(0, 4));
+      } catch (err) {
+        console.error("Error fetching services:", err);
+      } finally {
+        setServicesLoading(false);
+      }
+    };
+
+    fetchServices();
+    const interval = setInterval(fetchServices, POLL_INTERVAL);
+    return () => clearInterval(interval);
   }, []);
 
   // Fetch data
@@ -135,32 +159,29 @@ function Home() {
     return announcements.slice(start, start + itemsPerSlide);
   };
 
-  const services = [
-    {
-      icon: <MdLocalHospital className="service-icon" />,
-      title: "Emergency Care",
-      text: "24/7 emergency services with rapid response teams and advanced life support systems.",
-      stat: "Available 24/7",
-    },
-    {
-      icon: <FaHeart className="service-icon" />,
-      title: "Cardiology",
-      text: "Expert heart care including diagnostics, treatments, and cardiac rehabilitation programs.",
-      stat: "1500+ Patients",
-    },
-    {
-      icon: <FaChild className="service-icon" />,
-      title: "Pediatrics",
-      text: "Compassionate care for infants, children, and adolescents with specialized pediatric services.",
-      stat: "500+ Newborns",
-    },
-    {
-      icon: <MdAddBox className="service-icon" />,
-      title: "Surgery",
-      text: "Advanced surgical procedures with cutting-edge technology and minimally invasive techniques.",
-      stat: "98% Success",
-    },
-  ];
+  // Helper function to get icon based on service title
+  const getServiceIcon = (title) => {
+    const lowerTitle = title.toLowerCase();
+    if (lowerTitle.includes('emergency') || lowerTitle.includes('care')) {
+      return <MdLocalHospital className="service-icon" />;
+    } else if (lowerTitle.includes('cardio') || lowerTitle.includes('heart')) {
+      return <FaHeart className="service-icon" />;
+    } else if (lowerTitle.includes('pediatric') || lowerTitle.includes('child')) {
+      return <FaChild className="service-icon" />;
+    } else {
+      return <MdAddBox className="service-icon" />;
+    }
+  };
+
+  // Helper function to clean HTML and limit text
+  const cleanDescription = (html, maxLength = 120) => {
+    if (!html) return "Comprehensive healthcare services with state-of-the-art facilities.";
+    const text = html.replace(/<[^>]*>/g, '');
+    if (text.length > maxLength) {
+      return text.substring(0, maxLength) + '...';
+    }
+    return text;
+  };
 
   return (
     <div className="page-transition">
@@ -188,14 +209,10 @@ function Home() {
                     connection to help you heal, recover, and thrive.
                   </p>
                  <div className="hero-buttons">
-
-
-  
   <button className="doc-btn" onClick={() => navigate("/doctors")}>
     Find a Doctor <FaUserDoctor />
   </button>
 </div>
-
                 </>
               )}
             </div>
@@ -246,7 +263,6 @@ function Home() {
             At MediSync, we believe exceptional healthcare begins with trust, compassion, and seamless access to the services you need. Our mission is simple: to bring patients, providers, and advanced medical technology together—creating a connected experience that puts your wellbeing first.
               </p>
               <button className="hero-btn" onClick={() => navigate("/about")}>
-                
                 Learn About Us <MdOutlineArrowForward />
               </button>
             </div>
@@ -363,22 +379,57 @@ function Home() {
                 </p>
               </div>
               <div className="services-grid">
-                {loading
+                {servicesLoading
                   ? Array(4).fill().map((_, i) => (
                       <div className="service-card-wrapper" key={i}>
                         <Skeleton height={250} borderRadius={20} />
                       </div>
                     ))
-                  : services.map((service, i) => (
-                      <div className="service-card-wrapper" key={i}>
+                  : services.length > 0 
+                  ? services.map((service) => (
+                      <div 
+                        className="service-card-wrapper" 
+                        key={service.id}
+                        onClick={() => navigate(`/services/${service.slug}`)}
+                        style={{ cursor: 'pointer' }}
+                      >
                         <div className="service-card">
-                          {service.icon}
-                          <h3 className="service-title">{service.title}</h3>
-                          <p className="service-text">{service.text}</p>
-                          <strong className="service-stat">{service.stat}</strong>
+                          {service.image_url ? (
+                            <div style={{ 
+                              width: '60px', 
+                              height: '60px', 
+                              marginBottom: '1rem',
+                              borderRadius: '10px',
+                              overflow: 'hidden'
+                            }}>
+                              <img 
+                                src={service.image_url} 
+                                alt={service.full_title}
+                                style={{
+                                  width: '100%',
+                                  height: '100%',
+                                  objectFit: 'cover'
+                                }}
+                              />
+                            </div>
+                          ) : (
+                            getServiceIcon(service.full_title)
+                          )}
+                          <h3 className="service-title">{service.full_title}</h3>
+                          <p className="service-text">
+                            {cleanDescription(service.description)}
+                          </p>
+                          <strong className="service-stat">
+                            {service.topic_tags || 'Healthcare'}
+                          </strong>
                         </div>
                       </div>
-                    ))}
+                    ))
+                  : (
+                    <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: '2rem' }}>
+                      <p>No services available at the moment.</p>
+                    </div>
+                  )}
               </div>
               <div className="view-all-container">
                 <button
