@@ -95,8 +95,7 @@ export default function Services() {
 
         {/* Top Services */}
         <div className="top-services-section">
-          <h3>Top Services</h3>
-          <div className="top-services-grid">
+                    <div className="top-services-grid">
             {topServices.map((service) => (
               <div key={service.id} className="top-service-card">
                 <img
