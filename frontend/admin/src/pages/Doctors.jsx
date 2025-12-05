@@ -398,7 +398,7 @@ const [doctors, setDoctors] = useState([]);
           />
 
           <button className="btn btn-search">Search</button>
-          <button className="btn btn-clearFilter" onClick={handleClearFilters}>
+          <button className="btn-clearFilter" onClick={handleClearFilters}>
            <FcClearFilters />
 
           </button>
