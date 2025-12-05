@@ -269,7 +269,7 @@ const goToPendingPage = (page) => {
                       </div>
                       
                       <div className="card-meta">
-                        <span className="meta-badge">Submitted by: {job.ems_user_name} (Pilot Tester) (EMS)</span>
+                        <span className="meta-badge">Submitted by: {job.ems_user_name}</span>
                         <span className="meta-badge">Date: {formatDate(job.created_at)}</span>
                       </div>
 
