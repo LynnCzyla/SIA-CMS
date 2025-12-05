@@ -215,47 +215,10 @@ useEffect(() => {
 
       <div className="row">
         {/* FONT FAMILY */}
-        <div className="col-md-4 mb-3">
-          <label className="form-label fw-semibold">Font Family</label>
-          <select className="form-select" value={fontFamily} onChange={(e) => setFontFamily(e.target.value)}>
-            {GOOGLE_FONTS.map((font) => (
-              <option key={font} value={font}>{font}</option>
-            ))}
-          </select>
-        </div>
+        
 
         {/* FONT SIZE */}
-        <div className="col-md-4 mb-3">
-          <label className="form-label fw-semibold">Font Size</label>
-          <select className="form-select" value={fontSize} onChange={(e) => setFontSize(e.target.value)}>
-            <option>Small</option>
-            <option>Medium</option>
-            <option>Large</option>
-          </select>
-        </div>
-
-        {/* FONT COLOR */}
-        <div className="col-md-4 mb-3">
-          <label className="form-label fw-semibold">Font Color</label>
-          <select className="form-select" value={fontColor} onChange={(e) => setFontColor(e.target.value)}>
-            <option>Header</option>
-            <option>Body</option>
-          </select>
-        </div>
-
-        {/* PREVIEW TEXT */}
-        <div className="col-md-12 mb-4">
-          <label className="form-label fw-semibold">Text Preview</label>
-          <input
-            className="form-control"
-            placeholder="Type to preview..."
-            value={previewText}
-            onChange={(e) => setPreviewText(e.target.value)}
-          />
-          <div className="mt-3 border" style={previewStyle}>
-            {previewText || "Your preview text will appear here..."}
-          </div>
-        </div>
+        
 
         {/* LAYOUT CARDS */}
         <div className="col-md-12 mt-4">

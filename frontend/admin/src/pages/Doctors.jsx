@@ -75,18 +75,64 @@ const [doctors, setDoctors] = useState([]);
       const deptMap = {};
       departments.forEach(d => deptMap[d.departmentID] = d.DepartmentName);
 
-      const formatted = employees.map((emp, i) => ({
-        id: emp.employeeID || i + 1,
-        name: `${emp.firstName} ${emp.lastName}`.trim(),
-        department: deptMap[emp.departmentID] || "Unknown",
-        specialization: emp.position || "General",
-        contactNumber: emp.Number || "N/A",
-        email: emp.Email || "N/A",
-        schedule: emp.schedule || "Not set",
-        visualStatus: "Shown",
-        isActive: true,
-        image: emp.profile_image || defaultProfile,
-      }));
+      const detectMimeFromBase64 = (b64) => {
+        if (!b64) return "image/jpeg";
+        if (b64.startsWith("/9j") || b64.startsWith("FFD8")) return "image/jpeg";
+        if (b64.startsWith("iVBOR")) return "image/png";
+        return "image/jpeg";
+      };
+
+      const bufferToDataUrl = (bufObj) => {
+        try {
+          const bytes = new Uint8Array(bufObj.data || []);
+          let binary = "";
+          for (let i = 0; i < bytes.byteLength; i++) {
+            binary += String.fromCharCode(bytes[i]);
+          }
+          const base64 = btoa(binary);
+          const mime = detectMimeFromBase64(base64);
+          return `data:${mime};base64,${base64}`;
+        } catch (e) {
+          return defaultProfile;
+        }
+      };
+
+      const formatted = employees.map((emp, i) => {
+        const rawImg = emp.profile_image;
+        let img = defaultProfile;
+
+        if (rawImg) {
+          if (typeof rawImg === "string") {
+            if (rawImg.startsWith("data:")) {
+              img = rawImg;
+            } else if (/^https?:\/\//i.test(rawImg)) {
+              img = rawImg;
+            } else if (rawImg.startsWith("/")) {
+              img = `http://147.185.221.27:34249${rawImg}`;
+            } else if (/^[A-Za-z0-9+/=\s]+$/.test(rawImg) && rawImg.length > 50) {
+              const mime = detectMimeFromBase64(rawImg);
+              img = `data:${mime};base64,${rawImg.replace(/\s+/g, "")}`;
+            } else {
+              img = defaultProfile;
+            }
+          } else if (rawImg.data && Array.isArray(rawImg.data)) {
+            img = bufferToDataUrl(rawImg);
+          }
+        }
+
+        return {
+          id: emp.employeeID || i + 1,
+          name: `${emp.firstName} ${emp.lastName}`.trim(),
+          department: deptMap[emp.departmentID] || "Unknown",
+          specialization: emp.position || "General",
+          contactNumber: emp.Number || "N/A",
+          email: emp.Email || "N/A",
+          schedule: emp.schedule || "Not set",
+          visualStatus: "Shown",
+          isActive: true,
+          image: img,
+        };
+      });
 
       const visRes = await fetch("http://26.41.72.16:5000/api/doctors/visibility");
       const visibility = await visRes.json();
@@ -100,7 +146,7 @@ const [doctors, setDoctors] = useState([]);
       }));
 
       setDoctors(final);
-      setPendingChanges({}); // Clear any unsaved changes
+      setPendingChanges({});
       setSaveSuccess(false);
     } catch (err) {
       console.error(err);

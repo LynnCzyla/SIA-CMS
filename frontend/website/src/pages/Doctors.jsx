@@ -75,28 +75,37 @@ function Doctors() {
   };
 
   // Fetch docggtors
-  useEffect(() => {
+    useEffect(() => {
     async function loadDoctors() {
       setLoading(true);
       setFetchError(false);
       
       try {
-        const res = await fetch(
-          "http://26.41.72.16:5000/api/doctors/visible-full"
+        // Fetch employees (same as admin)
+        const empRes = await fetch(
+          "http://147.185.221.27:34249/Group-4-SIA-EMS/api/api.php?module=employee&filter_doctors=1"
         );
         
-        if (!res.ok) {
+        if (!empRes.ok) {
           throw new Error('Failed to fetch doctors');
         }
         
-        const doctors = await res.json();
+        const employees = await empRes.json();
 
-        if (!Array.isArray(doctors)) {
+        if (!Array.isArray(employees)) {
           throw new Error('Invalid response format');
         }
 
-    // ...existing code...
-        const formatted = doctors.map((emp) => {
+        // Fetch visibility status from your backend
+        const visRes = await fetch("http://26.41.72.16:5000/api/doctors/visibility");
+        const visibility = await visRes.json();
+        const visMap = {};
+        visibility.forEach(v => visMap[v.employee_id] = v.is_shown === 1);
+
+        // Filter only visible doctors
+        const visibleEmployees = employees.filter(emp => visMap[emp.employeeID] !== false);
+
+        const formatted = visibleEmployees.map((emp) => {
           const rawImg = emp.profile_image;
           
           const detectMimeFromBase64 = (b64) => {
@@ -108,7 +117,6 @@ function Doctors() {
 
           const bufferToDataUrl = (bufObj) => {
             try {
-              // bufObj expected shape: { type: 'Buffer', data: [...] }
               const bytes = new Uint8Array(bufObj.data || []);
               let binary = "";
               for (let i = 0; i < bytes.byteLength; i++) {
@@ -126,28 +134,19 @@ function Doctors() {
 
           if (rawImg) {
             if (typeof rawImg === "string") {
-              // Already a data URL
               if (rawImg.startsWith("data:")) {
                 img = rawImg;
-              }
-              // Absolute URL
-              else if (/^https?:\/\//i.test(rawImg)) {
+              } else if (/^https?:\/\//i.test(rawImg)) {
                 img = rawImg;
-              }
-              // Server-relative path (e.g. "/uploads/x.jpg") — prefix backend origin
-              else if (rawImg.startsWith("/")) {
-                img = `http://26.41.72.16:5000${rawImg}`;
-              }
-              // Likely a raw base64 string (BLOB encoded as base64 in JSON)
-              else if (/^[A-Za-z0-9+/=\s]+$/.test(rawImg) && rawImg.length > 50) {
+              } else if (rawImg.startsWith("/")) {
+                img = `http://147.185.221.27:34249${rawImg}`;
+              } else if (/^[A-Za-z0-9+/=\s]+$/.test(rawImg) && rawImg.length > 50) {
                 const mime = detectMimeFromBase64(rawImg);
                 img = `data:${mime};base64,${rawImg.replace(/\s+/g, "")}`;
               } else {
                 img = defaultProfile;
               }
-            }
-            // Node/DB Buffer-like object
-            else if (rawImg.data && Array.isArray(rawImg.data)) {
+            } else if (rawImg.data && Array.isArray(rawImg.data)) {
               img = bufferToDataUrl(rawImg);
             }
           }
@@ -165,7 +164,6 @@ function Doctors() {
             img,
           };
         });
- // ...existing code...
 
         setAllDoctors(formatted);
         setFilteredDoctors(formatted);

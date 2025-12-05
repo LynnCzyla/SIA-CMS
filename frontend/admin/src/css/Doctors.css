@@ -54,8 +54,8 @@
   border: 1px solid #f3f4f6;
   margin-bottom: 1.5rem;
   height: 300px;
-  width:1200px;
   justify-content: center;
+  display: flex;
 }
 
 .stats-card-content {
@@ -264,13 +264,15 @@
 }
 
 .btn-clearFilter {
-  background-color: #ef4444;
   color: var(--white);
   width: 150px;
+  background: none;
+  font-size: 28px;
 }
 
 .btn-clearFilter:hover {
-  opacity: 0.85;
+  background:none ;
+  transform: ease(45); /* You can also transition transforms */
 }
 
 .btn-refresh {
@@ -295,6 +297,9 @@
 /* =========================
    Table
 ========================= */
+/* =========================
+   Table
+========================= */
 .table-container {
   border: 1px solid #e5e7eb;
   border-radius: 0.5rem;
@@ -304,6 +309,7 @@
 .doctors-table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
 }
 
 .table-header-row {
@@ -333,6 +339,8 @@
   padding: 1rem;
   font-size: 0.875rem;
   color: #374151;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .doctor-photo {
@@ -342,7 +350,6 @@
   object-fit: cover;
   border: 2px solid #e0e6f0;
 }
-
 /* =========================
    Status Badge
 ========================= */

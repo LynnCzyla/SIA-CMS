@@ -8,6 +8,7 @@ import "../components/components-css/ComponentNews.css";
 const ComponentCareer = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
 
   const [job, setJob] = useState(null);
   const [allJobs, setAllJobs] = useState([]);
@@ -177,7 +178,9 @@ const ComponentCareer = () => {
                               {j.short_title || j.job_title}
                             </h5>
                             <p className="sidebar-date">
-                              {new Date(j.application_deadline).toLocaleDateString()}
+                              {new Date(
+                                j.application_deadline
+                              ).toLocaleDateString()}
                             </p>
                           </div>
                         </Link>
@@ -195,6 +198,25 @@ const ComponentCareer = () => {
           </div>
         </aside>
       </div>
+      <button className="open-btn" onClick={() => setOpen(true)}>
+        APPLY NOW!
+      </button>
+
+      {open && (
+        <div className="modal-overlay">
+          <div className="modal-box">
+            <button className="close-btn" onClick={() => setOpen(false)}>
+              ×
+            </button>
+
+            <iframe
+              src="http://147.185.221.27:34249/Group-4-SIA-EMS/application-form/applicationForm.html?fbclid=IwY2xjawOfph5leHRuA2FlbQIxMABicmlkETFBUm1Ydm9ZNEt5NjJ5MUtOc3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHiEssZE2bO5ItjqAaut2xQMePXMPkvvhuJ05rv95yIBzqKto221rc72bCPX5_aem_xbBpsKV7F4qSOuzzHkTmPg"
+              className="modal-iframe"
+              allowFullScreen
+            ></iframe>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
