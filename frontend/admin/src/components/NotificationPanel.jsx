@@ -110,7 +110,7 @@ export default function NotificationPanel({
         case "job_approval":
         case "job_posting":
           if (metadata?.job_id) {
-            // Close panel and navigate to Careers with job ID in state
+            // Close panel and navigate to Careers with job IDss in state
             setIsOpen(false);
             navigate("/careers", {
               state: {
