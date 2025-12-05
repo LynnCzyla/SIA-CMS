@@ -644,6 +644,22 @@
   gap: 8px;
 }
 
+.ann-btn {
+  background-color: var(--primary-color);
+  color: #fff;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
 .services-btn:hover {
   background-color: #c7a84d;
   transform: translateY(-2px);
@@ -953,5 +969,227 @@
 
   .services-header h2 {
     font-size: 1.5rem;
+  }
+}
+
+/* ------------------------------
+   MOBILE RESPONSIVE FIXES
+------------------------------ */
+
+/* Tablet Portrait & Mobile */
+@media (max-width: 768px) {
+  /* Home Section */
+  .home-section {
+    padding: 40px 15px;
+  }
+  .carousel-wrapper{
+    padding: 0px;
+  }
+  .home-content {
+    gap: 30px;
+    flex-direction: column;
+    align-items: center;
+  }
+  .home-left h1 {
+    font-size: 2rem;
+    text-align: center;
+  }
+  .home-left p {
+    font-size: 0.95rem;
+    text-align: center;
+    max-width: 90%;
+    margin: 0 auto;
+  }
+  .home-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .home-btn,
+  .doc-btn {
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+
+  /* Hero Section */
+  .hero-title {
+    font-size: 1.8rem;
+  }
+  .hero-desc {
+    font-size: 0.95rem;
+  }
+  .hero-btn {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+
+  /* Carousel */
+  .carousel-slide {
+    height: 300px;
+    max-width: 100%;
+  }
+  .announcements-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .news-image {
+    height: 180px;
+  }
+
+  /* Services */
+  .services-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .service-card {
+    padding: 30px 20px;
+  }
+
+  /* Contact */
+  .contact-content {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .contact-info {
+    padding: 30px 20px;
+  }
+  .map-container iframe {
+    min-height: 300px;
+  }
+}
+
+/* Mobile Only */
+@media (max-width: 576px) {
+  /* Home Section */
+  .home-section {
+    padding: 30px 10px;
+  }
+  .home-left h1 {
+    font-size: 1.75rem;
+  }
+  .home-left p {
+    font-size: 0.9rem;
+  }
+
+  /* Hero Section */
+  .hero-title {
+    font-size: 1.5rem;
+  }
+  .hero-desc {
+    font-size: 0.9rem;
+  }
+
+  /* Carousel */
+  .carousel-slide {
+    height: 250px;
+  }
+  .announcements-block {
+    padding: 40px 10px 60px;
+  }
+  .news-heading {
+    font-size: 1rem;
+  }
+
+  /* Services */
+  .services-section {
+    padding: 60px 15px;
+  }
+  .services-header h2 {
+    font-size: 1.7rem;
+  }
+  .services-header p {
+    font-size: 0.95rem;
+  }
+  .service-icon {
+    font-size: 2.5rem;
+  }
+  .service-title {
+    font-size: 1.2rem;
+  }
+
+  /* Contact */
+  .contact-section {
+    padding: 60px 15px;
+  }
+  .contact-info h2 {
+    font-size: 1.7rem;
+  }
+  .map-container iframe {
+    min-height: 250px;
+  }
+
+  /* Buttons */
+  .home-btn,
+  .doc-btn,
+  .news-btn,
+  .hero-btn,
+  .services-btn,
+  .ann-btn {
+    width: 100%;
+  }
+}
+
+/* Extra Small Mobile */
+@media (max-width: 380px) {
+  .home-left h1 {
+    font-size: 1.5rem;
+  }
+  .hero-title {
+    font-size: 1.3rem;
+  }
+  .news-title1 {
+    font-size: 1.3rem;
+  }
+  .services-header h2 {
+    font-size: 1.5rem;
+  }
+  .service-icon {
+    font-size: 2rem;
+  }
+  .service-title {
+    font-size: 1.1rem;
+  }
+}
+
+/* ------------------------------
+   CAROUSEL MOBILE RESPONSIVE FIX
+------------------------------ */
+
+/* Tablet Portrait & Mobile */
+@media (max-width: 768px) {
+  .carousel-wrapper {
+    padding: 0 10px !important; /* Reduce side padding */
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .announcements-carousel-container {
+    width: 100%;
+    overflow-x: auto; /* Allow horizontal scroll if needed */
+    -webkit-overflow-scrolling: touch; /* Smooth scroll on iOS */
+  }
+
+  .announcements-carousel {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 20px; /* Space between cards */
+    width: max-content; /* Wrap width to content for scrolling */
+  }
+
+  .announcement-card-wrapper {
+    flex: 0 0 90%; /* Cards take most of viewport width */
+    max-width: 90%;
+  }
+}
+
+/* Mobile Only */
+@media (max-width: 576px) {
+  .announcement-card-wrapper {
+    flex: 0 0 95%; /* Cards almost full width */
+    max-width: 95%;
+  }
+  .announcements-carousel {
+    gap: 15px;
   }
 }

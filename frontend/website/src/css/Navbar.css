@@ -304,3 +304,44 @@
   background-color: var(--primary-color2);
   color: #fff;
 }
+
+
+/* ------------------------------
+   TOP BAR RESPONSIVE
+------------------------------ */
+@media (max-width: 768px) {
+  .top-bar {
+    flex-direction: column;       /* Stack items vertically */
+    align-items: center;          /* Center content horizontally */
+    gap: 0.5rem;                  /* Reduce gap between items */
+    text-align: center;           /* Center text */
+    padding: 8px 10px;            /* Adjust padding for mobile */
+  }
+
+  .top-bar .contact-info1 {
+    justify-content: center;
+    text-align: center;
+    line-height: 1.2;             /* Improve spacing on stacked layout */
+  }
+
+  .top-bar .social-icons {
+    justify-content: center;       /* Center social icons horizontally */
+    gap: 0.5rem;                   /* Slightly smaller gap on mobile */
+  }
+
+  .top-bar .social-icons a {
+    font-size: 14px;               /* Slightly smaller icons for mobile */
+  }
+}
+
+/* Extra Small Mobile */
+@media (max-width: 576px) {
+  .top-bar {
+    font-size: 0.8rem;            /* Smaller font size */
+    padding: 5px 8px;             /* Tighter padding */
+  }
+
+  .top-bar .social-icons a {
+    font-size: 12px;              /* Even smaller icons */
+  }
+}

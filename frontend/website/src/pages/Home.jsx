@@ -295,47 +295,54 @@ function Home() {
                 )}
 
                 {/* Carousel Content */}
-                <div className="announcements-carousel-container">
-                  <div className="announcements-carousel">
-                    {newsLoading ? (
-                      <div className="announcements-grid">
-                        {Array(3).fill().map((_, i) => (
-                          <div key={i} className="announcement-card-wrapper">
-                            <Skeleton height={280} borderRadius={20} />
-                          </div>
-                        ))}
-                      </div>
-                    ) : announcements.length > 0 ? (
-                      <div className="announcements-grid">
-                        {getCurrentAnnouncements().map((item) => (
-                          <div key={item.id} className="announcement-card-wrapper">
-                            <div
-                              className="news-card"
-                              onClick={() => navigate(`/announcements/${item.id}`)}
-                            >
-                              <div className="news-image">
-                                {item.image ? (
-                                  <img src={item.image} alt={item.short_title} />
-                                ) : (
-                                  <span className="no-image">No Image</span>
-                                )}
-                              </div>
-                              <div className="news-content">
-                                <h5 className="news-heading">{item.short_title}</h5>
-                                <p className="news-desc">{item.short_description}</p>
-                                <p className="news-date">
-                                  {new Date(item.created_at).toLocaleDateString()}
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="no-announcements">No announcements yet.</p>
-                    )}
-                  </div>
-                </div>
+              <div className="announcements-carousel-container">
+  <div className="announcements-carousel">
+    {newsLoading ? (
+      <div className="announcements-grid">
+        {Array(3).fill().map((_, i) => (
+          <div key={i} className="announcement-card-wrapper">
+            <Skeleton height={280} borderRadius={20} />
+          </div>
+        ))}
+      </div>
+    ) : announcements.length > 0 ? (
+      <div className="announcements-grid">
+        {getCurrentAnnouncements().map((announcement) => (
+          <div key={announcement.id} className="announcement-card-wrapper">
+            <div className="news-card" onClick={() => navigate(`/announcements/${announcement.slug}`)}>
+              <div className="news-image">
+                {announcement.image ? (
+                  <img src={announcement.image} alt={announcement.short_title} />
+                ) : (
+                  <span className="no-image">No Image</span>
+                )}
+              </div>
+              <div className="news-content">
+                <h5 className="news-heading">{announcement.short_title}</h5>
+                <p className="news-desc">{announcement.short_description}</p>
+                <p className="news-date">
+                  {new Date(announcement.created_at).toLocaleDateString()}
+                </p>
+                <button
+                  className="ann-btn btn-primary mt-2"
+                  onClick={(e) => {
+                    e.stopPropagation(); // prevent parent onClick
+                    navigate(`/announcements/${announcement.slug}`);
+                  }}
+                >
+                  Read More →
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    ) : (
+      <p className="no-announcements">No announcements yet.</p>
+    )}
+  </div>
+</div>
+
 
                 {/* Dots Indicator */}
                 {!newsLoading && announcements.length > itemsPerSlide && (
