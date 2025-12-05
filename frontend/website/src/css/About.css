@@ -15,6 +15,13 @@
   overflow: hidden;
 }
 
+.center-justify {
+    text-align: justify;        /* Justify all lines */
+    text-align-last: center;    /* Center the last line */
+    margin: 0 auto;             /* Optional: center block element horizontally */
+    width: 80%;                 /* Optional: set width for better justification */
+}
+
 .cross-pattern {
   position: absolute;
   top: 0;

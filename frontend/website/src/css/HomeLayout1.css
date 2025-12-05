@@ -658,10 +658,25 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
+  list-style: none;
+  text-decoration: none;
+  margin-top: 10px;
+}
+
+.text-justify {
+    text-align: justify;
+    text-align-last: center; /* centers the last line */
+    max-width: 600px;        /* optional: limits paragraph width for neatness */
+}
+.center-block {
+    display: flex;
+    justify-content: center; /* centers the block horizontally */
+    margin: 0 auto;
 }
 
 .ann-btn:hover {
   background-color: var(--footer-bg);
+  color: #fff;
   transform: translateY(-2px);
 }
 

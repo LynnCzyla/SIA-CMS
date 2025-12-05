@@ -93,6 +93,13 @@ export default function Services() {
           Our <span className="title-primary">Services</span>
         </h2>
 
+        <div class="center-block">
+  <p class="text-justify mb-5">
+    Discover the wide range of services offered by Hospital Medisync, including specialized medical care, diagnostic services, wellness programs, and patient support initiatives. Stay informed about our offerings to make the most of the healthcare services available to you and your family.
+  </p>
+</div>
+
+
         {/* Top Services */}
         <div className="top-services-section">
                     <div className="top-services-grid">
@@ -158,7 +165,7 @@ export default function Services() {
               </span>
             </div>
             
-            <Link to={`/services/${service.slug}`} className="read-more-btn">
+            <Link to={`/services/${service.slug}`} className="ann-btn">
               Read More <ArrowIcon />
             </Link>
           </div>

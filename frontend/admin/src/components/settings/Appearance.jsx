@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 import { FaCheckCircle, FaInfoCircle } from "react-icons/fa";
 
 // Set your live website URL for preview
-const WEBSITE_URL = "";
+const WEBSITE_URL = "http://26.41.72.16:5174/";
 
 // List of Google Fonts
 const GOOGLE_FONTS = [

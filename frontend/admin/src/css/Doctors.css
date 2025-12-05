@@ -1,14 +1,31 @@
-/* frontend/admin/src/css/doctors.css */
+/* =========================
+   Root Colors
+========================= */
+:root {
+  --primary-color: #043873;
+  --primary-color2: #4f9cf9;
+  --bg-blue: #f3f7ff;
+  --white: #ffffff;
+  --text-dark: #1a1a1a;
+  --text-gray: #6b7280;
+  --success: #16a34a;
+  --warning: #facc15;
+  --danger: #dc2626;
+}
 
-/* Page Container */
+/* =========================
+   Page Container
+========================= */
 .doctors-page {
   min-height: 100vh;
-  background-color: #f3f7ff;
+  background-color: var(--bg-blue);
   padding: 1.5rem;
   font-family: "Inter", sans-serif;
 }
 
-/* Header */
+/* =========================
+   Header
+========================= */
 .header {
   margin-bottom: 1.5rem;
 }
@@ -16,18 +33,20 @@
 .header-title {
   font-size: 1.875rem;
   font-weight: 700;
-  color: #043873;
+  color: var(--primary-color);
 }
 
 .header-breadcrumb {
   font-size: 0.875rem;
-  color: #4f9cf9;
+  color: var(--primary-color2);
   margin-top: 0.25rem;
 }
 
-/* Stats Card */
+/* =========================
+   Stats Card
+========================= */
 .stats-card {
-  background-color: white;
+  background-color: var(--white);
   border-radius: 0.75rem;
   box-sizing: border-box;
   padding: 2.5rem;
@@ -35,6 +54,8 @@
   border: 1px solid #f3f4f6;
   margin-bottom: 1.5rem;
   height: 300px;
+  width:1200px;
+  justify-content: center;
 }
 
 .stats-card-content {
@@ -43,7 +64,6 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 5rem;
-  box-sizing: border-box;
 }
 
 @media (min-width: 1024px) {
@@ -53,29 +73,32 @@
   }
 }
 
-/* Chart Section */
+/* =========================
+   Chart Section
+========================= */
 .chart-section {
   display: flex;
   align-items: center;
   gap: 4rem;
 }
 
-/* ApexCharts Donut Chart Container */
 .apex-chart {
   width: 250px;
   height: 250px;
 }
 
-/* Legend */
-.legend{
+/* =========================
+   Legend
+========================= */
+.legend {
   box-sizing: border-box;
-  padding: rem;
+  padding: 1rem;
 }
 
 .legend-title {
   font-size: 0.875rem;
   font-weight: 600;
-  color: #4f9cf9;
+  color: var(--primary-color2);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-bottom: 0.75rem;
@@ -110,7 +133,9 @@
   font-style: italic;
 }
 
-/* Stats Numbers */
+/* =========================
+   Stats Numbers
+========================= */
 .stats-numbers {
   display: flex;
   gap: 4rem;
@@ -127,7 +152,7 @@
 }
 
 .stat-value-primary {
-  color: #4f9cf9;
+  color: var(--primary-color2);
 }
 
 .stat-value-secondary {
@@ -143,9 +168,11 @@
   color: inherit;
 }
 
-/* Filters Card */
+/* =========================
+   Filters Card
+========================= */
 .filters-card {
-  background-color: white;
+  background-color: var(--white);
   border-radius: 0.75rem;
   padding: 1.5rem;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
@@ -158,20 +185,21 @@
   margin-bottom: 1rem;
 }
 
-/* Filter Rows */
 .filter-row,
 .secondary-filter-row {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   align-items: center;
   gap: 1rem;
   margin-bottom: 1.5rem;
 }
 
-/* Dropdowns */
+/* =========================
+   Dropdowns
+========================= */
 .dropdown-select {
   appearance: none;
-  background-color: white;
+  background-color: var(--white);
   border: 1px solid #e5e7eb;
   border-radius: 0.5rem;
   padding: 0.625rem 1rem;
@@ -183,11 +211,13 @@
 
 .dropdown-select:focus {
   outline: none;
-  border-color: #60a5fa;
-  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+  border-color: var(--primary-color2);
+  box-shadow: 0 0 0 3px rgba(79, 156, 249, 0.2);
 }
 
-/* Search Input */
+/* =========================
+   Search Input
+========================= */
 .search-input {
   border: 1px solid #e5e7eb;
   border-radius: 0.5rem;
@@ -199,15 +229,17 @@
 
 .search-input:focus {
   outline: none;
-  border-color: #60a5fa;
-  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+  border-color: var(--primary-color2);
+  box-shadow: 0 0 0 3px rgba(79, 156, 249, 0.2);
 }
 
 .search-input::placeholder {
   color: #9ca3af;
 }
 
-/* Buttons */
+/* =========================
+   Buttons
+========================= */
 .btn {
   display: flex;
   align-items: center;
@@ -220,45 +252,38 @@
   transition: all 0.2s ease;
   border: none;
   justify-content: center;
-  width: 200px;
 }
 
 .btn-search {
   background-color: #60a5fa;
-  color: white;
+  color: var(--white);
 }
 
 .btn-search:hover {
   background-color: #3b82f6;
-    color: white;
-
 }
 
 .btn-clearFilter {
-  color: white;
+  background-color: #ef4444;
+  color: var(--white);
   width: 150px;
-  font-size: 28px;
-
 }
 
 .btn-clearFilter:hover {
-    color: white;
-
+  opacity: 0.85;
 }
 
 .btn-refresh {
-  background-color: #1e3a8a;
-  color: white;
+  background-color: var(--primary-color);
+  color: var(--white);
 }
 
 .btn-refresh:hover {
   background-color: #172554;
-    color: white;
-
 }
 
 .btn-show-all {
-  background-color: white;
+  background-color: var(--white);
   color: #374151;
   border: 1px solid #e5e7eb;
 }
@@ -267,7 +292,9 @@
   background-color: #f9fafb;
 }
 
-/* Table */
+/* =========================
+   Table
+========================= */
 .table-container {
   border: 1px solid #e5e7eb;
   border-radius: 0.5rem;
@@ -280,7 +307,7 @@
 }
 
 .table-header-row {
-  background-color: #1e3a8a;
+  background-color: var(--primary-color);
 }
 
 .table-header-cell {
@@ -288,7 +315,7 @@
   text-align: left;
   font-size: 0.75rem;
   font-weight: 600;
-  color: white;
+  color: var(--white);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -316,8 +343,9 @@
   border: 2px solid #e0e6f0;
 }
 
-
-/* Status Badge */
+/* =========================
+   Status Badge
+========================= */
 .status-badge {
   padding: 6px 12px;
   border-radius: 6px;
@@ -337,7 +365,9 @@
   color: #991b1b;
 }
 
-/* Toggle Switch - ON/OFF */
+/* =========================
+   Toggle Switch
+========================= */
 .toggle-switch {
   position: relative;
   display: inline-block;
@@ -373,30 +403,23 @@
   width: 26px;
   left: 4px;
   bottom: 3px;
-  background-color: white;
+  background-color: var(--white);
   transition: 0.4s;
   border-radius: 50%;
   box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
 
 input:checked + .slider {
-  background-color: #10b981;
+  background-color: var(--success);
 }
 
 input:checked + .slider:before {
   transform: translateX(30px);
 }
 
-.slider-text {
-  color: white;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  position: relative;
-  z-index: 1;
-}
-
-/* Add to doctors.css */
+/* =========================
+   Unsaved Indicator
+========================= */
 .unsaved-indicator {
   animation: pulse 2s infinite;
 }
@@ -406,13 +429,17 @@ input:checked + .slider:before {
   50% { opacity: 1; }
 }
 
-/* Show All Active Button */
+/* =========================
+   Show All Active Button
+========================= */
 .btn-active {
-  background-color: #1e3a8a !important;
-  color: white !important;
+  background-color: var(--primary-color) !important;
+  color: var(--white) !important;
 }
 
-/* Bootstrap-style Pagination */
+/* =========================
+   Pagination
+========================= */
 .pagination {
   margin-top: 1.5rem;
   display: flex;
@@ -427,7 +454,7 @@ input:checked + .slider:before {
 .page-link {
   padding: 0.5rem 1rem;
   border: 1px solid #e5e7eb;
-  background-color: white;
+  background-color: var(--white);
   color: #374151;
   border-radius: 0.375rem;
   cursor: pointer;
@@ -437,7 +464,7 @@ input:checked + .slider:before {
 
 .page-link:hover {
   background-color: #f3f7ff;
-  border-color: #60a5fa;
+  border-color: var(--primary-color2);
 }
 
 .page-item.disabled .page-link {
@@ -446,12 +473,25 @@ input:checked + .slider:before {
 }
 
 .page-item.active .page-link {
-  background-color: #4f9cf9;
-  color: white;
-  border-color: #4f9cf9;
+  background-color: var(--primary-color2);
+  color: var(--white);
+  border-color: var(--primary-color2);
 }
 
-/* Responsive */
+/* =========================
+   Media Upload / Toggle Push Fix
+========================= */
+.media-upload-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+/* =========================
+   Responsive
+========================= */
 @media (max-width: 1024px) {
   .chart-section {
     flex-direction: column;
@@ -473,5 +513,4 @@ input:checked + .slider:before {
     min-width: 100%;
   }
 }
-
 

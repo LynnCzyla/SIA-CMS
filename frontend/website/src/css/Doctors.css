@@ -10,6 +10,20 @@
   padding: 50px 10px 0px;
 }
 
+.text-justify1 {
+    text-align: justify;
+    text-align-last: center; /* centers the last line */
+    max-width: 600px; 
+    color: #fff;       /* keeps text neat */
+}
+
+.center-block {
+    display: flex;
+    justify-content: center; /* centers the block horizontally */
+    margin: 0 auto;
+}
+
+
 .doctors-header h2 {
   font-size: 45px;
   color: var(--primary-color);
@@ -29,7 +43,6 @@
 
 .doctors-header p {
   margin-top: 10px;
-  color: var(--text-gray);
   letter-spacing: 1px;
   font-weight: 500;
 }

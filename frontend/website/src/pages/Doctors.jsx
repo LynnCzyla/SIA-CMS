@@ -304,7 +304,11 @@ function Doctors() {
           <h2>
             Meet Our <span className="highlight">Doctors</span>
           </h2>
-          <p>WE ARE DEDICATED TO YOUR WELL-BEING</p>
+<div class="center-block">
+  <p class="text-justify1 mb-5">
+    Meet the expert doctors at Hospital Medisync, dedicated to providing exceptional care across a wide range of specialties. Stay informed about our medical team’s qualifications, areas of expertise, and commitment to delivering compassionate, patient-centered healthcare.
+  </p>
+</div>
           <img
             src="/our_doctors.svg"
             alt="Our Doctors"

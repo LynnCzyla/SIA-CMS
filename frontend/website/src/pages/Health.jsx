@@ -43,9 +43,12 @@ const Health = () => {
           <h2 className="title-center mb-4">
             <span className="title-primary">Health Tips</span>
           </h2>
-          <p className="intro-text text-center mb-5">
-            Stay updated with the latest health tips, wellness advice, and medical insights.
-          </p>
+          <div class="center-block">
+  <p class="text-justify mb-5">
+    Stay informed with the latest Hospital Medisync health tips, including advice on wellness, preventive care, healthy lifestyle habits, and practical guidance to help you maintain optimal health every day. Never miss an important tip that could improve your well-being and support a healthier lifestyle.
+  </p>
+</div>
+
         </>
       )}
 

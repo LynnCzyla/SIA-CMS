@@ -65,12 +65,12 @@ const Careers = () => {
           <h2 className="title-center mb-4 text-primary">
             Latest <span className="title-primary">Careers</span>
           </h2>
-          <p className="intro-text text-center mb-5">
-            Join our healthcare team and be part of an organization where you
-            can make a meaningful impact on people's lives. As a valued member,
-            you'll collaborate with dedicated professionals to provide
-            compassionate, high-quality care.
-          </p>
+         <div class="center-block">
+  <p class="text-justify mb-5">
+    Explore career opportunities at Hospital Medisync and join a team dedicated to excellence in healthcare. Stay informed about job openings, professional development programs, and initiatives that allow you to grow, contribute, and make a meaningful impact in patient care.
+  </p>
+</div>
+
         </>
       )}
 
