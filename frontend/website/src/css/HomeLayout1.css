@@ -660,6 +660,11 @@
   gap: 8px;
 }
 
+.ann-btn:hover {
+  background-color: var(--footer-bg);
+  transform: translateY(-2px);
+}
+
 .services-btn:hover {
   background-color: #c7a84d;
   transform: translateY(-2px);
