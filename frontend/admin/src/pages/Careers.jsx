@@ -10,12 +10,7 @@ export default function Careers() {
   const fileInputRef = useRef(null);
   const [fileInfo, setFileInfo] = useState(null);
   const user = JSON.parse(localStorage.getItem("user"));
-  const [departments] = useState([
-    "Administration",
-    "Nursing",
-    "Radiology",
-    "Pharmacy",
-  ]);
+  const [departments, setDepartments] = useState([]);
 
   const [pendingJobs, setPendingJobs] = useState([]);
   const [isLoadingPending, setIsLoadingPending] = useState(false);
@@ -24,6 +19,24 @@ export default function Careers() {
     alert("Please log in first!");
     return null;
   }
+
+  // Fetch departments from EMS API
+  useEffect(() => {
+    const fetchDepartments = async () => {
+      try {
+        const res = await fetch("http://147.185.221.27:34249/Group-4-SIA-EMS/api/api.php?module=departments");
+        const data = await res.json();
+        if (Array.isArray(data)) {
+          const deptNames = data.map(dept => dept.DepartmentName);
+          setDepartments(deptNames);
+        }
+      } catch (err) {
+        console.error("Error fetching departments:", err);
+        setDepartments(["Administration", "Nursing", "Radiology", "Pharmacy"]);
+      }
+    };
+    fetchDepartments();
+  }, []);
 
   useEffect(() => {
     if (quillRef.current && !quillRef.current.__quill) {
@@ -43,6 +56,7 @@ export default function Careers() {
       quillRef.current.__quill = quill;
     }
   }, []);
+
 
   useEffect(() => {
     if (user.role === "hr_administrator" || user.role === "super_administrator") {
@@ -152,7 +166,31 @@ export default function Careers() {
   };
 
   const showJobDetails = (job) => {
-    const imageUrl = job.image ? `http://localhost:5000/uploads/jobs/${job.image}` : null;
+    let imageUrl = null;
+
+    // Handle different image formats
+    if (job.image) {
+      if (typeof job.image === "string") {
+        // If it's a URL string
+        if (job.image.startsWith("http")) {
+          imageUrl = job.image;
+        } else if (job.image.startsWith("data:")) {
+          imageUrl = job.image;
+        } else {
+          // Assume it's a filename from uploads folder
+          imageUrl = `http://26.41.72.16:5000/uploads/jobs/${job.image}`;
+        }
+      } else if (job.image.data && Array.isArray(job.image.data)) {
+        // Handle Buffer/Blob from database
+        const bytes = new Uint8Array(job.image.data);
+        let binary = "";
+        for (let i = 0; i < bytes.byteLength; i++) {
+          binary += String.fromCharCode(bytes[i]);
+        }
+        const base64 = btoa(binary);
+        imageUrl = `data:image/jpeg;base64,${base64}`;
+      }
+    }
     
     Swal.fire({
       html: `
@@ -160,7 +198,7 @@ export default function Careers() {
           <div class="modal-header-section">
             <h2 class="modal-job-title">${job.job_title}</h2>
             <div class="modal-badges">
-              <span class="modal-badge submitted-badge">Submitted by: ${job.ems_user_name} (Pilot Tester) (EMS)</span>
+              <span class="modal-badge submitted-badge">Submitted by: ${job.ems_user_name}</span>
               <span class="modal-badge date-badge">Date: ${formatDate(job.created_at)}</span>
             </div>
           </div>
@@ -173,34 +211,34 @@ export default function Careers() {
             ` : ''}
             
             <div class="modal-info-grid">
-            <div class="modal-info-row">
-              <span class="modal-label">Job Title:</span>
-              <span class="modal-value">${job.job_title || 'N/A'}</span>
-            </div>
-            <div class="modal-info-row">
-              <span class="modal-label">Department:</span>
-              <span class="modal-value">${job.department || 'N/A'}</span>
-            </div>
-            <div class="modal-info-row">
-              <span class="modal-label">Short Title:</span>
-              <span class="modal-value">${job.short_title || 'N/A'}</span>
-            </div>
-            <div class="modal-info-row">
-              <span class="modal-label">Location:</span>
-              <span class="modal-value">${job.location || 'N/A'}</span>
-            </div>
-            <div class="modal-info-row">
-              <span class="modal-label">Job Type:</span>
-              <span class="modal-value">${job.job_type || 'N/A'}</span>
-            </div>
-            <div class="modal-info-row">
-              <span class="modal-label">Application Deadline:</span>
-              <span class="modal-value">${formatDate(job.application_deadline)}</span>
-            </div>
-            <div class="modal-info-row full-width">
-              <span class="modal-label">Qualification:</span>
-              <span class="modal-value">${job.qualifications || 'N/A'}</span>
-            </div>
+              <div class="modal-info-row">
+                <span class="modal-label">Job Title:</span>
+                <span class="modal-value">${job.job_title || 'N/A'}</span>
+              </div>
+              <div class="modal-info-row">
+                <span class="modal-label">Department:</span>
+                <span class="modal-value">${job.department || 'N/A'}</span>
+              </div>
+              <div class="modal-info-row">
+                <span class="modal-label">Short Title:</span>
+                <span class="modal-value">${job.short_title || 'N/A'}</span>
+              </div>
+              <div class="modal-info-row">
+                <span class="modal-label">Location:</span>
+                <span class="modal-value">${job.location || 'N/A'}</span>
+              </div>
+              <div class="modal-info-row">
+                <span class="modal-label">Job Type:</span>
+                <span class="modal-value">${job.job_type || 'N/A'}</span>
+              </div>
+              <div class="modal-info-row">
+                <span class="modal-label">Application Deadline:</span>
+                <span class="modal-value">${formatDate(job.application_deadline)}</span>
+              </div>
+              <div class="modal-info-row full-width">
+                <span class="modal-label">Qualification:</span>
+                <span class="modal-value">${job.qualifications || 'N/A'}</span>
+              </div>
             </div>
           </div>
 

@@ -261,13 +261,13 @@ export default function Hospital() {
           {activeTab === "about" && (
             <div className="about-form-container">
               {[
-                "aboutHospital",
-                "mission",
-                "vision",
-                "qualityPolicy",
-                "coreValues",
-                "ourHistory",
-                "privacyPolicy",
+                "About Hospital",
+                "Mission",
+                "Vision",
+                "Quality Policy",
+                "Core Values",
+                "Our History",
+                "Privacy Policy",
               ].map((field) => (
                 <div className="about-form-group" key={field}>
                   <label>{field}</label>

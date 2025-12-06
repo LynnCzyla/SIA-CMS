@@ -26,7 +26,7 @@ export default function User() {
   // Fetch users
   const fetchUsers = async () => {
     try {
-      const response = await fetch("http://26.41.72.16:5000/api/users");
+      const response = await fetch("http://26.41.72.16:5173/api/users");
       const data = await response.json();
       setUsers(data);
     } catch (error) {
@@ -57,7 +57,7 @@ export default function User() {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/api/users/add", {
+      const response = await fetch("http://26.41.72.16:5173/api/users/add", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ full_name: fullName, email, password, role }),
@@ -100,7 +100,7 @@ export default function User() {
       const payload = { full_name: fullName, email, role };
       if (password) payload.password = password;
 
-      const response = await fetch(`http://localhost:5000/api/users/${editingUserId}`, {
+      const response = await fetch(`http://26.41.72.16:5173/api/users/${editingUserId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -138,7 +138,7 @@ export default function User() {
 
     if (result.isConfirmed) {
       try {
-        const response = await fetch(`http://localhost:5000/api/users/${userId}`, { method: "DELETE" });
+        const response = await fetch(`http://26.41.72.16:5173/api/users/${userId}`, { method: "DELETE" });
         const data = await response.json();
 
         if (response.ok) {
@@ -264,7 +264,6 @@ export default function User() {
                 <option value="">Select Role</option>
                 <option value="content_administrator">Content Administrator</option>
                 <option value="super_administrator">Super Administrator</option>
-                <option value="hr_administrator">HR Administrator</option>
               </select>
             </div>
             <div className="mt-4 d-flex gap-3">

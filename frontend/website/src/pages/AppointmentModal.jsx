@@ -23,17 +23,32 @@ const AppointmentModal = ({ isOpen, onClose }) => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
-  useEffect(() => {
+    useEffect(() => {
     if (!isOpen) return;
     const loadDoctors = async () => {
       try {
-        const res = await axios.get(
-          "http://147.185.221.27:34249/Group-4-SIA-EMS/api/api.php?module=employee&filter_doctors=1"
-        );
-        const doctorList = res.data.map((doc) => ({
-          id: Number(doc.employeeID),
-          name: `Dr. ${doc.firstName} ${doc.lastName}`,
-        }));
+        const [empRes, visRes] = await Promise.all([
+          axios.get(
+            "http://147.185.221.27:34249/Group-4-SIA-EMS/api/api.php?module=employee&filter_doctors=1"
+          ),
+          axios.get("http://26.41.72.16:5000/api/doctors/visibility"),
+        ]);
+
+        const employees = empRes.data;
+        const visibility = visRes.data;
+        
+        // Create visibility map
+        const visMap = {};
+        visibility.forEach(v => visMap[v.employee_id] = v.is_shown === 1);
+
+        // Filter only visible doctors
+        const doctorList = employees
+          .filter(doc => visMap[doc.employeeID] !== false)
+          .map((doc) => ({
+            id: Number(doc.employeeID),
+            name: `Dr. ${doc.firstName} ${doc.lastName}`,
+          }));
+        
         setDoctors(doctorList);
       } catch (err) {
         console.error("Failed to load doctors:", err);
@@ -47,7 +62,6 @@ const AppointmentModal = ({ isOpen, onClose }) => {
     };
     loadDoctors();
   }, [isOpen]);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
